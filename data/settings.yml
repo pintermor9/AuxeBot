@@ -1,0 +1,17 @@
+#General settings
+prefix: '-'
+TOKEN: os.getenv('TOKEN')
+webServer: True
+owner_IDs: 
+  - 761555679873597450
+
+#Downtime settings:
+downAnnouncement: False
+downDate: 'on 16-04-21 at 8:00'
+downAnnouncementStatus: f'The bot will be down on maintenance {downDate}. Please be patient!'
+
+#Status and activity settings:
+cycleActivities: True
+status: 'discord.Status.online'
+updates: "Added a leveling system. Try it out by running 'rank' command!"
+noCycleActivity: ''
