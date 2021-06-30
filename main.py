@@ -78,7 +78,7 @@ async def activityLoop():
 
 
 for file in os.listdir('./cogs'):
-    if file.endswith('.py'):
+    if file.endswith('.py') and str(file) != "Levelling.py":
         client.load_extension(f'cogs.{file[:-3]}')
 
 print("\n\nStarting client...\n")
