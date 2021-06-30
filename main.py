@@ -1,8 +1,13 @@
+print("Importing modules...")
+
 import discord
 from discord.ext import commands, tasks
 import os
 import yaml
 from itertools import cycle
+
+print("done.")
+print("Reading settings.")
 
 with open(r'./data/settings.yml') as file:
     settings = yaml.full_load(file)
@@ -30,6 +35,8 @@ loopActivities = cycle([
     'Yeah I know that I should get a profile picture.',
     f'Latest updates: {updates}'
 ])
+
+print("done.")
 
 intents = discord.Intents.all()
 
@@ -73,5 +80,7 @@ async def activityLoop():
 for file in os.listdir('./cogs'):
     if file.endswith('.py'):
         client.load_extension(f'cogs.{file[:-3]}')
+
+print("\n\nStarting client...\n")
 
 client.run(TOKEN)
