@@ -66,11 +66,11 @@ async def on_ready():
         status=discord.Status.idle,
         activity=discord.Game("Initializing... Please wait."))
 
-    if cycleActivities:
-        activityLoop.start()
-    else:
-        await client.change_presence(activity=discord.Game(noCycleActivity))
-
+    #if cycleActivities:
+    #    activityLoop.start()
+    #else:
+    #    await client.change_presence(activity=discord.Game(noCycleActivity))
+    await client.change_presence(activity=discord.Game('Levelling is temporarily disabled due to heroku uncompatibility! After enabling it again you will receive triple XP for at least a week.'))
 
 @tasks.loop(seconds=10)
 async def activityLoop():
