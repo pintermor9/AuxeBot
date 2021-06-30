@@ -39,15 +39,15 @@ class Help(commands.Cog):
 """,
             inline=False)
 
-        embed.add_field(
-            name="**Levelling** | *You can earn levels by sending messages.*", 
-            value="""
-
-**rank** [person] - *Shows your XP, level, rank and a progress bar!*
-**leaderboard** [top] - *Shows the top 5 (by deafult) ranked people!*
-
-""",
-            inline=False)
+#        embed.add_field(
+#            name="**Levelling** | *You can earn levels by sending messages.*", 
+#            value="""
+#
+#**rank** [person] - *Shows your XP, level, rank and a progress bar!*
+#**leaderboard** [top] - *Shows the top 5 (by deafult) ranked people!*
+#
+#""",
+#            inline=False)
 
         embed.set_footer(
             text=f"< > required, [ ] optional | Suggested by {ctx.author}.")
