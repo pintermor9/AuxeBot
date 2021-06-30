@@ -12,5 +12,5 @@ downAnnouncementStatus: f'The bot will be down on maintenance {downDate}. Please
 #Status and activity settings:
 cycleActivities: True
 status: 'discord.Status.online'
-updates: "Added a leveling system. Try it out by running 'rank' command!"
+updates: "Now deployed on Heroku! Less ping, no downtimes, faster bot!"
 noCycleActivity: ''
