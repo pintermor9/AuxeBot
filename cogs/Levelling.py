@@ -11,7 +11,7 @@ class Levelling(commands.Cog):
         print(f'Loaded', __name__)
 
         
-        self.levels = requests.get(f"https://lvlsys-api.pintermor9.repl.co/?key={self.apikey}")
+        self.client.levels = requests.get(f"https://lvlsys-api.pintermor9.repl.co/?key={self.apikey}")
 
     def get_lvl(xp):
         lvl = 0
@@ -28,7 +28,7 @@ class Levelling(commands.Cog):
         
         authorID = str(message.author.id)
         try:
-            old_xp = self.levels[authorID]
+            old_xp = self.client.levels[authorID]
         except:
             old_xp = 0
 
@@ -41,7 +41,7 @@ class Levelling(commands.Cog):
                 f"GG {message.author.mention}, you just advanced to level {Levelling.get_lvl(xp)[1]}!"
             )
 
-        self.levels.update({authorID: xp})
+        self.client.levels.update({authorID: xp})
 
         Levelling.write()
 
@@ -54,11 +54,11 @@ class Levelling(commands.Cog):
             user = ctx.author
 
         try:
-            xp = self.levels[str(user.id)]
+            xp = self.client.levels[str(user.id)]
         except:
-            self.levels.update({str(user.id): 0})
+            self.client.levels.update({str(user.id): 0})
             Levelling.write()
-            xp = self.levels[str(user.id)]
+            xp = self.client.levels[str(user.id)]
 
         lvlxp, lvl = Levelling.get_lvl(xp)
 
@@ -67,7 +67,7 @@ class Levelling(commands.Cog):
         boxes = int((lvlxp / (200 * ((1 / 2) * lvl))) * boxnum)
         rank = 1
 
-        datalisted = sorted(self.levels.items(), key=lambda x: x[1], reverse=True)
+        datalisted = sorted(self.client.levels.items(), key=lambda x: x[1], reverse=True)
 
         for x in datalisted:
             if x[0] == str(user.id):
@@ -96,7 +96,7 @@ class Levelling(commands.Cog):
     async def leaderboard(self, ctx, top_x=5):
         msg = await ctx.send("Please wait...")
         
-        datalisted = sorted(self.levels.items(), key=lambda x: x[1], reverse=True)
+        datalisted = sorted(self.client.levels.items(), key=lambda x: x[1], reverse=True)
 
         topIDs = tuple(map(lambda i: i[0], datalisted))
 
