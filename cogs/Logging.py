@@ -20,13 +20,13 @@ class Logging(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command(self, ctx):
-        if len(ctx.message.content[len(ctx.prefix + str(ctx.command)):].strip()) == 0:
-            args = "no"
-        else:
-            args = f"`{ctx.message.content[len(ctx.prefix + str(ctx.command)):].strip()}`"
+        args = [arg for index, arg in enumerate(ctx.message.content.split(' ')) if index != 0]
 
-        requests.post("https://roboty-api.pintermor9.repl.co/logging/log", json={"channel": str(
-            str(ctx.channel))[3:], "author": str(ctx.author), "command": str(ctx.command), "args": list(ctx.args)})
+        json = {"channel": str(ctx.channel)[3:], "author": str(ctx.author), "command": str(ctx.command), "args": args}
+
+        print(json)
+
+        requests.post("https://roboty-api.pintermor9.repl.co/logging/log", json=json)
 
 
 def setup(client):
