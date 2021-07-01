@@ -11,7 +11,7 @@ class Levelling(commands.Cog):
         print(f'Loaded', __name__)
 
         
-        self.client.levels = requests.get(f"https://roboty-api.pintermor9.repl.co/?key={self.client.apikey}").json()
+        self.client.levels = requests.get(f"https://roboty-api.pintermor9.repl.co/levels/?key={self.client.apikey}").json()
 
     def get_lvl(xp):
         lvl = 0
@@ -32,7 +32,7 @@ class Levelling(commands.Cog):
         except:
             old_xp = 0
 
-        xp = requests.get(f"https://roboty-api.pintermor9.repl.co/add/{authorID}/{random.randint(10, 30)}?key={self.client.apikey}").json()[authorID]
+        xp = requests.get(f"https://roboty-api.pintermor9.repl.co/levels/add/{authorID}/{random.randint(10, 30)}?key={self.client.apikey}").json()[authorID]
 
         if Levelling.get_lvl(old_xp)[1] < Levelling.get_lvl(xp)[1]:
             channel = self.client.get_channel(768720147804192788)
