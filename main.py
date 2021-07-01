@@ -46,7 +46,7 @@ client = commands.Bot(command_prefix=prefix,
                       help_command=None,
                       intents=intents)
 
-# gets the apikey of https://lvlsys-api.pintermor9.repl.co/
+# gets the apikey of https://Roboty-api.pintermor9.repl.co/
 client.apikey = settings["apikey"]
 
 if downAnnouncement:
