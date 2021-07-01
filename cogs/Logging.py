@@ -25,8 +25,6 @@ class Logging(commands.Cog):
 
         data = {"channel": str(ctx.channel)[3:], "author": str(ctx.author), "command": str(ctx.command), "args": args}
 
-        print(data)
-
         async with aiohttp.ClientSession() as session:
             await session.post(f"https://roboty-api.pintermor9.repl.co/logging/log/?key={self.client.logging_apikey}", json=data, ssl=False)
 
