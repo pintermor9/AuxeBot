@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-import json
+import aiohttp
 import random
 import requests
 
@@ -32,8 +32,11 @@ class Levelling(commands.Cog):
         except:
             old_xp = 0
 
-        xp = requests.get(
-            f"https://roboty-api.pintermor9.repl.co/levels/add/{authorID}/{random.randint(10, 30)}?key={self.client.levelling_apikey}").json()[authorID]
+        async with aiohttp.ClientSession() as session:
+            xp = await session.get(f"https://roboty-api.pintermor9.repl.co/levels/add/{authorID}/{random.randint(10, 30)}?key={self.client.levelling_apikey}")
+            xp = await xp.json(); xp = xp[authorID]
+
+        print(xp, "\n\n\n")
 
         if Levelling.get_lvl(old_xp)[1] < Levelling.get_lvl(xp)[1]:
             channel = self.client.get_channel(768720147804192788)

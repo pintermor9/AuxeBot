@@ -1,9 +1,10 @@
+import ssl
 from discord.ext import commands
 from datetime import datetime
 from time import time
 import json
 import asyncio
-import requests
+import aiohttp
 
 
 class Logging(commands.Cog):
@@ -22,11 +23,12 @@ class Logging(commands.Cog):
     async def on_command(self, ctx):
         args = [arg for index, arg in enumerate(ctx.message.content.split(' ')) if index != 0]
 
-        json = {"channel": str(ctx.channel)[3:], "author": str(ctx.author), "command": str(ctx.command), "args": args}
+        data = {"channel": str(ctx.channel)[3:], "author": str(ctx.author), "command": str(ctx.command), "args": args}
 
-        print(json)
+        print(data)
 
-        requests.post("https://roboty-api.pintermor9.repl.co/logging/log", json=json)
+        async with aiohttp.ClientSession() as session:
+            await session.post(f"https://roboty-api.pintermor9.repl.co/logging/log/?key={self.client.logging_apikey}", json=data, ssl=False)
 
 
 def setup(client):
