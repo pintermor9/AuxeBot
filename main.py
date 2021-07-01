@@ -5,7 +5,6 @@ from discord.ext import commands, tasks
 import os
 import yaml
 from itertools import cycle
-from data.web import web
 
 print("done.")
 print("Reading settings...")
@@ -18,7 +17,6 @@ with open(r'./data/settings.yml') as file:
 prefix = settings['prefix']
 TOKEN = settings['TOKEN']
 owner_IDs = settings['owner_IDs']
-webServer = settings['web']
 
 #Downtime settings:
 downAnnouncement = settings['downAnnouncement']
@@ -78,9 +76,7 @@ async def on_ready():
     else:
         await client.change_presence(activity=discord.Game(noCycleActivity))
     
-    if webServer:
-        web()
-
+    
 @tasks.loop(seconds=10)
 async def activityLoop():
     await client.change_presence(activity=discord.Game(next(loopActivities)))

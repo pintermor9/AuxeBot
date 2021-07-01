@@ -3,7 +3,6 @@ prefix: '-'
 TOKEN: ODMxNzk0MTAxNzUzNzQxMzMy.YHaanw.xzFW7O9_3-7M7-ItQGFTM0h7MB0
 owner_IDs: 
   - 761555679873597450
-web: True
 
 #Downtime settings:
 downAnnouncement: False
@@ -16,4 +15,4 @@ status: 'discord.Status.online'
 updates: "Now deployed on Heroku! Less ping, no downtimes, faster bot!"
 noCycleActivity: 'Levelling is temporarily disabled due to heroku uncompatibility! After enabling it again you will receive triple XP for at least a week.'
 
-apikey: roboty-levlling
+apikey: roboty-levelling
