@@ -43,8 +43,6 @@ class Levelling(commands.Cog):
 
         self.client.levels.update({authorID: xp})
 
-        Levelling.write()
-
     @commands.command()
     async def rank(self, ctx, user: discord.Member = None):
         msg = await ctx.send("Please wait...")
@@ -57,7 +55,6 @@ class Levelling(commands.Cog):
             xp = self.client.levels[str(user.id)]
         except:
             self.client.levels.update({str(user.id): 0})
-            Levelling.write()
             xp = self.client.levels[str(user.id)]
 
         lvlxp, lvl = Levelling.get_lvl(xp)
