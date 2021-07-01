@@ -5,6 +5,7 @@ from discord.ext import commands, tasks
 import os
 import yaml
 from itertools import cycle
+from data.web import web
 
 print("done.")
 print("Reading settings...")
@@ -17,6 +18,7 @@ with open(r'./data/settings.yml') as file:
 prefix = settings['prefix']
 TOKEN = settings['TOKEN']
 owner_IDs = settings['owner_IDs']
+web = settings['web']
 
 #Downtime settings:
 downAnnouncement = settings['downAnnouncement']
@@ -71,11 +73,13 @@ async def on_ready():
         status=discord.Status.idle,
         activity=discord.Game("Initializing... Please wait."))
 
-    #if cycleActivities:
-    #    activityLoop.start()
-    #else:
-    #    await client.change_presence(activity=discord.Game(noCycleActivity))
-    await client.change_presence(activity=discord.Game('Levelling is temporarily disabled due to heroku uncompatibility! After enabling it again you will receive triple XP for at least a week.'))
+    if cycleActivities:
+        activityLoop.start()
+    else:
+        await client.change_presence(activity=discord.Game(noCycleActivity))
+    
+    if web:
+        web()
 
 @tasks.loop(seconds=10)
 async def activityLoop():
@@ -83,7 +87,7 @@ async def activityLoop():
 
 
 for file in os.listdir('./cogs'):
-    if file.endswith('.py') and str(file) != "Levelling.py":
+    if file.endswith('.py'):
         client.load_extension(f'cogs.{file[:-3]}')
 
 print("\n\nStarting client...\n")

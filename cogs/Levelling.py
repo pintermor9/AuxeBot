@@ -32,7 +32,7 @@ class Levelling(commands.Cog):
         except:
             old_xp = 0
 
-        requests.get(f"https://lvlsys-api.pintermor9.repl.co/add/{message.author.id}/{random.randint(10, 30)}?key={self.apikey}")
+        xp = requests.get(f"https://lvlsys-api.pintermor9.repl.co/add/{authorID}/{random.randint(10, 30)}?key={self.apikey}")[authorID]
 
         if Levelling.get_lvl(old_xp)[1] < Levelling.get_lvl(xp)[1]:
             channel = self.client.get_channel(768720147804192788)

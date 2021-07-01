@@ -3,6 +3,7 @@ prefix: '-'
 TOKEN: ODMxNzk0MTAxNzUzNzQxMzMy.YHaanw.xzFW7O9_3-7M7-ItQGFTM0h7MB0
 owner_IDs: 
   - 761555679873597450
+web: True
 
 #Downtime settings:
 downAnnouncement: False
@@ -10,7 +11,7 @@ downDate: 'on 16-04-21 at 8:00'
 downAnnouncementStatus: f'The bot will be down on maintenance {downDate}. Please be patient!'
 
 #Status and activity settings:
-cycleActivities: False
+cycleActivities: True
 status: 'discord.Status.online'
 updates: "Now deployed on Heroku! Less ping, no downtimes, faster bot!"
 noCycleActivity: 'Levelling is temporarily disabled due to heroku uncompatibility! After enabling it again you will receive triple XP for at least a week.'
