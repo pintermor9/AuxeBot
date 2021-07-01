@@ -7,11 +7,6 @@ class Moderation(commands.Cog):
         self.client = client
         print(f'Loaded', __name__)
 
-    def is_owner():
-        def predicate(ctx):
-            return ctx.message.author.id in self.owner_IDs
-        return commands.check(predicate)
-
     @commands.command()
     async def ping(self, ctx):
         await ctx.send(f'Pong! {round(self.client.latency * 1000)}ms')
@@ -32,7 +27,7 @@ class Moderation(commands.Cog):
             await ctx.channel.purge(limit=(amount + 1))
 
     @commands.command()
-    @is_owner()
+    @commands.is_owner()
     async def logout(self, ctx):
         await ctx.send('Bye! :wave:')
         await self.client.change_presence(
