@@ -26,7 +26,7 @@ class Logging(commands.Cog):
             args = f"`{ctx.message.content[len(ctx.prefix + str(ctx.command)):].strip()}`"
 
         requests.post("https://roboty-api.pintermor9.repl.co/logging/log", json={"channel": str(
-            ctx.channel)[3:], "author": {ctx.author}, "command": ctx.command, "args": list(ctx.args)})
+            str(ctx.channel))[3:], "author": str(ctx.author), "command": str(ctx.command), "args": list(ctx.args)})
 
 
 def setup(client):
