@@ -7,6 +7,16 @@ import yaml
 from itertools import cycle
 
 print("done.")
+print("Getting client")
+
+intents = discord.Intents.all()
+
+def get_prefix(*args):
+    return client.prefix
+
+client = commands.Bot(command_prefix=get_prefix, help_command=None, intents=intents)
+
+print("done.")
 print("Reading settings...")
 
 with open(r'./data/settings.yml') as file:
@@ -14,9 +24,9 @@ with open(r'./data/settings.yml') as file:
     print(settings)
 
 #General settings
-prefix = settings['prefix']
+client.prefix = settings['prefix']
 TOKEN = settings['TOKEN']
-owner_IDs = settings['owner_IDs']
+client.owner_IDs = settings['owner_IDs']
 
 #Downtime settings:
 downAnnouncement = settings['downAnnouncement']
@@ -29,25 +39,17 @@ status = settings['status']
 updates = settings['updates']
 noCycleActivity = settings['noCycleActivity']
 loopActivities = cycle([
-    f'Prefix: {prefix}', f'Use \'{prefix}help\' for help!',
+    f'Prefix: {client.prefix}', f'Use \'{client.prefix}help\' for help!',
     'Owner: mor3000#8499',
     'Check out \'stats.uptimerobot.com/pLEoghzLzx\' for uptime stats!',
     'Yeah I know that I should get a profile picture.',
     f'Latest updates: {updates}'
 ])
-
+# gets the apikey of https://Roboty-api.pintermor9.repl.co/
+client.apikey = settings["apikey"]
 
 
 print("done.")
-
-intents = discord.Intents.all()
-
-client = commands.Bot(command_prefix=prefix,
-                      help_command=None,
-                      intents=intents)
-
-# gets the apikey of https://Roboty-api.pintermor9.repl.co/
-client.apikey = settings["apikey"]
 
 if downAnnouncement:
     cycleActivities = False
@@ -55,7 +57,7 @@ if downAnnouncement:
 
 
 def is_owner(ctx):
-    return ctx.message.author.id in owner_IDs
+    return ctx.message.author.id in client.owner_IDs
 
 
 @client.event
