@@ -73,7 +73,9 @@ class Fun(commands.Cog):
         await ctx.send(''.join(thisforthat))
       
 
-
+    @commands.command()
+    async def echo(self, ctx, *, text):
+        await ctx.send(text)
 
     
 def setup(client):
