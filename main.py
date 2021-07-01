@@ -7,7 +7,7 @@ import yaml
 from itertools import cycle
 
 print("done.")
-print("Reading settings.")
+print("Reading settings...")
 
 with open(r'./data/settings.yml') as file:
     settings = yaml.full_load(file)
@@ -36,6 +36,8 @@ loopActivities = cycle([
     f'Latest updates: {updates}'
 ])
 
+
+
 print("done.")
 
 intents = discord.Intents.all()
@@ -43,6 +45,9 @@ intents = discord.Intents.all()
 client = commands.Bot(command_prefix=prefix,
                       help_command=None,
                       intents=intents)
+
+# gets the apikey of https://lvlsys-api.pintermor9.repl.co/
+client.apikey = settings["apikey"]
 
 if downAnnouncement:
     cycleActivities = False
