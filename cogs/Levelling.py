@@ -66,8 +66,11 @@ class Levelling(commands.Cog):
         boxes = int((lvlxp / (200 * ((1 / 2) * lvl))) * boxnum)
         rank = 1
 
-        datalisted = sorted(self.client.levels.items(),
-                            key=lambda x: x[1], reverse=True)
+        try:
+            datalisted = sorted(self.client.levels.items(), key=lambda x: x[1], reverse=True)
+        except:
+            print("\nERROR: {}\n\n".format(self.client.levels))
+            raise Exception
 
         for x in datalisted:
             if x[0] == str(user.id):
