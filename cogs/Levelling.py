@@ -11,7 +11,7 @@ class Levelling(commands.Cog):
         print(f'Loaded', __name__)
 
         
-        self.client.levels = requests.get(f"https://lvlsys-api.pintermor9.repl.co/?key={self.apikey}")
+        self.client.levels = requests.get(f"https://lvlsys-api.pintermor9.repl.co/?key={self.client.apikey}")
 
     def get_lvl(xp):
         lvl = 0
@@ -32,7 +32,7 @@ class Levelling(commands.Cog):
         except:
             old_xp = 0
 
-        xp = requests.get(f"https://lvlsys-api.pintermor9.repl.co/add/{authorID}/{random.randint(10, 30)}?key={self.apikey}")[authorID]
+        xp = requests.get(f"https://lvlsys-api.pintermor9.repl.co/add/{authorID}/{random.randint(10, 30)}?key={self.client.apikey}")[authorID]
 
         if Levelling.get_lvl(old_xp)[1] < Levelling.get_lvl(xp)[1]:
             channel = self.client.get_channel(768720147804192788)
