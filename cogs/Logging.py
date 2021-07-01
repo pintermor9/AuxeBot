@@ -25,11 +25,6 @@ class Logging(commands.Cog):
         else:
             args = f"`{ctx.message.content[len(ctx.prefix + str(ctx.command)):].strip()}`"
 
-        with open("./data/log.log", "a") as file:
-            file.write(
-                f"{str(datetime.now())[:-7]}: {ctx.author} invoked `{ctx.command}` command with {args} arguments in `#{str(ctx.channel)[3:]}`.\n"
-            )
-
         requests.post("https://roboty-api.pintermor9.repl.co/logging/log", json={"channel": str(
             ctx.channel)[3:], "author": {ctx.author}, "command": ctx.command, "args": list(ctx.args)})
 
