@@ -11,7 +11,7 @@ class Levelling(commands.Cog):
         print(f'Loaded', __name__)
 
         self.client.levels = requests.get(
-            f"https://roboty-api.pintermor9.repl.co/levels/?key={self.client.levelling_apikey}").json()
+            f"https://roboty-api.pintermor9.repl.co/levels/?key={self.client.levelling_apikey}/").json()
 
     def get_lvl(xp):
         lvl = 0
@@ -33,10 +33,9 @@ class Levelling(commands.Cog):
             old_xp = 0
 
         async with aiohttp.ClientSession() as session:
-            xp = await session.get(f"https://roboty-api.pintermor9.repl.co/levels/add/{authorID}/{random.randint(10, 30)}?key={self.client.levelling_apikey}")
+            xp = await session.get(f"https://roboty-api.pintermor9.repl.co/levels/add/{authorID}/{random.randint(10, 30)}/?key={self.client.levelling_apikey}")
             xp = await xp.json(); xp = xp[authorID]
 
-        print(xp, "\n\n\n")
 
         if Levelling.get_lvl(old_xp)[1] < Levelling.get_lvl(xp)[1]:
             channel = self.client.get_channel(768720147804192788)
