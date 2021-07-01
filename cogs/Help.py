@@ -55,6 +55,14 @@ class Help(commands.Cog):
 
         await ctx.send(embed=embed)
 
+    
+    @commands.command()
+    async def info(self, ctx):
+        embed = discord.Embed(
+            title="Info about the bot",
+            description="Source code: https://bit.ly/roboty-source")
+        await ctx.send(embed=embed)
+
 
 def setup(client):
     client.add_cog(Help(client))

@@ -11,13 +11,6 @@ class Moderation(commands.Cog):
     async def ping(self, ctx):
         await ctx.send(f'Pong! {round(self.client.latency * 1000)}ms')
 
-    @commands.command()
-    async def info(self, ctx):
-        embed = discord.Embed(
-            title="Info about the bot",
-            description="Source code: replit.com/@pintermor9/Roboty")
-        await ctx.send(embed=embed)
-
     @commands.command(aliases=['clear', 'cls'])
     @commands.has_permissions(manage_messages=True)
     async def purge(self, ctx, amount: int = None):
