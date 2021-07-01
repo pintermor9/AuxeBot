@@ -1,2 +1,2 @@
 worker: python main.py
-web: gunicorn web:app
+web: gunicorn -k uvicorn.workers.UvicornWorker web:app
