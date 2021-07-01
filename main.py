@@ -18,7 +18,7 @@ with open(r'./data/settings.yml') as file:
 prefix = settings['prefix']
 TOKEN = settings['TOKEN']
 owner_IDs = settings['owner_IDs']
-web = settings['web']
+webServer = settings['web']
 
 #Downtime settings:
 downAnnouncement = settings['downAnnouncement']
@@ -78,7 +78,7 @@ async def on_ready():
     else:
         await client.change_presence(activity=discord.Game(noCycleActivity))
     
-    if web:
+    if webServer:
         web()
 
 @tasks.loop(seconds=10)
