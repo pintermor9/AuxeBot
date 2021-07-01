@@ -7,7 +7,7 @@ class Moderation(commands.Cog):
         self.client = client
         print(f'Loaded', __name__)
 
-    def is_owner(self):
+    def is_owner():
         def predicate(ctx):
             return ctx.message.author.id in self.owner_IDs
         return commands.check(predicate)
