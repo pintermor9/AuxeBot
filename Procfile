@@ -1,2 +1,2 @@
 worker: python main.py
-web: uvicorn web:app --port 8080
+web: uvicorn web:app --port=${PORT:-8080}
