@@ -2,15 +2,16 @@ import discord
 from discord.ext import commands
 import aiohttp
 import random
-import requests
 
 
 class Levelling(commands.Cog):
-    def __init__(self, client):
+    async def __init__(self, client): 
         self.client = client
         print(f'Loaded', __name__)
 
-        self.client.levels = requests.get(f"https://roboty-api.pintermor9.repl.co/levels/?key={self.client.levelling_apikey}").json()
+        async with aiohttp.ClientSession() as session:
+            self.client.levels = await session.get(f"https://roboty-api.pintermor9.repl.co/levels/?key={self.client.levelling_apikey}")
+            self.client.levels = await self.client.levels.json()
 
     def get_lvl(xp):
         lvl = 0
