@@ -10,8 +10,7 @@ class Levelling(commands.Cog):
         self.client = client
         print(f'Loaded', __name__)
 
-        self.client.levels = requests.get(
-            f"https://roboty-api.pintermor9.repl.co/levels/?key={self.client.levelling_apikey}/").json()
+        self.client.levels = requests.get(f"https://roboty-api.pintermor9.repl.co/levels/?key={self.client.levelling_apikey}").json()
 
     def get_lvl(xp):
         lvl = 0
@@ -66,11 +65,8 @@ class Levelling(commands.Cog):
         boxes = int((lvlxp / (200 * ((1 / 2) * lvl))) * boxnum)
         rank = 1
 
-        try:
-            datalisted = sorted(self.client.levels.items(), key=lambda x: x[1], reverse=True)
-        except:
-            print("\nERROR: {}\n\n".format(self.client.levels))
-            raise Exception
+        datalisted = sorted(self.client.levels.items(), key=lambda x: x[1], reverse=True)
+        
 
         for x in datalisted:
             if x[0] == str(user.id):
