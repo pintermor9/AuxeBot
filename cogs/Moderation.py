@@ -38,7 +38,7 @@ class Moderation(commands.Cog):
     @commands.command()
     async def getctx(self, ctx):
         await ctx.message.delete()
-        print(ctx.__dict__)
+        print(dict(ctx))
         await ctx.send('Context printed to console.', delete_after=5)
 
 

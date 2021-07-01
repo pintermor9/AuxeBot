@@ -7,12 +7,13 @@ class Help(commands.Cog):
         self.client = client
         print(f'Loaded', __name__)
 
-    #COMMAND GROUP!
+    # COMMAND GROUP!
     # TAB!
 
     @commands.command()
     async def help(self, ctx):
-        embed = discord.Embed(description='These are the commands:', color=0x2F3136)
+        embed = discord.Embed(
+            description='These are the commands:', color=0x2F3136)
         embed.set_author(name="Help")
         embed.set_thumbnail(url=ctx.author.avatar_url)
         embed.add_field(
@@ -40,7 +41,7 @@ class Help(commands.Cog):
             inline=False)
 
         embed.add_field(
-            name="**Levelling** | *You can earn levels by sending messages.*", 
+            name="**Levelling** | *You can earn levels by sending messages.*",
             value="""
 
 **rank** [person] - *Shows your XP, level, rank and a progress bar!*

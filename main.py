@@ -1,39 +1,40 @@
-print("Importing modules...")
 
-import discord
-from discord.ext import commands, tasks
-import os
-import yaml
 from itertools import cycle
-
-print("done.")
-print("Getting client")
+import yaml
+import os
+from discord.ext import commands, tasks
+import discord
+print("Imported modules.")
+print("Getting client...")
 
 intents = discord.Intents.all()
+
 
 def get_prefix(*args):
     return client.prefix
 
-client = commands.Bot(command_prefix=get_prefix, help_command=None, intents=intents)
+
+client = commands.Bot(command_prefix=get_prefix,
+                      help_command=None, intents=intents)
 
 print("done.")
 print("Reading settings...")
 
-with open(r'./data/settings.yml') as file:
+with open(r'./settings.yml') as file:
     settings = yaml.full_load(file)
     print(settings)
 
-#General settings
+# General settings
 client.prefix = settings['prefix']
 TOKEN = settings['TOKEN']
 client.owner_IDs = settings['owner_IDs']
 
-#Downtime settings:
+# Downtime settings:
 downAnnouncement = settings['downAnnouncement']
 downDate = settings['downDate']
 downAnnouncementStatus = settings['downAnnouncementStatus']
 
-#Status and activity settings:
+# Status and activity settings:
 cycleActivities = settings['cycleActivities']
 status = settings['status']
 updates = settings['updates']
@@ -45,8 +46,10 @@ loopActivities = cycle([
     'Yeah I know that I should get a profile picture.',
     f'Latest updates: {updates}'
 ])
+
 # gets the apikey of https://Roboty-api.pintermor9.repl.co/
-client.apikey = settings["apikey"]
+client.levelling_apikey = settings["levelling_apikey"]
+client.logging_apikey = settings["logging_apikey"]
 
 
 print("done.")
@@ -77,8 +80,8 @@ async def on_ready():
         activityLoop.start()
     else:
         await client.change_presence(activity=discord.Game(noCycleActivity))
-    
-    
+
+
 @tasks.loop(seconds=10)
 async def activityLoop():
     await client.change_presence(activity=discord.Game(next(loopActivities)))

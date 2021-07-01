@@ -10,8 +10,8 @@ class Levelling(commands.Cog):
         self.client = client
         print(f'Loaded', __name__)
 
-        
-        self.client.levels = requests.get(f"https://roboty-api.pintermor9.repl.co/levels/?key={self.client.apikey}").json()
+        self.client.levels = requests.get(
+            f"https://roboty-api.pintermor9.repl.co/levels/?key={self.client.levelling_apikey}").json()
 
     def get_lvl(xp):
         lvl = 0
@@ -25,14 +25,15 @@ class Levelling(commands.Cog):
     async def on_message(self, message):
         if message.author.bot:
             return
-        
+
         authorID = str(message.author.id)
         try:
             old_xp = self.client.levels[authorID]
         except:
             old_xp = 0
 
-        xp = requests.get(f"https://roboty-api.pintermor9.repl.co/levels/add/{authorID}/{random.randint(10, 30)}?key={self.client.apikey}").json()[authorID]
+        xp = requests.get(
+            f"https://roboty-api.pintermor9.repl.co/levels/add/{authorID}/{random.randint(10, 30)}?key={self.client.levelling_apikey}").json()[authorID]
 
         if Levelling.get_lvl(old_xp)[1] < Levelling.get_lvl(xp)[1]:
             channel = self.client.get_channel(768720147804192788)
@@ -47,7 +48,6 @@ class Levelling(commands.Cog):
     async def rank(self, ctx, user: discord.Member = None):
         msg = await ctx.send("Please wait...")
 
-        
         if user == None:
             user = ctx.author
 
@@ -64,7 +64,8 @@ class Levelling(commands.Cog):
         boxes = int((lvlxp / (200 * ((1 / 2) * lvl))) * boxnum)
         rank = 1
 
-        datalisted = sorted(self.client.levels.items(), key=lambda x: x[1], reverse=True)
+        datalisted = sorted(self.client.levels.items(),
+                            key=lambda x: x[1], reverse=True)
 
         for x in datalisted:
             if x[0] == str(user.id):
@@ -92,8 +93,9 @@ class Levelling(commands.Cog):
     @commands.command(aliases=["lead"])
     async def leaderboard(self, ctx, top_x=5):
         msg = await ctx.send("Please wait...")
-        
-        datalisted = sorted(self.client.levels.items(), key=lambda x: x[1], reverse=True)
+
+        datalisted = sorted(self.client.levels.items(),
+                            key=lambda x: x[1], reverse=True)
 
         topIDs = tuple(map(lambda i: i[0], datalisted))
 

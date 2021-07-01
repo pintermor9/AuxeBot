@@ -15,4 +15,6 @@ status: 'discord.Status.online'
 updates: "Now deployed on Heroku! Less ping, no downtimes, faster bot!"
 noCycleActivity: 'Levelling is temporarily disabled due to heroku uncompatibility! After enabling it again you will receive triple XP for at least a week.'
 
-apikey: roboty-levelling
+# replit api settings
+levelling_apikey: roboty-levelling
+logging_apikey: roboty-logging

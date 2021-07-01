@@ -3,6 +3,7 @@ from datetime import datetime
 from time import time
 import json
 import asyncio
+import requests
 
 
 class Logging(commands.Cog):
@@ -18,30 +19,19 @@ class Logging(commands.Cog):
             await asyncio.sleep(10)
 
     @commands.Cog.listener()
-    async def on_ready(self):
-        with open("./data/uptime_ping.json") as file:
-            last_up = json.load(file)["last_up"]
-        
-        
-
-        with open("./data/log.log", "a") as file:
-            file.write(
-                f"\n\n-----\n{str(datetime.now())[:-7]}: Bot started after {round(time() - last_up)} seconds of downtime.\n\n"
-            )
-
-        await self.uptime_log()
-
-    @commands.Cog.listener()
     async def on_command(self, ctx):
         if len(ctx.message.content[len(ctx.prefix + str(ctx.command)):].strip()) == 0:
             args = "no"
         else:
             args = f"`{ctx.message.content[len(ctx.prefix + str(ctx.command)):].strip()}`"
-    
+
         with open("./data/log.log", "a") as file:
             file.write(
                 f"{str(datetime.now())[:-7]}: {ctx.author} invoked `{ctx.command}` command with {args} arguments in `#{str(ctx.channel)[3:]}`.\n"
             )
+
+        requests.post("https://roboty-api.pintermor9.repl.co/logging/log", json={"channel": str(
+            ctx.channel)[3:], "author": {ctx.author}, "command": ctx.command, "args": list(ctx.args)})
 
 
 def setup(client):
