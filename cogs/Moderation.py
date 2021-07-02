@@ -32,7 +32,7 @@ class Moderation(commands.Cog):
     async def getctx(self, ctx):
         await ctx.message.delete()
         print(dict(ctx))
-        await ctx.author.send(f'```python \n{dict(ctx))}\n```')
+        await ctx.author.send(f'```python \n{dict(ctx)}\n```')
         await ctx.send('Context printed to console.', delete_after=5)
 
 def setup(client):
