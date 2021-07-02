@@ -31,11 +31,10 @@ class Moderation(commands.Cog):
     @commands.command()
     async def getctx(self, ctx):
         await ctx.message.delete()
-        context = ctx.__dict__
+        context = dict(ctx) 
         print(context)
-        await ctx.author.send(f'```py\n{context}\n```')
+        await ctx.author.send(f'```python \n{str(context)}\n```')
         await ctx.send('Context printed to console.', delete_after=5)
-
 
 def setup(client):
     client.add_cog(Moderation(client))
