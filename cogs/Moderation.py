@@ -28,12 +28,12 @@ class Moderation(commands.Cog):
             activity=discord.Game("Shutting down..."))
         await self.client.logout()
 
-    @commands.command()
-    async def getctx(self, ctx):
-        await ctx.message.delete()
-        print(dict(ctx))
-        await ctx.author.send(f'```python \n{dict(ctx)}\n```')
-        await ctx.send('Context printed to console.', delete_after=5)
+    # @commands.command(aliases=["ctx"], hidden=True)
+    # async def getctx(self, ctx):
+    #     await ctx.message.delete()
+    #     print(ctx.__name__)
+    #     # await ctx.author.send(f'```python \n{ctx}\n```')
+    #     await ctx.send('Context printed to console.', delete_after=5)
 
 def setup(client):
     client.add_cog(Moderation(client))
