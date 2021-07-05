@@ -1,48 +1,58 @@
-print("Importing modules...")
 
-import discord
-from discord.ext import commands, tasks
-import os
-import yaml
 from itertools import cycle
+import yaml
+import os
+from discord.ext import commands, tasks
+import discord
+print("Imported modules.")
+print("Getting client...")
+
+intents = discord.Intents.all()
+
+
+def get_prefix(*args):
+    return client.prefix
+
+
+client = commands.Bot(command_prefix=get_prefix,
+                      help_command=None, intents=intents)
 
 print("done.")
-print("Reading settings.")
+print("Reading settings...")
 
-with open(r'./data/settings.yml') as file:
+with open(r'./settings.yml') as file:
     settings = yaml.full_load(file)
     print(settings)
 
-#General settings
-prefix = settings['prefix']
+# General settings
+client.prefix = settings['prefix']
 TOKEN = settings['TOKEN']
-owner_IDs = settings['owner_IDs']
+client.owner_IDs = settings['owner_IDs']
 
-#Downtime settings:
+# Downtime settings:
 downAnnouncement = settings['downAnnouncement']
 downDate = settings['downDate']
 downAnnouncementStatus = settings['downAnnouncementStatus']
 
-#Status and activity settings:
+# Status and activity settings:
 cycleActivities = settings['cycleActivities']
 status = settings['status']
 updates = settings['updates']
 noCycleActivity = settings['noCycleActivity']
 loopActivities = cycle([
-    f'Prefix: {prefix}', f'Use \'{prefix}help\' for help!',
+    f'Prefix: {client.prefix}', f'Use \'{client.prefix}help\' for help!',
     'Owner: mor3000#8499',
     'Check out \'stats.uptimerobot.com/pLEoghzLzx\' for uptime stats!',
     'Yeah I know that I should get a profile picture.',
     f'Latest updates: {updates}'
 ])
 
+# gets the apikey of https://Roboty-api.pintermor9.repl.co/
+client.levelling_apikey = settings["levelling_apikey"]
+client.logging_apikey = settings["logging_apikey"]
+
+
 print("done.")
-
-intents = discord.Intents.all()
-
-client = commands.Bot(command_prefix=prefix,
-                      help_command=None,
-                      intents=intents)
 
 if downAnnouncement:
     cycleActivities = False
@@ -50,7 +60,7 @@ if downAnnouncement:
 
 
 def is_owner(ctx):
-    return ctx.message.author.id in owner_IDs
+    return ctx.message.author.id in client.owner_IDs
 
 
 @client.event

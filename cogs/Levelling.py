@@ -1,25 +1,15 @@
 import discord
 from discord.ext import commands
-import json
+import aiohttp, requests
 import random
-
-filepath = r"./cogs/Levelling/data.json"
 
 
 class Levelling(commands.Cog):
-    def __init__(self, client):
+    def __init__(self, client): 
         self.client = client
         print(f'Loaded', __name__)
 
-        with open(filepath) as file:
-            global data
-            data = json.load(file)
-
-    def write():
-        global data
-
-        with open(filepath, "w") as file:
-            json.dump(data, file)
+        self.client.levels = requests.get(f"https://roboty-api.pintermor9.repl.co/levels/?key={self.client.levelling_apikey}").json()
 
     def get_lvl(xp):
         lvl = 0
@@ -34,14 +24,16 @@ class Levelling(commands.Cog):
         if message.author.bot:
             return
 
-        global data
         authorID = str(message.author.id)
         try:
-            old_xp = data[authorID]
+            old_xp = self.client.levels[authorID]
         except:
             old_xp = 0
 
-        xp = old_xp + random.randint(1, 10)
+        async with aiohttp.ClientSession() as session:
+            xp = await session.get(f"https://roboty-api.pintermor9.repl.co/levels/add/{authorID}/{random.randint(10, 30)}/?key={self.client.levelling_apikey}")
+            xp = await xp.json(); xp = xp[authorID]
+
 
         if Levelling.get_lvl(old_xp)[1] < Levelling.get_lvl(xp)[1]:
             channel = self.client.get_channel(768720147804192788)
@@ -50,25 +42,20 @@ class Levelling(commands.Cog):
                 f"GG {message.author.mention}, you just advanced to level {Levelling.get_lvl(xp)[1]}!"
             )
 
-        data.update({authorID: xp})
-
-        Levelling.write()
+        self.client.levels.update({authorID: xp})
 
     @commands.command()
     async def rank(self, ctx, user: discord.Member = None):
         msg = await ctx.send("Please wait...")
 
-        global data
-
         if user == None:
             user = ctx.author
 
         try:
-            xp = data[str(user.id)]
+            xp = self.client.levels[str(user.id)]
         except:
-            data.update({str(user.id): 0})
-            Levelling.write()
-            xp = data[str(user.id)]
+            self.client.levels.update({str(user.id): 0})
+            xp = self.client.levels[str(user.id)]
 
         lvlxp, lvl = Levelling.get_lvl(xp)
 
@@ -77,7 +64,8 @@ class Levelling(commands.Cog):
         boxes = int((lvlxp / (200 * ((1 / 2) * lvl))) * boxnum)
         rank = 1
 
-        datalisted = sorted(data.items(), key=lambda x: x[1], reverse=True)
+        datalisted = sorted(self.client.levels.items(), key=lambda x: x[1], reverse=True)
+        
 
         for x in datalisted:
             if x[0] == str(user.id):
@@ -105,8 +93,9 @@ class Levelling(commands.Cog):
     @commands.command(aliases=["lead"])
     async def leaderboard(self, ctx, top_x=5):
         msg = await ctx.send("Please wait...")
-        global data
-        datalisted = sorted(data.items(), key=lambda x: x[1], reverse=True)
+
+        datalisted = sorted(self.client.levels.items(),
+                            key=lambda x: x[1], reverse=True)
 
         topIDs = tuple(map(lambda i: i[0], datalisted))
 
