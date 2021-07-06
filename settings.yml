@@ -14,3 +14,6 @@ cycleActivities: True
 status: 'discord.Status.online'
 updates: "Now deployed on HEROKU instead of REPLIT."
 noCycleActivity: ''
+
+levelling_apikey: roboty-levelling
+loggiing_apikey: roboty-logging
