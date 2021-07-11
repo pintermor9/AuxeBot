@@ -23,10 +23,10 @@ class Test(commands.Cog):
 
     @commands.command()
     async def typing(self, ctx):
-        async with channel.typing():
+        async with ctx.typing():
             # do expensive stuff here
             await sleep(5)
-            await channel.send('done!')
+            await ctx.send('done!')
 
 
 def setup(client):
