@@ -22,10 +22,10 @@ class Test(commands.Cog):
         await paginator.run(embeds)
 
     @commands.command()
-    async def typing(self, ctx):
+    async def type(self, ctx, time: int):
         async with ctx.typing():
             # do expensive stuff here
-            await sleep(5)
+            await sleep(time)
             await ctx.send('done!')
 
 
