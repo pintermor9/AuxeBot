@@ -11,7 +11,7 @@ class Test(commands.Cog):
         embed1 = discord.Embed(color=ctx.author.color).add_field(name="Example", value="Page 1")
         embed2 = discord.Embed(color=ctx.author.color).add_field(name="Example", value="Page 2")
         embed3 = discord.Embed(color=ctx.author.color).add_field(name="Example", value="Page 3")
-        paginator = DiscordUtils.Pagination.AutoEmbedPaginator(ctx, remove_reactions=True)
+        paginator = DiscordUtils.Pagination.CustomEmbedPaginator(ctx, remove_reactions=True)
         paginator.add_reaction('⏮️', "first")
         paginator.add_reaction('⏪', "back")
         paginator.add_reaction('🔐', "lock")
