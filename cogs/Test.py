@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import DiscordUtils
+from asyncio import sleep
 
 class Test(commands.Cog):
     def __init__(self, client):
@@ -19,6 +20,14 @@ class Test(commands.Cog):
         paginator.add_reaction('⏭️', "last")
         embeds = [embed1, embed2, embed3]
         await paginator.run(embeds)
+
+    @commands.command()
+    async def typing(self, ctx):
+        async with channel.typing():
+            # do expensive stuff here
+            await sleep(5)
+            await channel.send('done!')
+
 
 def setup(client):
     client.add_cog(Test(client))
