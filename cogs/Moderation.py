@@ -35,5 +35,6 @@ class Moderation(commands.Cog):
     #     # await ctx.author.send(f'```python \n{ctx}\n```')
     #     await ctx.send('Context printed to console.', delete_after=5)
 
+
 def setup(client):
     client.add_cog(Moderation(client))

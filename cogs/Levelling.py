@@ -1,15 +1,19 @@
 import discord
 from discord.ext import commands
-import aiohttp, requests
+import aiohttp
+import requests
 import random
 
 
 class Levelling(commands.Cog):
-    def __init__(self, client): 
+    def __init__(self, client):
         self.client = client
         print(f'Loaded', __name__)
-
-        self.client.levels = requests.get(f"https://roboty-api.pintermor9.repl.co/levels/?key={self.client.levelling_apikey}").json()
+        try:
+            self.client.levels = requests.get(
+                f"https://roboty-api.pintermor9.repl.co/levels/?key={self.client.levelling_apikey}").json()
+        except:
+            pass
 
     def get_lvl(xp):
         lvl = 0
@@ -21,6 +25,12 @@ class Levelling(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        try:  # This checks if the api is online and returns if not
+            async with aiohttp.ClientSession() as session:
+                await session.get("https://roboty-api.pintermor9.repl.co/ping")
+        except:
+            return
+
         if message.author.bot:
             return
 
@@ -32,8 +42,8 @@ class Levelling(commands.Cog):
 
         async with aiohttp.ClientSession() as session:
             xp = await session.get(f"https://roboty-api.pintermor9.repl.co/levels/add/{authorID}/{random.randint(10, 30)}/?key={self.client.levelling_apikey}")
-            xp = await xp.json(); xp = xp[authorID]
-
+            xp = await xp.json()
+            xp = xp[authorID]
 
         if Levelling.get_lvl(old_xp)[1] < Levelling.get_lvl(xp)[1]:
             channel = self.client.get_channel(768720147804192788)
@@ -46,93 +56,109 @@ class Levelling(commands.Cog):
 
     @commands.command()
     async def rank(self, ctx, user: discord.Member = None):
-        msg = await ctx.send("Please wait...")
+        async with ctx.typing():
+            try:  # This checks if the api is online and returns if not
+                async with aiohttp.ClientSession() as session:
+                    await session.get("https://roboty-api.pintermor9.repl.co/ping")
+            except:
+                await ctx.send("Sorry, You can't do that now. Try again later.")
+                return
 
-        if user == None:
-            user = ctx.author
+            if user == None:
+                user = ctx.author
 
-        try:
-            xp = self.client.levels[str(user.id)]
-        except:
-            self.client.levels.update({str(user.id): 0})
-            xp = self.client.levels[str(user.id)]
+            try:
+                xp = self.client.levels[str(user.id)]
+            except:
+                self.client.levels.update({str(user.id): 0})
+                xp = self.client.levels[str(user.id)]
 
-        lvlxp, lvl = Levelling.get_lvl(xp)
+            lvlxp, lvl = Levelling.get_lvl(xp)
 
-        boxnum = 25
+            boxnum = 25
 
-        boxes = int((lvlxp / (200 * ((1 / 2) * lvl))) * boxnum)
-        rank = 1
+            boxes = int((lvlxp / (200 * ((1 / 2) * lvl))) * boxnum)
+            rank = 1
 
-        datalisted = sorted(self.client.levels.items(), key=lambda x: x[1], reverse=True)
-        
+            datalisted = sorted(self.client.levels.items(),
+                                key=lambda x: x[1], reverse=True)
 
-        for x in datalisted:
-            if x[0] == str(user.id):
-                break
-            rank += 1
+            for x in datalisted:
+                if x[0] == str(user.id):
+                    break
+                rank += 1
 
-        if boxes < 10:
-            embed = discord.Embed(title=f"{user}'s XP Stats", color=0xff0000)
-        elif boxes < (boxnum - 5):
-            embed = discord.Embed(title=f"{user}'s XP Stats", color=0xff8800)
-        elif boxes >= (boxnum - 5):
-            embed = discord.Embed(title=f"{user}'s XP Stats", color=0x00ff00)
+            if boxes < 10:
+                embed = discord.Embed(
+                    title=f"{user}'s XP Stats", color=0xff0000)
+            elif boxes < (boxnum - 5):
+                embed = discord.Embed(
+                    title=f"{user}'s XP Stats", color=0xff8800)
+            elif boxes >= (boxnum - 5):
+                embed = discord.Embed(
+                    title=f"{user}'s XP Stats", color=0x00ff00)
 
-        embed.add_field(name="Experience",
-                        value=f"{lvlxp}/{int(200*((1/2)*lvl))}\n*Total: {xp}*",
-                        inline=True)
-        embed.add_field(name="Level", value=lvl, inline=True)
-        embed.add_field(name="Rank", value=rank, inline=True)
-        embed.add_field(name="Progress Bar",
-                        value="".join((boxes * "█", (boxnum - boxes) * "░")),
-                        inline=False)
+            embed.add_field(name="Experience",
+                            value=f"{lvlxp}/{int(200*((1/2)*lvl))}\n*Total: {xp}*",
+                            inline=True)
+            embed.add_field(name="Level", value=lvl, inline=True)
+            embed.add_field(name="Rank", value=rank, inline=True)
+            embed.add_field(name="Progress Bar",
+                            value="".join(
+                                (boxes * "█", (boxnum - boxes) * "░")),
+                            inline=False)
 
-        await msg.edit(embed=embed, content="")
+            await ctx.send(embed=embed)
 
     @commands.command(aliases=["lead"])
     async def leaderboard(self, ctx, top_x=5):
-        msg = await ctx.send("Please wait...")
-
-        datalisted = sorted(self.client.levels.items(),
-                            key=lambda x: x[1], reverse=True)
-
-        topIDs = tuple(map(lambda i: i[0], datalisted))
-
-        if str(ctx.author.id) in topIDs:
-            try:
-                if topIDs.index(str(ctx.author.id)) == 0:
-                    color = 0xff8800
-                elif topIDs.index(str(ctx.author.id)) == 1:
-                    color = 0xC0C0C0
-                elif topIDs.index(str(ctx.author.id)) == 2:
-                    color = 0xCC8833
-                else:
-                    raise Exception()
+        async with ctx.typing():
+            try:  # This checks if the api is online and returns if not
+                async with aiohttp.ClientSession() as session:
+                    await session.get("https://roboty-api.pintermor9.repl.co/ping")
             except:
-                color = 0x2F3136
+                await ctx.send("Sorry, You can't do that now. Try again later.")
+                return
 
-        embed = discord.Embed(
-            title="Leaderboard",
-            description=f"Top {top_x} member(s) on the leaderboard\n",
-            color=color)
+            datalisted = sorted(self.client.levels.items(),
+                                key=lambda x: x[1], reverse=True)
 
-        for rank in range(top_x):
-            try:
-                user = self.client.get_user(int(datalisted[rank][0]))
-                xp = datalisted[rank][1]
-            except:
-                break
+            topIDs = tuple(map(lambda i: i[0], datalisted))
 
-            lvlxp, lvl = Levelling.get_lvl(xp)
-            whitespace = '\u2800' * (len(str(rank)) + 1)
+            if str(ctx.author.id) in topIDs:
+                try:
+                    if topIDs.index(str(ctx.author.id)) == 0:
+                        color = 0xff8800
+                    elif topIDs.index(str(ctx.author.id)) == 1:
+                        color = 0xC0C0C0
+                    elif topIDs.index(str(ctx.author.id)) == 2:
+                        color = 0xCC8833
+                    else:
+                        raise Exception()
+                except:
+                    color = 0x2F3136
 
-            embed.add_field(
-                name=f"**{rank + 1}.**\u2800{user}",
-                value=f"**{whitespace} Level: {lvl},\u2800XP: {lvlxp}**",
-                inline=False)
+            embed = discord.Embed(
+                title="Leaderboard",
+                description=f"Top {top_x} member(s) on the leaderboard\n",
+                color=color)
 
-        await msg.edit(content=None, embed=embed)
+            for rank in range(top_x):
+                try:
+                    user = self.client.get_user(int(datalisted[rank][0]))
+                    xp = datalisted[rank][1]
+                except:
+                    break
+
+                lvlxp, lvl = Levelling.get_lvl(xp)
+                whitespace = '\u2800' * (len(str(rank)) + 1)
+
+                embed.add_field(
+                    name=f"**`{rank + 1}`.** {user}",
+                    value=f"** {whitespace} Level: {lvl},\u2800XP: {lvlxp}**",
+                    inline=False)
+
+            await ctx.send(embed=embed)
 
 
 def setup(client):

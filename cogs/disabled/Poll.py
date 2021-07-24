@@ -8,6 +8,5 @@ class Poll(commands.Cog):
         print(f'Loaded', __name__)
 
 
-
 def setup(client):
     client.add_cog(Poll(client))

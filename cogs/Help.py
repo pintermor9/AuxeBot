@@ -55,7 +55,6 @@ class Help(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    
     @commands.command()
     async def info(self, ctx):
         embed = discord.Embed(
