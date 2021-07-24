@@ -1,20 +1,19 @@
 #General settings
-prefix: "-"
+prefix: '-'
 TOKEN: ODMxNzk0MTAxNzUzNzQxMzMy.YHaanw.xzFW7O9_3-7M7-ItQGFTM0h7MB0
-owner_IDs:
+owner_IDs: 
   - 761555679873597450
 
 #Downtime settings:
 downAnnouncement: False
-downDate: "on 16-04-21 at 8:00"
+downDate: 'on 16-04-21 at 8:00'
 downAnnouncementStatus: f'The bot will be down on maintenance {downDate}. Please be patient!'
 
 #Status and activity settings:
-cycleActivities: False
-status: "discord.Status.online"
-updates: "Now deployed on Heroku! Less ping, no downtimes, faster bot!"
-noCycleActivity: "Testing..."
+cycleActivities: True
+status: 'discord.Status.online'
+updates: "Now deployed on HEROKU instead of REPLIT."
+noCycleActivity: ''
 
-# replit api settings
 levelling_apikey: roboty-levelling
 logging_apikey: roboty-logging
