@@ -7,4 +7,5 @@ uvicorn
 gunicorn
 DiscordUtils
 youtube_dl
+ffmpeg
 PyNaCl
