@@ -87,13 +87,9 @@ class Help(commands.Cog):
                     helpText += f'**Aliases: ** `{", ".join(command.aliases)}`'
                 helpText += '\n'
 
-                data = await self.bot.config._Document__get_raw(ctx.guild.id)
-                if not data or "prefix" not in data:
-                    prefix = self.bot.DEFAULTPREFIX
-                else:
-                    prefix = data['prefix']
+   
 
-                helpText += f'**Format:** `{prefix}{command.name} {command.usage if command.usage is not None else ""}`\n\n'
+                helpText += f'**Format:** `-{command.name} {command.usage if command.usage is not None else ""}`\n\n'
             helpEmbed.description = helpText
 
         else:
