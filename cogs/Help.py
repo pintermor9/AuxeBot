@@ -24,6 +24,7 @@ class Help(commands.Cog):
 **nice** - *Sends a nice gif!*
 **creeper** - *Sends a creepy gif!*
 **choose** <1> <2> [3] [4] [5] [...] - *Chooses something from the given parameters!*
+**echo** <text> - *Echos the inputted text!*
 **reverse** <text> - *Reverses the inputted text!*
 
 """,
@@ -46,6 +47,28 @@ class Help(commands.Cog):
 
 **rank** [person] - *Shows your XP, level, rank and a progress bar!*
 **leaderboard** [top] - *Shows the top 5 (by deafult) ranked people!*
+
+""",
+            inline=False)
+
+        embed.add_field(
+            name="**Music**",
+            value="""
+
+**join** - *Joins your voice channel.*
+**summon** [voice channel id] - *Summons the bot to a specified voice channel.*
+**leave** - *Clears the queue and leaves the voice channel.*
+**volume** <volume> - *Sets the volume of the player.* `WIP`
+**now** - *Displays the currently playing song.*
+**pause** - *Pauses the currently playing song.*
+**resume** - *Pauses the paused song.*
+**stop** - *Stops playing song and clears the queue.*
+**skip** - *Skips the currently playing song.*
+**queue** [page: 1] - *Shows the player's queue.*
+**shuffle** - *Shuffles the queue.*
+**remove** - *Removes a song from the queue at a given index.*
+**loop** - *Loops the currently playing song.*
+**play** [title/youtube url] - *If not in voice channel, invokes `join`. Plays or enqueues a song.*
 
 """,
             inline=False)

@@ -9,10 +9,6 @@ class Fun(commands.Cog):
         self.client = client
         print('Loaded', __name__)
 
-    @commands.command()
-    async def reverse(self, ctx, *, text):
-        await ctx.send(text[-1::-1])
-
     @commands.command(name='8ball', aliases=['eightball'], description="Gives you a random answer to your question!")
     async def _8ball(self, ctx, *, question=None):
         if question == None:
@@ -66,9 +62,13 @@ class Fun(commands.Cog):
         thisforthat = r['this'], ' for ', r['that'], '!'
         await ctx.send(''.join(thisforthat))
 
-    @commands.command()
+    @commands.command(description="Echos the inputted text!")
     async def echo(self, ctx, *, text):
         await ctx.send(text)
+
+    @commands.command(description="Reverses the inputted text!")
+    async def reverse(self, ctx, *, text):
+        await ctx.send(text[-1::-1])
 
 
 def setup(client):

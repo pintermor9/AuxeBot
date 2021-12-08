@@ -7,11 +7,11 @@ class Moderation(commands.Cog):
         self.client = client
         print(f'Loaded', __name__)
 
-    @commands.command()
+    @commands.command(description="")
     async def ping(self, ctx):
         await ctx.send(f'Pong! {round(self.client.latency * 1000)}ms')
 
-    @commands.command(aliases=['clear', 'cls'])
+    @commands.command(aliases=['clear', 'cls'], description="")
     @commands.has_permissions(manage_messages=True)
     async def purge(self, ctx, amount: int = None):
         if amount == None:
@@ -27,13 +27,6 @@ class Moderation(commands.Cog):
             status=discord.Status.do_not_disturb,
             activity=discord.Game("Shutting down..."))
         await self.client.logout()
-
-    # @commands.command(aliases=["ctx"], hidden=True)
-    # async def getctx(self, ctx):
-    #     await ctx.message.delete()
-    #     print(ctx.__name__)
-    #     # await ctx.author.send(f'```python \n{ctx}\n```')
-    #     await ctx.send('Context printed to console.', delete_after=5)
 
 
 def setup(client):
