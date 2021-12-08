@@ -60,7 +60,7 @@ class Help(commands.Cog):
                     commandList += f"**{command.name}** - *{command.description}*\n"
                 commandList += "\n"
 
-                helpEmbed.add_field(name=cog, value=commandList, inline=False)
+                helpEmbed.add_field(name=cog if cog else "no", value=commandList if commandList else "no", inline=False)
 
         elif re.search(r"[a-zA-Z]", str(cog)):
             lowerCogs = [c.lower() for c in cogs]
