@@ -20,7 +20,7 @@ class Help(commands.Cog):
     )
     async def help(self, ctx, cog="1"):
         helpEmbed = discord.Embed(
-            title="Help commands!", color=random.choice(self.bot.color_list)
+            title="Help commands!", color=0x000000
         )
         helpEmbed.set_thumbnail(url=ctx.author.avatar_url)
 
