@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands
 
 
-class Help(commands.Cog):
+class THelp(commands.Cog):
     def __init__(self, bot):
         print('hrlp loaded')
         self.bot = bot
