@@ -13,7 +13,7 @@ class Fun(commands.Cog):
     async def reverse(self, ctx, *, text):
         await ctx.send(text[-1::-1])
 
-    @commands.command(name='8ball', aliases=['eightball'])
+    @commands.command(name='8ball', aliases=['eightball'], description="Gives you a random answer to your question!")
     async def _8ball(self, ctx, *, question=None):
         if question == None:
             await ctx.send('Please ask a question!')
@@ -46,21 +46,21 @@ class Fun(commands.Cog):
 
             await ctx.send(embed=embed)
 
-    @commands.command(aliases=['noice', 'nájsz', 'nojsz', 'nolysz'])
+    @commands.command(aliases=['noice', 'nájsz', 'nojsz', 'nolysz'], description="Sends a nice gif!")
     async def nice(self, ctx):
         await ctx.send('https://www.icegif.com/wp-content/uploads/noice-icegif-3.gif')
 
-    @commands.command()
+    @commands.command(description="Sends a creepy gif!")
     async def creeper(self, ctx):
         await ctx.send('https://thumbs.gfycat.com/EntireReflectingKakarikis-size_restricted.gif')
 
-    @commands.command()
+    @commands.command(description="Chooses something from the given parameters!")
     async def choose(self, ctx, _1, _2, *more):
         chooselist = [_1, _2]
         chooselist.extend(more)
         await ctx.send(random.choice(chooselist))
 
-    @commands.command(aliases=['itsthisforthat', 'this/that', 'thisthat'])
+    @commands.command(aliases=['itsthisforthat', 'this/that', 'thisthat'], description="itsthisforthat.com")
     async def thisforthat(self, ctx):
         r = requests.get('http://itsthisforthat.com/api.php?json').json()
         thisforthat = r['this'], ' for ', r['that'], '!'
