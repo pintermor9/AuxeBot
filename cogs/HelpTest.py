@@ -22,7 +22,7 @@ class Help(commands.Cog):
         helpEmbed = discord.Embed(
             title="Help commands!", color=0x000000
         )
-        helpEmbed.set_thumbnail(url=ctx.author.avatar_url)
+        # helpEmbed.set_thumbnail(url=ctx.author.avatar_url)
 
         # Get a list of all our current cogs & rmeove ones without commands
         cogs = [c for c in self.bot.cogs.keys()]
