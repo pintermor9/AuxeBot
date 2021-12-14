@@ -66,6 +66,11 @@ class Fun(commands.Cog):
     async def echo(self, ctx, *, text):
         await ctx.send(text)
 
+    @commands.command()
+    async def repeat(self, ctx, *, text):
+        await ctx.message.delete()
+        await ctx.send(text)
+
     @commands.command(description="Reverses the inputted text!")
     async def reverse(self, ctx, *, text):
         await ctx.send(text[-1::-1])
