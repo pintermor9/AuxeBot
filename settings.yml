@@ -17,3 +17,5 @@ noCycleActivity: ''
 
 levelling_apikey: roboty-levelling
 logging_apikey: roboty-logging
+
+main_guild_id: 920662357372444672
