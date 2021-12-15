@@ -51,6 +51,9 @@ loopActivities = cycle([
 client.levelling_apikey = settings["levelling_apikey"]
 client.logging_apikey = settings["logging_apikey"]
 
+# get necessary info for logging and levelling #! chech later
+client.main_guild_id = int(settings["main_guild_id"])
+
 
 print("done.")
 
@@ -82,7 +85,7 @@ async def on_ready():
         await client.change_presence(activity=discord.Game(noCycleActivity))
 
 
-@tasks.loop(seconds=10)
+@tasks.loop(seconds=15)
 async def activityLoop():
     await client.change_presence(activity=discord.Game(next(loopActivities)))
 
