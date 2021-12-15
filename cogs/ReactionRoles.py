@@ -159,4 +159,5 @@ class ReactionRoles(commands.Cog):
 
 
 def setup(bot):
+    print("rr temp disable")
     # bot.add_cog(ReactionRoles(bot))
