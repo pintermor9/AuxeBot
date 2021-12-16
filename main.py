@@ -52,7 +52,8 @@ client.levelling_apikey = settings["levelling_apikey"]
 client.logging_apikey = settings["logging_apikey"]
 
 # get necessary info for logging and levelling #! chech later
-client.main_guild_id = int(settings["main_guild_id"])
+client.data_guild_id = int(settings["main_guild_id"])
+client.data_guild = client.get_guild(client.data_guild_id)
 
 
 print("done.")
