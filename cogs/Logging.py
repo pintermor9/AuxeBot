@@ -4,7 +4,7 @@ from time import time
 import json
 import asyncio
 import aiohttp
-
+import atexit
 
 class Logging(commands.Cog):
     def __init__(self, client):
@@ -17,6 +17,10 @@ class Logging(commands.Cog):
                 json.dump({"last_up": time()}, file)
 
             await asyncio.sleep(10)"""
+
+    @atexit.register
+    async def last_up():
+        print(time()) #TODO Send message + read when stattded
 
     @commands.Cog.listener()
     async def on_command(self, ctx):
