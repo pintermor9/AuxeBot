@@ -11,12 +11,12 @@ class Logging(commands.Cog):
         self.client = client
         print(f'Loaded', __name__)
 
-    async def uptime_log(self):
+    """async def uptime_log(self):
         while True:
             with open("./data/uptime_ping.json", "w") as file:
                 json.dump({"last_up": time()}, file)
 
-            await asyncio.sleep(10)
+            await asyncio.sleep(10)"""
 
     @commands.Cog.listener()
     async def on_command(self, ctx):
