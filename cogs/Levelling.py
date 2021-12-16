@@ -1,3 +1,4 @@
+import time
 import discord
 from discord.ext import commands
 import aiohttp
@@ -9,11 +10,6 @@ class Levelling(commands.Cog):
     def __init__(self, client):
         self.client = client
         print(f'Loaded', __name__)
-        try:
-            self.client.levels = requests.get(
-                f"https://roboty-api.pintermor9.repl.co/levels/?key={self.client.levelling_apikey}").json()
-        except:
-            pass
 
     def get_lvl(xp):
         lvl = 0
@@ -25,12 +21,6 @@ class Levelling(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        try:  # This checks if the api is online and returns if not
-            async with aiohttp.ClientSession() as session:
-                await session.get("https://roboty-api.pintermor9.repl.co/ping")
-        except:
-            return
-
         if message.author.bot:
             return
 
@@ -40,21 +30,19 @@ class Levelling(commands.Cog):
         except:
             old_xp = 0
 
-        async with aiohttp.ClientSession() as session:
-            xp = await session.get(f"https://roboty-api.pintermor9.repl.co/levels/add/{authorID}/{random.randint(10, 30)}/?key={self.client.levelling_apikey}")
-            xp = await xp.json()
-            xp = xp[authorID]
+        self.client.levels[authorID] += random.randint(10, 30)
+        xp = self.client.levels[authorID]
 
         if Levelling.get_lvl(old_xp)[1] < Levelling.get_lvl(xp)[1]:
-            channel = self.client.get_channel(768720147804192788)
-
-            await channel.send(
+            await message.author.send(
                 f"GG {message.author.mention}, you just advanced to level {Levelling.get_lvl(xp)[1]}!"
             )
 
         self.client.levels.update({authorID: xp})
 
-    @commands.command()
+    !!!!!!!lkéj fgdfjg jfshg jhdf
+
+    @commands.command()  # ! iue zrgthpjosdyufhg iusf hzgpoéiuhsdygoiuhy
     async def rank(self, ctx, user: discord.Member = None):
         async with ctx.typing():
             try:  # This checks if the api is online and returns if not

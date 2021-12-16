@@ -1,5 +1,6 @@
 
 from itertools import cycle
+import json
 import yaml
 import os
 from discord.ext import commands, tasks
@@ -51,10 +52,8 @@ loopActivities = cycle([
 client.levelling_apikey = settings["levelling_apikey"]
 client.logging_apikey = settings["logging_apikey"]
 
-# get necessary info for logging and levelling #! chech later
-client.data_guild_id = int(settings["main_guild_id"])
-client.data_guild = client.get_guild(client.data_guild_id)
-
+# get necessary info for logging and levelling #! check later
+client.data_guild_id = int(settings["data_guild_id"])
 
 print("done.")
 
@@ -80,10 +79,30 @@ async def on_ready():
         status=discord.Status.idle,
         activity=discord.Game("Initializing... Please wait."))
 
+    client.data_guild = client.get_guild(client.data_guild_id)
+
+    client.data_channels = client.data_guild.text_channels
+    client.message_ids_channel = discord.utils.find(
+        lambda channel: channel.name == 'message-ids', client.data_channels)
+    client.message_ids = await client.message_ids_channel.fetch_message(client.message_ids_channel.last_message_id)
+    client.message_ids = dict(json.loads(client.message_ids.content))
+
+    channel = discord.utils.find(
+        lambda channel: channel.name == 'levelling-levels', client.data_channels)
+    message_id = client.message_ids["levelling-levels"]
+    levels = await channel.fetch_message(message_id)
+    client.levels = levels.content
+
     if cycleActivities:
         activityLoop.start()
     else:
         await client.change_presence(activity=discord.Game(noCycleActivity))
+
+
+def read_data(channel_id, message_id):
+    message = client.data_guild.get_channel(
+        channel_id).get_message(message_id).content
+    print(message)
 
 
 @tasks.loop(seconds=15)
