@@ -18,4 +18,13 @@ noCycleActivity: ""
 levelling_apikey: roboty-levelling
 logging_apikey: roboty-logging
 
-data_guild_id: 920662357372444672
+data:
+  logging:
+    channel: 920666671121842178
+    message: 922873383941709854
+  levelling:
+    channel: 920764690244730950
+    message: 920929513456676875
+  reaction_roles:
+    channel: 920764997594935407
+    message: 921016292943740969

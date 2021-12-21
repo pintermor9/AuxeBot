@@ -21,6 +21,16 @@ class Levelling(commands.Cog):
             lvl += 1
 
     @commands.Cog.listener()
+    async def on_ready(self):
+        self.client.levelling_channel = self.client.get_channel(
+            self.client.data["levelling"]["channel"])
+        self.client.levelling_message = await self.client.levelling_channel.fetch_message(
+            self.client.data["levelling"]["message"])
+        self.client.levelling_levels = json.loads(
+            self.client.levelling_message.content)
+        print(self.client.levelling_levels)
+
+    @commands.Cog.listener()
     async def on_message(self, message):
         if message.author.bot:
             return
@@ -40,7 +50,7 @@ class Levelling(commands.Cog):
             )
 
         self.client.levelling_levels.update({authorID: xp})
-        await self.client.levelling_message.edit(content=json.dumps(self.client.levelling_levels))
+        await self.client.levelling_message.edit(content=json.dumps(self.client.levelling_levels, indent=2))
 
     @commands.command()
     async def rank(self, ctx, user: discord.Member = None):
