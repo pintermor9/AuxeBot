@@ -1,3 +1,4 @@
+import json
 import time
 import discord
 from discord.ext import commands
@@ -26,40 +27,32 @@ class Levelling(commands.Cog):
 
         authorID = str(message.author.id)
         try:
-            old_xp = self.client.levels[authorID]
+            old_xp = self.client.levelling_levels[authorID]
         except:
             old_xp = 0
 
-        self.client.levels[authorID] += random.randint(10, 30)
-        xp = self.client.levels[authorID]
+        self.client.levelling_levels[authorID] += random.randint(10, 30)
+        xp = self.client.levelling_levels[authorID]
 
         if Levelling.get_lvl(old_xp)[1] < Levelling.get_lvl(xp)[1]:
             await message.author.send(
                 f"GG {message.author.mention}, you just advanced to level {Levelling.get_lvl(xp)[1]}!"
             )
 
-        self.client.levels.update({authorID: xp})
+        self.client.levelling_levels.update({authorID: xp})
+        await self.client.levelling_message.edit(content=json.dumps(self.client.levelling_levels))
 
-    !!!!!!!lkéj fgdfjg jfshg jhdf
-
-    @commands.command()  # ! iue zrgthpjosdyufhg iusf hzgpoéiuhsdygoiuhy
+    @commands.command()
     async def rank(self, ctx, user: discord.Member = None):
         async with ctx.typing():
-            try:  # This checks if the api is online and returns if not
-                async with aiohttp.ClientSession() as session:
-                    await session.get("https://roboty-api.pintermor9.repl.co/ping")
-            except:
-                await ctx.send("Sorry, You can't do that now. Try again later.")
-                return
-
             if user == None:
                 user = ctx.author
 
             try:
-                xp = self.client.levels[str(user.id)]
+                xp = self.client.levelling_levels[str(user.id)]
             except:
-                self.client.levels.update({str(user.id): 0})
-                xp = self.client.levels[str(user.id)]
+                self.client.levelling_levels.update({str(user.id): 0})
+                xp = self.client.levelling_levels[str(user.id)]
 
             lvlxp, lvl = Levelling.get_lvl(xp)
 
@@ -68,7 +61,7 @@ class Levelling(commands.Cog):
             boxes = int((lvlxp / (200 * ((1 / 2) * lvl))) * boxnum)
             rank = 1
 
-            datalisted = sorted(self.client.levels.items(),
+            datalisted = sorted(self.client.levelling_levels.items(),
                                 key=lambda x: x[1], reverse=True)
 
             for x in datalisted:
@@ -101,14 +94,7 @@ class Levelling(commands.Cog):
     @commands.command(aliases=["lead"])
     async def leaderboard(self, ctx, top_x=5):
         async with ctx.typing():
-            try:  # This checks if the api is online and returns if not
-                async with aiohttp.ClientSession() as session:
-                    await session.get("https://roboty-api.pintermor9.repl.co/ping")
-            except:
-                await ctx.send("Sorry, You can't do that now. Try again later.")
-                return
-
-            datalisted = sorted(self.client.levels.items(),
+            datalisted = sorted(self.client.levelling_levels.items(),
                                 key=lambda x: x[1], reverse=True)
 
             topIDs = tuple(map(lambda i: i[0], datalisted))

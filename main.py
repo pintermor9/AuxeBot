@@ -85,13 +85,13 @@ async def on_ready():
     client.message_ids_channel = discord.utils.find(
         lambda channel: channel.name == 'message-ids', client.data_channels)
     client.message_ids = await client.message_ids_channel.fetch_message(client.message_ids_channel.last_message_id)
-    client.message_ids = dict(json.loads(client.message_ids.content))
+    client.message_ids = json.loads(client.message_ids.content)
 
-    channel = discord.utils.find(
+    client.levelling_channel = discord.utils.find(
         lambda channel: channel.name == 'levelling-levels', client.data_channels)
     message_id = client.message_ids["levelling-levels"]
-    levels = await channel.fetch_message(message_id)
-    client.levels = levels.content
+    client.levelling_message = await client.levelling_channel.fetch_message(message_id)
+    client.levelling_levels = json.loads(client.levelling_message.content)
 
     if cycleActivities:
         activityLoop.start()
