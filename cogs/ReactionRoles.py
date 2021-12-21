@@ -61,7 +61,7 @@ class ReactionRoles(commands.Cog):
                 message_id = rr.get("messageID")
                 embed.add_field(
                     name=index,
-                    value=f"{:emote:} - @{role} - [message](https://www.discordapp.com/channels/{guild_id}/{channel_id}/{message_id})",
+                    value=f":{emote}: - @{role} - [message](https://www.discordapp.com/channels/{guild_id}/{channel_id}/{message_id})",
                     inline=False,
                 )
         await ctx.send(embed=embed)
@@ -97,7 +97,7 @@ class ReactionRoles(commands.Cog):
             embed.set_footer(text=_id)
             embed.add_field(
                 name=index,
-                value=f"{:emote:} - @{role} - [message](https://www.discordapp.com/channels/{guild_id}/{channel_id}/{message_id})",
+                value=f":{emote}: - @{role} - [message](https://www.discordapp.com/channels/{guild_id}/{channel_id}/{message_id})",
                 inline=False,
             )
         msg = await ctx.send(embed=embed)
