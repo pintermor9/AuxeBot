@@ -129,7 +129,7 @@ class ReactionRoles(commands.Cog):
         self.client.reaction_roles_data[str(guild_id)].append(
             {
                 "id": str(uuid.uuid4()),
-                "emote": emote.name,
+                "emote": emote,
                 "roleID": role_id,
                 "channelID": channel_id,
                 "messageID": message_id,
