@@ -144,7 +144,7 @@ class ReactionRoles(commands.Cog):
                 emote = rr.get("emote")
                 if payload.message_id == rr.get("messageID"):
                     if payload.channel_id == rr.get("channelID"):
-                        if payload.emoji.name == emote:
+                        if str(payload.emoji) == emote:
                             guild = self.client.get_guild(guild_id)
                             role = guild.get_role(rr.get("roleID"))
                             user = guild.get_member(payload.user_id)
