@@ -61,7 +61,7 @@ class ReactionRoles(commands.Cog):
                 message_id = rr.get("messageID")
                 embed.add_field(
                     name=index,
-                    value=f"{emote} - @{role} - [message](https://www.discordapp.com/channels/{guild_id}/{channel_id}/{message_id})",
+                    value=f"{:emote:} - @{role} - [message](https://www.discordapp.com/channels/{guild_id}/{channel_id}/{message_id})",
                     inline=False,
                 )
         await ctx.send(embed=embed)
@@ -97,7 +97,7 @@ class ReactionRoles(commands.Cog):
             embed.set_footer(text=_id)
             embed.add_field(
                 name=index,
-                value=f"{emote} - @{role} - [message](https://www.discordapp.com/channels/{guild_id}/{channel_id}/{message_id})",
+                value=f"{:emote:} - @{role} - [message](https://www.discordapp.com/channels/{guild_id}/{channel_id}/{message_id})",
                 inline=False,
             )
         msg = await ctx.send(embed=embed)
@@ -128,7 +128,7 @@ class ReactionRoles(commands.Cog):
         self.client.reaction_roles_data[str(guild_id)].append(
             {
                 "id": str(uuid.uuid4()),
-                "emote": emote,
+                "emote": emote.name,
                 "roleID": role_id,
                 "channelID": channel_id,
                 "messageID": message_id,
@@ -143,7 +143,7 @@ class ReactionRoles(commands.Cog):
                 emote = rr.get("emote")
                 if payload.message_id == rr.get("messageID"):
                     if payload.channel_id == rr.get("channelID"):
-                        if str(payload.emoji) == emote:
+                        if payload.emoji.name == emote:
                             guild = self.client.get_guild(guild_id)
                             role = guild.get_role(rr.get("roleID"))
                             user = guild.get_member(payload.user_id)
