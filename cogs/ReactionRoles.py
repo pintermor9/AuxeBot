@@ -122,7 +122,7 @@ class ReactionRoles(commands.Cog):
             self.client.reaction_roles_data[str(guild_id)] = data
             await self.save_reaction_roles()
 
-    def add_reaction(self, guild_id, emote, role_id, channel_id, message_id):
+    def add_reaction(self, guild_id, emote: discord.Emoji, role_id, channel_id, message_id):
         if not str(guild_id) in self.client.reaction_roles_data:
             self.client.reaction_roles_data[str(guild_id)] = []
         self.client.reaction_roles_data[str(guild_id)].append(
