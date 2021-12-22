@@ -12,7 +12,7 @@ class Levelling(commands.Cog):
         self.client = client
         print(f'Loaded', __name__)
 
-    def get_lvl(xp):
+    def get_lvl(self, xp):
         lvl = 0
         while True:
             if xp < ((50 * (lvl**2)) + (50 * lvl)):
@@ -30,6 +30,14 @@ class Levelling(commands.Cog):
             self.client.levelling_message.content)
         print(self.client.levelling_levels)
 
+        # i delete users with no XP from dictionary (cleanup)
+        self.client.levelling_levels = {
+            member: xp for member, xp in self.client.levelling_levels.items() if xp != 0}
+        await self.save_levels()
+
+    async def save_levels(self):
+        await self.client.levelling_message.edit(content=json.dumps(self.client.levelling_levels, indent=2))
+
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.author.bot:
@@ -38,22 +46,23 @@ class Levelling(commands.Cog):
         authorID = str(message.author.id)
         try:
             old_xp = self.client.levelling_levels[authorID]
-        except:
+        except KeyError:
+            self.client.levelling_levels.update({authorID: 0})
             old_xp = 0
 
         self.client.levelling_levels[authorID] += random.randint(10, 30)
         xp = self.client.levelling_levels[authorID]
 
-        if Levelling.get_lvl(old_xp)[1] < Levelling.get_lvl(xp)[1]:
+        if self.get_lvl(old_xp)[1] < self.get_lvl(xp)[1]:
             await message.author.send(
-                f"GG {message.author.mention}, you just advanced to level {Levelling.get_lvl(xp)[1]}!"
+                f"GG {message.author.mention}, you just advanced to level {self.get_lvl(xp)[1]}!"
             )
 
         self.client.levelling_levels.update({authorID: xp})
-        await self.client.levelling_message.edit(content=json.dumps(self.client.levelling_levels, indent=2))
+        await self.save_levels()
 
     @commands.command()
-    async def rank(self, ctx, user: discord.Member = None):
+    async def rank(self, ctx, user: discord.User = None):
         async with ctx.typing():
             if user == None:
                 user = ctx.author
@@ -64,7 +73,7 @@ class Levelling(commands.Cog):
                 self.client.levelling_levels.update({str(user.id): 0})
                 xp = self.client.levelling_levels[str(user.id)]
 
-            lvlxp, lvl = Levelling.get_lvl(xp)
+            lvlxp, lvl = self.get_lvl(xp)
 
             boxnum = 25
 
@@ -134,7 +143,7 @@ class Levelling(commands.Cog):
                 except:
                     break
 
-                lvlxp, lvl = Levelling.get_lvl(xp)
+                lvlxp, lvl = self.get_lvl(xp)
                 whitespace = '\u2800' * (len(str(rank)) + 1)
 
                 embed.add_field(

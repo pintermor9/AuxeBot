@@ -1,4 +1,6 @@
+import asyncio
 import discord
+from discord import message
 from discord.ext import commands
 
 
@@ -27,6 +29,19 @@ class Moderation(commands.Cog):
             status=discord.Status.do_not_disturb,
             activity=discord.Game("Shutting down..."))
         await self.client.logout()
+
+    @commands.command(hidden=True)
+    @commands.is_owner()
+    async def edit(self, ctx, channel: discord.TextChannel, message_id, content):
+        message = await channel.fetch_message(message_id)
+        if message.author != self.client.user:
+            return await ctx.message.add_reaction(":x:")
+        await message.edit(content=content)
+        await ctx.message.delete()
+
+    @commands.command()
+    async def report(self, ctx, *report):
+        await ctx.send(embed=self.client.WorkInProgressEmbed)
 
 
 def setup(client):

@@ -1,10 +1,13 @@
 
 from itertools import cycle
 import json
+from unicodedata import decomposition
 import yaml
 import os
 from discord.ext import commands, tasks
 import discord
+from Help import HelpCommand
+
 print("Imported modules.")
 print("Getting client...")
 
@@ -16,7 +19,7 @@ def get_prefix(*args):
 
 
 client = commands.Bot(command_prefix=get_prefix,
-                      help_command=None, intents=intents)
+                      help_command=HelpCommand(), intents=intents)
 
 print("done.")
 print("Reading settings...")
@@ -54,6 +57,11 @@ client.logging_apikey = settings["logging_apikey"]
 
 # get necessary info for logging and levelling #! check later
 client.data = settings["data"]
+
+client.WorkInProgressEmbed = discord.Embed(
+    title="**Hello:exclamation:**", description="**The command that you invoked is not done yet.**\nSorry for the inconvenience.")
+client.WorkInProgressEmbed.set_footer(
+    text="If you experience any bugs or mistakes, please use the \n`report` command, to report it to the owner")
 
 print("done.")
 

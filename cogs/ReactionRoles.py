@@ -5,6 +5,8 @@ import json
 import uuid
 from asyncio import TimeoutError
 
+from discord.ext.commands.core import guild_only
+
 
 class ReactionRoles(commands.Cog):
     def __init__(self, client):
@@ -20,8 +22,28 @@ class ReactionRoles(commands.Cog):
             self.client.reaction_roles_message.content)
         print(self.client.reaction_roles_data)
 
+        # i delete guilds with no RRs from dictionary (cleanup)
+        self.client.reaction_roles_data = {
+            guild: data for guild, data in self.client.reaction_roles_data.items() if data != []}
+        await self.save_reaction_roles()
+
     async def save_reaction_roles(self):
         await self.client.reaction_roles_message.edit(content=json.dumps(self.client.reaction_roles_data, indent=2))
+
+    def parse_reaction_payload(self, payload: discord.RawReactionActionEvent):
+        guild_id = payload.guild_id
+        data = self.client.reaction_roles_data.get(str(guild_id), None)
+        if data is not None:
+            for rr in data:
+                emote = rr.get("emote")
+                if int(payload.message_id) == int(rr.get("messageID")):
+                    if int(payload.channel_id) == int(rr.get("channelID")):
+                        if str(payload.emoji) == str(emote):
+                            guild = self.client.get_guild(guild_id)
+                            role = guild.get_role(int(rr.get("roleID")))
+                            user = guild.get_member(int(payload.user_id))
+                            return role, user
+        return None, None
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
@@ -32,7 +54,7 @@ class ReactionRoles(commands.Cog):
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload: discord.RawReactionActionEvent):
         role, user = self.parse_reaction_payload(payload)
-        if role is not None and user is not None:
+        if role is not None and user is not None and user is not self.client.user:
             await user.remove_roles(role, reason="ReactionRole")
 
     @commands.has_permissions(manage_channels=True, manage_roles=True)
@@ -61,7 +83,7 @@ class ReactionRoles(commands.Cog):
                 message_id = rr.get("messageID")
                 embed.add_field(
                     name=index,
-                    value=f":{emote}: - @{role} - [message](https://www.discordapp.com/channels/{guild_id}/{channel_id}/{message_id})",
+                    value=f":{emote}: - @{role} - [message](https://www.discord.com/channels/{guild_id}/{channel_id}/{message_id})",
                     inline=False,
                 )
         await ctx.send(embed=embed)
@@ -69,7 +91,6 @@ class ReactionRoles(commands.Cog):
     @commands.has_permissions(manage_channels=True, manage_roles=True)
     @reactions.command()
     async def add(self, ctx, emote, role: discord.Role, channel: discord.TextChannel, message_id):
-        await ctx.send(f"{emote} | {type(emote)}")
         msg = await channel.fetch_message(int(message_id))
         await msg.add_reaction(emote)
         self.add_reaction(ctx.guild.id, emote, role.id, channel.id, message_id)
@@ -130,26 +151,11 @@ class ReactionRoles(commands.Cog):
             {
                 "id": str(uuid.uuid4()),
                 "emote": emote,
-                "roleID": role_id,
-                "channelID": channel_id,
-                "messageID": message_id,
+                "roleID": int(role_id),
+                "channelID": int(channel_id),
+                "messageID": int(message_id),
             }
         )
-
-    def parse_reaction_payload(self, payload: discord.RawReactionActionEvent):
-        guild_id = payload.guild_id
-        data = self.client.reaction_roles_data.get(str(guild_id), None)
-        if data is not None:
-            for rr in data:
-                emote = rr.get("emote")
-                if payload.message_id == rr.get("messageID"):
-                    if payload.channel_id == rr.get("channelID"):
-                        if str(payload.emoji) == emote:
-                            guild = self.client.get_guild(guild_id)
-                            role = guild.get_role(rr.get("roleID"))
-                            user = guild.get_member(payload.user_id)
-                            return role, user
-        return None, None
 
 
 def setup(client):
