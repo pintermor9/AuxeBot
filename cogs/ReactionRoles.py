@@ -42,7 +42,8 @@ class ReactionRoles(commands.Cog):
                             guild = self.client.get_guild(guild_id)
                             role = guild.get_role(int(rr.get("roleID")))
                             user = guild.get_member(int(payload.user_id))
-                            return role, user
+                            if user != self.client.user:
+                                return role, user
         return None, None
 
     @commands.Cog.listener()
@@ -83,7 +84,8 @@ class ReactionRoles(commands.Cog):
                 message_id = rr.get("messageID")
                 embed.add_field(
                     name=index,
-                    value=f":{emote}: - @{role} - [message](https://www.discord.com/channels/{guild_id}/{channel_id}/{message_id})",
+                    value=f":
+{emote}: - @{role} - [message](https://www.discord.com/channels/{guild_id}/{channel_id}/{message_id})",
                     inline=False,
                 )
         await ctx.send(embed=embed)
@@ -119,7 +121,7 @@ class ReactionRoles(commands.Cog):
             embed.set_footer(text=_id)
             embed.add_field(
                 name=index,
-                value=f":{emote}: - @{role} - [message](https://www.discordapp.com/channels/{guild_id}/{channel_id}/{message_id})",
+                value=f"{emote} - @{role} - [message](https://www.discord.com/channels/{guild_id}/{channel_id}/{message_id})",
                 inline=False,
             )
         msg = await ctx.send(embed=embed)
@@ -133,7 +135,7 @@ class ReactionRoles(commands.Cog):
                     and str(reaction.emoji) == "🗑️"
                 )
             try:
-                reaction, user = await self.client.wait_for("reaction_add", check=check, timeout=10)
+                reaction, user = await self.client.wait_for("reaction_add", check=check, timeout=15)
                 data.remove(rr)
                 embed = discord.Embed(title="Ok. Deleted.🗑️")
             except TimeoutError:
