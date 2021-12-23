@@ -9,6 +9,11 @@ class Moderation(commands.Cog):
         self.client = client
         print(f'Loaded', __name__)
 
+    @commands.Cog.listener()
+    async def on_ready(self):
+        self.client.report_channel = self.client.get_channel(
+            self.client.data["report"]["channel"])
+
     @commands.command(description="")
     async def ping(self, ctx):
         await ctx.send(f'Pong! {round(self.client.latency * 1000)}ms')
@@ -41,7 +46,9 @@ class Moderation(commands.Cog):
 
     @commands.command()
     async def report(self, ctx, *report):
-        await ctx.send(embed=self.client.WorkInProgressEmbed)
+        await ctx.message.add_reaction("✅")
+        await self.client.report_channel.send(f"**author: {ctx.message.author.name}#{ctx.message.author.discriminator}**, guild: {ctx.guild.name}\n> {' '.join(report)}\nhttps://www.discord.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}")
+        await ctx.send("**Thank you for reporting!** Please do not delete the command.")
 
 
 def setup(client):

@@ -28,3 +28,5 @@ data:
   reaction_roles:
     channel: 920764997594935407
     message: 921016292943740969
+  report:
+    channel: 923558173904867349
