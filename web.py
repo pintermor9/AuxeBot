@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 
 app = FastAPI()
 
@@ -6,4 +7,4 @@ app = FastAPI()
 @app.get('/')
 def index():
     with open("web/index.html") as f:
-        return f.read()
+        return HTMLResponse(f.read())
