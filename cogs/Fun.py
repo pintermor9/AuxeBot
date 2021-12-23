@@ -10,37 +10,34 @@ class Fun(commands.Cog):
         print('Loaded', __name__)
 
     @commands.command(name='8ball', aliases=['eightball'], description="Gives you a random answer to your question!")
-    async def _8ball(self, ctx, *, question=None):
-        if question == None:
-            await ctx.send('Please ask a question!')
-        else:
-            responses = [
-                "It is certain.",
-                "It is decidedly so.",
-                "Without a doubt.",
-                "Yes - definitely.",
-                "You may rely on it.",
-                "As I see it, yes.",
-                "Most likely.",
-                "Outlook good.",
-                "Yes.",
-                "Signs point to yes.",
-                "Reply hazy, try again.",
-                "Ask again later.",
-                "Better not tell you now.",
-                "Cannot predict now.",
-                "Concentrate and ask again.",
-                "Don't count on it.",
-                "My reply is no.",
-                "My sources say no.",
-                "Outlook not so good.",
-                "Very doubtful."
-            ]
+    async def _8ball(self, ctx, *, question):
+        responses = [
+            "It is certain.",
+            "It is decidedly so.",
+            "Without a doubt.",
+            "Yes - definitely.",
+            "You may rely on it.",
+            "As I see it, yes.",
+            "Most likely.",
+            "Outlook good.",
+            "Yes.",
+            "Signs point to yes.",
+            "Reply hazy, try again.",
+            "Ask again later.",
+            "Better not tell you now.",
+            "Cannot predict now.",
+            "Concentrate and ask again.",
+            "Don't count on it.",
+            "My reply is no.",
+            "My sources say no.",
+            "Outlook not so good.",
+            "Very doubtful."
+        ]
 
-            embed = discord.Embed(title=f'Answer: {random.choice(responses)}')
-            embed.set_author(name=f'Your question: {question}')
+        embed = discord.Embed(title=f'Answer: {random.choice(responses)}')
+        embed.set_author(name=f'Your question: {question}')
 
-            await ctx.send(embed=embed)
+        await ctx.send(embed=embed)
 
     @commands.command(aliases=['noice', 'nájsz', 'nojsz', 'nolysz'], description="Sends a nice gif!")
     async def nice(self, ctx):
@@ -51,8 +48,8 @@ class Fun(commands.Cog):
         await ctx.send('https://thumbs.gfycat.com/EntireReflectingKakarikis-size_restricted.gif')
 
     @commands.command(description="Chooses something from the given parameters!")
-    async def choose(self, ctx, _1, _2, *more):
-        chooselist = [_1, _2]
+    async def choose(self, ctx, option_1, option_2, *more):
+        chooselist = [option_1, option_2]
         chooselist.extend(more)
         await ctx.send(random.choice(chooselist))
 

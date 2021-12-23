@@ -62,9 +62,9 @@ class Levelling(commands.Cog):
         await self.save_levels()
 
     @commands.command()
-    async def rank(self, ctx, user: discord.User = None):
+    async def rank(self, ctx, user: discord.User = "you"):
         async with ctx.typing():
-            if user == None:
+            if user == "you":
                 user = ctx.author
 
             try:

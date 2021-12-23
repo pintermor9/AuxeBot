@@ -21,7 +21,7 @@ class Moderation(commands.Cog):
         else:
             await ctx.channel.purge(limit=(amount + 1))
 
-    @commands.command()
+    @commands.command(hidden=True)
     @commands.is_owner()
     async def logout(self, ctx):
         await ctx.send('Bye! :wave:')
