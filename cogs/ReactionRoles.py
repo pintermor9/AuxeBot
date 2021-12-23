@@ -59,8 +59,16 @@ class ReactionRoles(commands.Cog):
             await user.remove_roles(role, reason="ReactionRole")
 
     @commands.has_permissions(manage_channels=True, manage_roles=True)
-    @commands.command()
+    @commands.command(description="Creates a new reaction role.")
     async def reaction(self, ctx, emote, role: discord.Role, channel: discord.TextChannel, title, message):
+        """Creates a new reaction role. The bot will send an embed message, wich will be the base of the reaction role.
+        **Parameters:**
+        `emote`: The emoji that users need to react in order to get the role.
+        `role`: A role that users get.
+        `channel`: The channel that the embed gets sent in. This can be the channels mention, name or id.
+        `title`: Title of the embed.
+        `message`: Description of the embed.
+        """
         embed = discord.Embed(title=title, description=message)
         msg = await channel.send(embed=embed)
         await msg.add_reaction(emote)
@@ -68,7 +76,7 @@ class ReactionRoles(commands.Cog):
         await self.save_reaction_roles()
 
     @commands.has_permissions(manage_channels=True, manage_roles=True)
-    @commands.group(invoke_without_command=True)
+    @commands.group(invoke_without_command=True, description="Lists the reaction roles in the current guild.")
     async def reactions(self, ctx):
         guild_id = ctx.guild.id
         data = self.client.reaction_roles_data.get(str(guild_id), None)
@@ -90,16 +98,24 @@ class ReactionRoles(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.has_permissions(manage_channels=True, manage_roles=True)
-    @reactions.command()
+    @reactions.command(description="Creates a new reaction role.")
     async def add(self, ctx, emote, role: discord.Role, channel: discord.TextChannel, message_id):
+        """Creates a new reaction role for an existing message.
+        **Parameters:**
+        `emote`: The emoji that users need to react in order to get the role.
+        `role`: A role that users get.
+        `channel`: The channel that the embed gets sent in. This can be the channels mention, name or id.
+        `message_id`: This is the id of the message that will be the base of the reaction role.
+        """
         msg = await channel.fetch_message(int(message_id))
         await msg.add_reaction(emote)
         self.add_reaction(ctx.guild.id, emote, role.id, channel.id, message_id)
         await self.save_reaction_roles()
 
     @commands.has_permissions(manage_channels=True)
-    @reactions.command()
+    @reactions.command(description="Removes an existing reaction role.")
     async def remove(self, ctx, index: int):
+        """Removes an existing reaction role in the current guild. It takes the `index` of the reaction role, which you can see by invoking `reactions`."""
         guild_id = ctx.guild.id
         data = self.client.reaction_roles_data.get(str(guild_id), None)
         embed = discord.Embed(title=f"Remove Reaction Role {index}")

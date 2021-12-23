@@ -58,8 +58,9 @@ class Levelling(commands.Cog):
         self.client.levelling_levels.update({authorID: xp})
         await self.save_levels()
 
-    @commands.command()
+    @commands.command(description="Shows the rank, level and xp of someone.")
     async def rank(self, ctx, user: discord.User = "you"):
+        """Shows the rank, level and xp of someone. If you don't specify a user, it will default to you."""
         async with ctx.typing():
             if user == "you":
                 user = ctx.author
@@ -105,8 +106,9 @@ class Levelling(commands.Cog):
 
             await ctx.send(embed=embed)
 
-    @commands.command(aliases=["lead"])
+    @commands.command(aliases=["lead"], description="Shows the leaderboard.")
     async def leaderboard(self, ctx, top_x=5):
+        """Shows the leaderboard. By default it will show the top 5 people, but you can specify a `top_x` argument."""
         async with ctx.typing():
             datalisted = sorted(self.client.levelling_levels.items(),
                                 key=lambda x: x[1], reverse=True)

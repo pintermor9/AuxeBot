@@ -10,7 +10,7 @@ class Paginator:
 
     async def run(self):
         embeds = self.embeds
-        message = await self.ctx.send(embed=discord.Embed(title="\u2800"))
+        message = await self.ctx.send("\u2800")
         current_page = 0
         EMOJIS = ('⏮️', '⏪', '⏹️', '⏩', '⏭️')
         for emoji in EMOJIS:

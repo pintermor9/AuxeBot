@@ -5,4 +5,5 @@ app = FastAPI()
 
 @app.get('/')
 def index():
-    return {"status": "online"}
+    with open("web/index.html") as f:
+        return f.read()

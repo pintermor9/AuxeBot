@@ -9,8 +9,11 @@ class Fun(commands.Cog):
         self.client = client
         print('Loaded', __name__)
 
-    @commands.command(name='8ball', aliases=['eightball'], description="Gives you a random answer to your question!")
+    @commands.command(name='8ball', aliases=['eightball'], description="Gives you a random answer to your question.")
     async def _8ball(self, ctx, *, question):
+        """Gives you a random answer to your question.
+        Possible answers: *It is certain.*, *It is decidedly so.*, *Without a doubt.*, *Yes - definitely.*, *You may rely on it.*, *As I see it, yes.*, *Most likely.*, *Outlook good.*, *Yes.*, *Signs point to yes.*, *Reply hazy, try again.*, *Ask again later.*, *Better not tell you now.*, *Cannot predict now.*, *Concentrate and ask again.*, *Don't count on it.*, *My reply is no.*, *My sources say no.*, *Outlook not so good.*, *Very doubtful.*"""
+
         responses = ("It is certain.", "It is decidedly so.", "Without a doubt.", "Yes - definitely.", "You may rely on it.", "As I see it, yes.", "Most likely.", "Outlook good.", "Yes.", "Signs point to yes.", "Reply hazy, try again.",
                      "Ask again later.", "Better not tell you now.", "Cannot predict now.", "Concentrate and ask again.", "Don't count on it.", "My reply is no.", "My sources say no.", "Outlook not so good.", "Very doubtful.")
 
@@ -19,15 +22,15 @@ class Fun(commands.Cog):
 
         await ctx.send(embed=embed)
 
-    @commands.command(aliases=['noice', 'nájsz', 'nojsz', 'nolysz'], description="Sends a nice gif!")
+    @commands.command(aliases=['noice', 'nájsz', 'nojsz', 'nolysz'], description="Sends a nice gif.")
     async def nice(self, ctx):
         await ctx.send('https://www.icegif.com/wp-content/uploads/noice-icegif-3.gif')
 
-    @commands.command(description="Sends a creepy gif!")
+    @commands.command(description="Sends a creepy gif.")
     async def creeper(self, ctx):
         await ctx.send('https://thumbs.gfycat.com/EntireReflectingKakarikis-size_restricted.gif')
 
-    @commands.command(description="Chooses something from the given parameters!")
+    @commands.command(description="Chooses something from the given parameters.")
     async def choose(self, ctx, option_1, option_2, *more):
         chooselist = [option_1, option_2]
         chooselist.extend(more)
@@ -39,7 +42,7 @@ class Fun(commands.Cog):
         thisforthat = r['this'], ' for ', r['that'], '!'
         await ctx.send(''.join(thisforthat))
 
-    @commands.command(description="Echos the inputted text!")
+    @commands.command(description="Echos/repeats the input text.")
     async def echo(self, ctx, *, text):
         await ctx.send(text)
 
@@ -48,7 +51,7 @@ class Fun(commands.Cog):
         await ctx.message.delete()
         await ctx.send(text)
 
-    @commands.command(description="Reverses the inputted text!")
+    @commands.command(description="Reverses the input text.")
     async def reverse(self, ctx, *, text):
         await ctx.send(text[-1::-1])
 

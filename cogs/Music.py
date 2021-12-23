@@ -306,9 +306,6 @@ class Music(commands.Cog):
     async def cog_before_invoke(self, ctx: commands.Context):
         ctx.voice_state = self.get_voice_state(ctx)
 
-    async def cog_command_error(self, ctx: commands.Context, error: commands.CommandError):
-        await ctx.send('An error occurred: {}'.format(str(error)))
-
     @commands.command(name='join', invoke_without_subcommand=True)
     async def _join(self, ctx: commands.Context):
         """Joins a voice channel."""
