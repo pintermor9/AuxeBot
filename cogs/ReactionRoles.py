@@ -22,7 +22,7 @@ class ReactionRoles(commands.Cog):
             self.client.reaction_roles_message.content)
         print(self.client.reaction_roles_data)
 
-        # i delete guilds with no RRs from dictionary (cleanup)
+        # ? delete guilds with no RRs from dictionary (cleanup)
         self.client.reaction_roles_data = {
             guild: data for guild, data in self.client.reaction_roles_data.items() if data != []}
         await self.save_reaction_roles()

@@ -15,9 +15,6 @@ status: "discord.Status.online"
 updates: "Now deployed on HEROKU instead of REPLIT."
 noCycleActivity: ""
 
-levelling_apikey: roboty-levelling
-logging_apikey: roboty-logging
-
 data:
   logging:
     channel: 920666671121842178

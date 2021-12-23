@@ -1,6 +1,5 @@
 import asyncio
 import discord
-from discord import message
 from discord.ext import commands
 
 
@@ -20,11 +19,8 @@ class Moderation(commands.Cog):
 
     @commands.command(aliases=['clear', 'cls'], description="")
     @commands.has_permissions(manage_messages=True)
-    async def purge(self, ctx, amount: int = None):
-        if amount == None:
-            await ctx.send('Please set an amount!')
-        else:
-            await ctx.channel.purge(limit=(amount + 1))
+    async def purge(self, ctx, amount: int):
+        await ctx.channel.purge(limit=(amount + 1))
 
     @commands.command(hidden=True)
     @commands.is_owner()

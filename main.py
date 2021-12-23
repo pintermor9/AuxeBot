@@ -51,10 +51,6 @@ loopActivities = cycle([
     f'Latest updates: {updates}'
 ])
 
-# gets the apikey of https://Roboty-api.pintermor9.repl.co/
-client.levelling_apikey = settings["levelling_apikey"]
-client.logging_apikey = settings["logging_apikey"]
-
 # get necessary info for logging and levelling #! check later
 client.data = settings["data"]
 

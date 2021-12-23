@@ -1,6 +1,6 @@
 ﻿discord.py==1.7.3
-fastapi==0.65.1
-PyYAML==5.4.1
+fastapi
+PyYAML
 requests
 aiohttp
 uvicorn

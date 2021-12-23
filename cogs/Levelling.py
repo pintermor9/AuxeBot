@@ -1,9 +1,6 @@
 import json
-import time
 import discord
 from discord.ext import commands
-import aiohttp
-import requests
 import random
 
 
@@ -74,9 +71,7 @@ class Levelling(commands.Cog):
                 xp = self.client.levelling_levels[str(user.id)]
 
             lvlxp, lvl = self.get_lvl(xp)
-
             boxnum = 25
-
             boxes = int((lvlxp / (200 * ((1 / 2) * lvl))) * boxnum)
             rank = 1
 

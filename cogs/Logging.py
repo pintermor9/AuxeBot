@@ -1,10 +1,7 @@
 from discord.ext import commands
 from datetime import timedelta
 from time import time
-import json
 import asyncio
-import aiohttp
-import atexit
 
 
 class Logging(commands.Cog):
