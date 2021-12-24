@@ -60,7 +60,7 @@ class Levelling(commands.Cog):
 
     @commands.command(description="Shows the rank, level and xp of someone.")
     async def rank(self, ctx, user: discord.User = "you"):
-        """Shows the rank, level and xp of someone. If you don't specify a user, it will default to you."""
+        """Shows the rank, level and xp of someone. If you don't specify a user, it defaults to you."""
         async with ctx.typing():
             if user == "you":
                 user = ctx.author
