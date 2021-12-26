@@ -25,6 +25,8 @@ class Logging(commands.Cog):
 
     @commands.Cog.listener()
     async def on_command(self, ctx):
+        if ctx.guild.id == 920662357372444672:
+            return  # dont log if testing
         guild = ctx.guild.name
         author = f"{ctx.author.name}#{ctx.author.discriminator}"
         channel = ctx.channel.name
