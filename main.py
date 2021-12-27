@@ -5,8 +5,10 @@ from itertools import cycle
 from discord.ext import commands, tasks
 from Help import HelpCommand
 
-print("Imported modules.")
-print("Getting client...")
+LINE_CLEAR = "\x1b[2k"
+
+print("Imported modules.", end=f"{LINE_CLEAR}\r")
+print("Getting client...", end=f"{LINE_CLEAR}\r")
 
 intents = discord.Intents.all()
 
@@ -18,8 +20,8 @@ def get_prefix(*_args):
 client = commands.Bot(command_prefix=get_prefix,
                       help_command=HelpCommand(), intents=intents)
 
-print("done.")
-print("Reading settings...")
+print("Done.", end=f"{LINE_CLEAR}\r")
+print("Reading settings... ")
 
 with open(r'./settings.yml') as file:
     settings = yaml.full_load(file)
@@ -56,7 +58,7 @@ client.WorkInProgressEmbed = discord.Embed(
 client.WorkInProgressEmbed.set_footer(
     text="If you experience any bugs or mistakes, please use the \n`report` command, to report it to the owner")
 
-print("done.")
+print("Done.", end=f"{LINE_CLEAR}\r")
 
 try:
     if os.environ["TESTING"] == True:

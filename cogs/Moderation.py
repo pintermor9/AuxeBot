@@ -1,4 +1,3 @@
-import asyncio
 import discord
 from discord.ext import commands
 
@@ -7,9 +6,6 @@ class Moderation(commands.Cog):
     def __init__(self, client):
         self.client = client
         print(f'Loaded', __name__)
-
-    def cog_unload(self):
-        self.bot.loop.create_task(self.client.report_channel.send(f"ffffg"))
 
     @commands.Cog.listener()
     async def on_ready(self):

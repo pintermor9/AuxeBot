@@ -1,16 +1,14 @@
 import discord
-from discord import message
 from discord.ext import commands
 import json
 import uuid
 from asyncio import TimeoutError
 
-from discord.ext.commands.core import guild_only
-
 
 class ReactionRoles(commands.Cog):
     def __init__(self, client):
         self.client = client
+        print('Loaded', __name__)
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -20,7 +18,7 @@ class ReactionRoles(commands.Cog):
             self.client.data["reaction_roles"]["message"])
         self.client.reaction_roles_data = json.loads(
             self.client.reaction_roles_message.content)
-        print(self.client.reaction_roles_data)
+        print(__name__+": "+str(self.client.reaction_roles_data))
 
         # ? delete guilds with no RRs from dictionary (cleanup)
         self.client.reaction_roles_data = {

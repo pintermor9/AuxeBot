@@ -25,7 +25,7 @@ class Levelling(commands.Cog):
             self.client.data["levelling"]["message"])
         self.client.levelling_levels = json.loads(
             self.client.levelling_message.content)
-        print(self.client.levelling_levels)
+        print(__name__+": "+str(self.client.levelling_levels))
 
         # i delete users with no XP from dictionary (cleanup)
         self.client.levelling_levels = {

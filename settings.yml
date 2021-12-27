@@ -26,3 +26,6 @@ data:
     message: 921016292943740969
   report:
     channel: 923558173904867349
+  poll:
+    channel: 925029810672136212
+    message: 925029832851611679

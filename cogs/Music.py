@@ -280,9 +280,9 @@ class VoiceState:
 
 class Music(commands.Cog):
     def __init__(self, bot: commands.Bot):
-        print('Music should be loaded')
         self.bot = bot
         self.voice_states = {}
+        print(f'Loaded', __name__)
 
     def get_voice_state(self, ctx: commands.Context):
         state = self.voice_states.get(ctx.guild.id)
