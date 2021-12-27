@@ -1,11 +1,8 @@
-
-from itertools import cycle
-import json
-from unicodedata import decomposition
-import yaml
 import os
-from discord.ext import commands, tasks
+import yaml
 import discord
+from itertools import cycle
+from discord.ext import commands, tasks
 from Help import HelpCommand
 
 print("Imported modules.")
@@ -14,7 +11,7 @@ print("Getting client...")
 intents = discord.Intents.all()
 
 
-def get_prefix(*args):
+def get_prefix(*_args):
     return client.prefix
 
 
@@ -29,8 +26,8 @@ with open(r'./settings.yml') as file:
     print(settings)
 
 # General settings
+TOKEN = os.environ["TOKEN"]
 client.prefix = settings['prefix']
-TOKEN = settings['TOKEN']
 client.owner_IDs = settings['owner_IDs']
 
 # Downtime settings:
@@ -60,6 +57,10 @@ client.WorkInProgressEmbed.set_footer(
     text="If you experience any bugs or mistakes, please use the \n`report` command, to report it to the owner")
 
 print("done.")
+
+if os.environ["TESTING"] == True:
+    cycleActivities = False
+    noCycleActivity = "Currently testing..."
 
 if downAnnouncement:
     cycleActivities = False
@@ -97,6 +98,6 @@ for file in os.listdir('./cogs'):
     if file.endswith('.py'):
         client.load_extension(f'cogs.{file[:-3]}')
 
-print("\n\nStarting client...\n")
+print(" \n \nStarting client...\n ")
 
 client.run(TOKEN)

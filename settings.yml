@@ -1,6 +1,5 @@
 #General settings
 prefix: "-"
-TOKEN: ODMxNzk0MTAxNzUzNzQxMzMy.YHaanw.xzFW7O9_3-7M7-ItQGFTM0h7MB0
 owner_IDs:
   - 761555679873597450
 
@@ -12,7 +11,7 @@ downAnnouncementStatus: f'The bot will be down on maintenance {downDate}. Please
 #Status and activity settings:
 cycleActivities: True
 status: "discord.Status.online"
-updates: "Now deployed on HEROKU instead of REPLIT."
+updates: ""
 noCycleActivity: ""
 
 data:
