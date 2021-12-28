@@ -61,10 +61,11 @@ client.WorkInProgressEmbed.set_footer(
 print("Done.", end=f"{LINE_CLEAR}\r")
 
 try:
-    if os.environ["TESTING"] == True:
+    if os.environ["TESTING"] == "True":
         cycleActivities = False
         noCycleActivity = "Currently testing..."
-except: pass
+except:
+    pass
 
 if downAnnouncement:
     cycleActivities = False

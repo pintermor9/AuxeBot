@@ -47,7 +47,7 @@ class Levelling(commands.Cog):
             self.client.levelling_levels.update({authorID: 0})
             old_xp = 0
 
-        self.client.levelling_levels[authorID] += random.randint(10, 30)
+        self.client.levelling_levels[authorID] += random.randint(5, 12)
         xp = self.client.levelling_levels[authorID]
 
         if self.get_lvl(old_xp)[1] < self.get_lvl(xp)[1]:
