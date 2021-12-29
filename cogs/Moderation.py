@@ -30,6 +30,7 @@ class Moderation(commands.Cog):
             status=discord.Status.do_not_disturb,
             activity=discord.Game("Shutting down..."))
         await self.client.logout()
+        exit(0)
 
     @commands.command(hidden=True)
     @commands.is_owner()
