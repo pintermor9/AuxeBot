@@ -11,7 +11,7 @@ downAnnouncementStatus: f'The bot will be down on maintenance {downDate}. Please
 #Status and activity settings:
 cycleActivities: True
 status: "discord.Status.online"
-updates: ""
+updates: "`rank` command now sends an image"
 noCycleActivity: ""
 
 data:
