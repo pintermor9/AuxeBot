@@ -108,8 +108,10 @@ class Poll(commands.Cog):
         votes = {}
         for reaction in message.reactions:
             users = await reaction.users().flatten()
-            users.pop(users.index(self.client.user))
-            votes.update({str(reaction): users})
+            try:
+                users.pop(users.index(self.client.user))
+            finally:
+                votes.update({str(reaction): users})
 
         embed = discord.Embed(
             title=message.embeds[0].title.replace("Poll ", "Poll results "),

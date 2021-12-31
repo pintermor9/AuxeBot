@@ -1,7 +1,10 @@
 import json
-import discord
-from discord.ext import commands
 import random
+import discord
+import aiohttp
+from io import BytesIO
+from typing import Union
+from discord.ext import commands
 
 
 class Levelling(commands.Cog):
@@ -59,7 +62,7 @@ class Levelling(commands.Cog):
         await self.save_levels()
 
     @commands.command(description="Shows the rank, level and xp of someone.")
-    async def rank(self, ctx, user: discord.User = "you"):
+    async def rank(self, ctx, user: Union[discord.Member, discord.User] = "you"):
         """Shows the rank, level and xp of someone. If you don't specify a user, it defaults to you."""
         async with ctx.typing():
             if user == "you":
@@ -70,43 +73,44 @@ class Levelling(commands.Cog):
             except:
                 self.client.levelling_levels.update({str(user.id): 0})
                 xp = self.client.levelling_levels[str(user.id)]
-
             lvlxp, lvl = self.get_lvl(xp)
-            boxnum = 25
-            boxes = int((lvlxp / (200 * ((1 / 2) * lvl))) * boxnum)
-            rank = 1
 
+            rank = 1
             datalisted = sorted(self.client.levelling_levels.items(),
                                 key=lambda x: x[1], reverse=True)
-
             for x in datalisted:
                 if x[0] == str(user.id):
                     break
                 rank += 1
+            try:
+                if user.status == discord.Status.online:
+                    status = "online"
+                if user.status == discord.Status.offline:
+                    status = "offline"
+                if user.status == discord.Status.idle:
+                    status = "idle"
+                if user.status == discord.Status.dnd:
+                    status = "dnd"
+            except:
+                status = "online"
 
-            if boxes < 10:
-                embed = discord.Embed(
-                    title=f"{user}'s XP Stats", color=0xff0000)
-            elif boxes < (boxnum - 5):
-                embed = discord.Embed(
-                    title=f"{user}'s XP Stats", color=0xff8800)
-            elif boxes >= (boxnum - 5):
-                embed = discord.Embed(
-                    title=f"{user}'s XP Stats", color=0x00ff00)
+            async with aiohttp.ClientSession() as session:
+                print(user.avatar_url_as(format="png", size=1024))
+                async with session.post("https://discord-bot-api.pintermor9.repl.co/rankcard/", data={
+                    "img": str(user.avatar_url_as(format="png", size=1024)),
+                    "currentXP": lvlxp,
+                    "requiredXP": int(200 * ((1 / 2) * lvl)),
+                    "status": status,
+                    "username": user.name,
+                    "discriminator": user.discriminator,
+                    "rank": rank,
+                    "level": lvl
+                }) as response:
+                    rankcard = await response.read()
 
-            embed.add_field(name="Experience",
-                            value=f"{lvlxp}/{int(200*((1/2)*lvl))}\n*Total: {xp}*",
-                            inline=True)
-            embed.add_field(name="Level", value=lvl, inline=True)
-            embed.add_field(name="Rank", value=rank, inline=True)
-            embed.add_field(name="Progress Bar",
-                            value="".join(
-                                (boxes * "█", (boxnum - boxes) * "░")),
-                            inline=False)
+            await ctx.send(file=discord.File(BytesIO(rankcard), "rankcard.png"))
 
-            await ctx.send(embed=embed)
-
-    @commands.command(aliases=["lead"], description="Shows the leaderboard.")
+    @ commands.command(aliases=["lead"], description="Shows the leaderboard.")
     async def leaderboard(self, ctx, top_x=5):
         """Shows the leaderboard. By default it will show the top 5 people, but you can specify a `top_x` argument."""
         async with ctx.typing():
