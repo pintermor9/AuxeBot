@@ -149,5 +149,4 @@ class Poll(commands.Cog):
 
 
 def setup(client):
-    # print("                              !!! MAKE POLLS END !!!\n                           Temporarily disabled Poll.py")
     client.add_cog(Poll(client))
