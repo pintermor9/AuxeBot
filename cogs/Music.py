@@ -162,7 +162,7 @@ class Song:
 
     def create_embed(self):
         embed = (discord.Embed(title='Now playing',
-                               description='```css\n{0.source.title}\n```'.format(
+                               description='```\n{0.source.title}\n```'.format(
                                    self),
                                color=discord.Color.blurple())
                  .add_field(name='Duration', value=self.source.duration)
@@ -519,7 +519,7 @@ class Music(commands.Cog):
 
         if ctx.voice_client:
             if ctx.voice_client.channel != ctx.author.voice.channel:
-                raise commands.CommandError('Bot is already in a vc')
+                raise commands.CommandError('Bot is already in a voice channel.')
 
 
 def setup(bot):
