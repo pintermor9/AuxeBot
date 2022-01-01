@@ -31,6 +31,10 @@ class Test(commands.Cog):
             last_message = await ctx.send(f"&{chunk}${last_message.id}")
             text = text.replace(chunk, "")
 
+    @commands.command()
+    async def sendtxt(self, ctx, text)
+        await ctx.send(file=discord.File(SttingIo(str(text))))
+
 
 def setup(client):
     client.add_cog(Test(client))
