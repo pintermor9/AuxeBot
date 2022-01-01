@@ -34,7 +34,7 @@ class Test(commands.Cog):
 
     @commands.command()
     async def sendtxt(self, ctx, text):
-        await ctx.send(file=discord.File(StringIO(str(text))))
+        await ctx.send(file=discord.File(StringIO(str(text)), filename="message.txt"))
 
 
 def setup(client):
