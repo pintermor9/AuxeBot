@@ -18,7 +18,7 @@ class Test(commands.Cog):
             texts.append(message.content.replace(
                 "$" + next_message, "").replace("&", ""))
             message = await ctx.channel.fetch_message(int(next_message))
-        texts.append(message.content.replace("$last", "").replace("$", ""))
+        texts.append(message.content.replace("$last", "").replace("&", ""))
         await ctx.send("".join(reversed(texts)))
 
     @commands.command()
