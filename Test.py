@@ -1,5 +1,6 @@
 import re
 import discord
+from io import StringIO
 from discord.ext import commands
 
 
@@ -33,7 +34,7 @@ class Test(commands.Cog):
 
     @commands.command()
     async def sendtxt(self, ctx, text):
-        await ctx.send(file=discord.File(SttingIo(str(text))))
+        await ctx.send(file=discord.File(StringIO(str(text))))
 
 
 def setup(client):
