@@ -32,7 +32,7 @@ class Test(commands.Cog):
             text = text.replace(chunk, "")
 
     @commands.command()
-    async def sendtxt(self, ctx, text)
+    async def sendtxt(self, ctx, text):
         await ctx.send(file=discord.File(SttingIo(str(text))))
 
 
