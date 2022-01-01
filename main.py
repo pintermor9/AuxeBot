@@ -1,9 +1,11 @@
+import asyncio
 import os
 import yaml
 import discord
+from Utils import Data
 from itertools import cycle
-from discord.ext import commands, tasks
 from Help import HelpCommand
+from discord.ext import commands, tasks
 
 LINE_CLEAR = "\x1b[2k"
 
@@ -50,7 +52,7 @@ loopActivities = cycle([
     f'Latest updates: {updates}'
 ])
 
-# get necessary info for logging and levelling #! check later
+# get necessary info for logging and levelling
 client.data = settings["data"]
 
 client.WorkInProgressEmbed = discord.Embed(
@@ -58,14 +60,18 @@ client.WorkInProgressEmbed = discord.Embed(
 client.WorkInProgressEmbed.set_footer(
     text="If you experience any bugs or mistakes, please use the \n`report` command, to report it to the owner")
 
+try:
+    client.testing = bool(os.environ["TESTING"])
+except:
+    client.testing = False
+
 print("Done.", end=f"{LINE_CLEAR}\r")
 
-try:
-    if os.environ["TESTING"] == "True":
-        cycleActivities = False
-        noCycleActivity = "Currently testing..."
-except:
-    pass
+if client.testing == True:
+    cycleActivities = False
+    noCycleActivity = "Currently testing..."
+    client.load_extension("Test")
+
 
 if downAnnouncement:
     cycleActivities = False
@@ -94,10 +100,24 @@ async def on_ready():
     else:
         await client.change_presence(activity=discord.Game(noCycleActivity))
 
+    # ! PUT THIS IN settings.yml
+    message = [926881468255436850, 926881548198883358]
+    client.data = await Data.load(client, message)
+
+    dump_data.start()
+
 
 @tasks.loop(seconds=15)
 async def activityLoop():
     await client.change_presence(activity=discord.Game(next(loopActivities)))
+
+
+@tasks.loop(minutes=1)
+async def dump_data():
+    # ! PUT THIS IN settings.yml
+    message = [926881468255436850, 926881548198883358]
+    await Data.dump(client, client.data, message)
+
 
 for file in os.listdir('./cogs'):
     if file.endswith('.py'):

@@ -14,21 +14,7 @@ class Poll(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        self.client.poll_channel = self.client.get_channel(
-            self.client.data["poll"]["channel"])
-        self.client.poll_message = await self.client.poll_channel.fetch_message(
-            self.client.data["poll"]["message"])
-        self.client.poll_data = json.loads(
-            self.client.poll_message.content)
-        print(__name__+": "+str(self.client.poll_data))
-
         self.expiry_check.start()
-
-    async def save_poll(self):
-        await self.client.poll_message.edit(content=json.dumps(self.client.poll_data, indent=2))
-
-    """poll_data = [{"channel": "int", "message": "int", "expires": "time.time()", "choices": [
-        {"emote": "emoji", "name": "1. válasz"}]}]"""
 
     @commands.command(name="poll", description="Creates a poll.")
     async def _poll(self, ctx, lenght: int, choices, message):
@@ -67,23 +53,22 @@ class Poll(commands.Cog):
         expires = round(time()) + (lenght * 60)
         poll = {"channel": msg.channel.id, "message": msg.id,
                 "expires": expires, "choices": choices}
-        self.client.poll_data.append(poll)
+        self.client.data["poll"].append(poll)
 
-        await self.save_poll()
         await asyncio.sleep(lenght * 60)
-        await self.end_poll(self.client.poll_data.index(poll))
+        await self.end_poll(self.client.data["poll"].index(poll))
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
         if self.client.user == payload.member:
             return
-        channels = [poll["channel"] for poll in self.client.poll_data]
+        channels = [poll["channel"] for poll in self.client.data["poll"]]
         if payload.channel_id not in channels:
             return
-        messages = [poll["message"] for poll in self.client.poll_data]
+        messages = [poll["message"] for poll in self.client.data["poll"]]
         if payload.message_id not in messages:
             return
-        poll = next(poll for poll in self.client.poll_data if poll["channel"] ==
+        poll = next(poll for poll in self.client.data["poll"] if poll["channel"] ==
                     payload.channel_id and poll["message"] == payload.message_id)
         if str(payload.emoji) not in [choice for choice in poll["choices"]]:
             return
@@ -101,7 +86,7 @@ class Poll(commands.Cog):
             await message.channel.send(f"{payload.member.mention} You can't vote for 2 choices!", reference=message, delete_after=5)
 
     async def end_poll(self, poll_index: int):
-        poll = self.client.poll_data[poll_index]
+        poll = self.client.data["poll"][poll_index]
         channel = self.client.get_channel(poll["channel"])
         message = await channel.fetch_message(poll["message"])
 
@@ -122,30 +107,17 @@ class Poll(commands.Cog):
         await message.edit(embed=embed)
         await message.clear_reactions()
 
-        self.client.poll_data.pop(self.client.poll_data.index(poll))
-        await self.save_poll()
+        self.client.data["poll"].pop(self.client.data["poll"].index(poll))
 
     @tasks.loop(seconds=10)
     async def expiry_check(self):
-        expired = list(filter(lambda p: p["expires"] <= int(
-            round(time())), self.client.poll_data))
-        for poll in expired:
-            await self.end_poll(self.client.poll_data.index(poll))
-
-
-"""
-[
-    {
-        "channel": "int",
-        "message": "int",
-        "expires": "time.time()",
-        "choices": {
-            "emote": "name"
-        }
-        
-    }
-]
-"""
+        try:
+            expired = list(filter(lambda p: p["expires"] <= int(
+                round(time())), self.client.data["poll"]))
+            for poll in expired:
+                await self.end_poll(self.client.data["poll"].index(poll))
+        except:
+            pass  # ? It'll prolly work 10 seconds later
 
 
 def setup(client):

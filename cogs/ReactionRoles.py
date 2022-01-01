@@ -10,27 +10,9 @@ class ReactionRoles(commands.Cog):
         self.client = client
         print('Loaded', __name__)
 
-    @commands.Cog.listener()
-    async def on_ready(self):
-        self.client.reaction_roles_channel = self.client.get_channel(
-            self.client.data["reaction_roles"]["channel"])
-        self.client.reaction_roles_message = await self.client.reaction_roles_channel.fetch_message(
-            self.client.data["reaction_roles"]["message"])
-        self.client.reaction_roles_data = json.loads(
-            self.client.reaction_roles_message.content)
-        print(__name__+": "+str(self.client.reaction_roles_data))
-
-        # ? delete guilds with no RRs from dictionary (cleanup)
-        self.client.reaction_roles_data = {
-            guild: data for guild, data in self.client.reaction_roles_data.items() if data != []}
-        await self.save_reaction_roles()
-
-    async def save_reaction_roles(self):
-        await self.client.reaction_roles_message.edit(content=json.dumps(self.client.reaction_roles_data, indent=2))
-
     def parse_reaction_payload(self, payload: discord.RawReactionActionEvent):
         guild_id = payload.guild_id
-        data = self.client.reaction_roles_data.get(str(guild_id), None)
+        data = self.client.data["reaction_roles"].get(str(guild_id), None)
         if data is not None:
             for rr in data:
                 emote = rr.get("emote")
@@ -71,13 +53,12 @@ class ReactionRoles(commands.Cog):
         msg = await channel.send(embed=embed)
         await msg.add_reaction(emote)
         self.add_reaction(ctx.guild.id, emote, role.id, channel.id, msg.id)
-        await self.save_reaction_roles()
 
     @commands.has_permissions(manage_channels=True, manage_roles=True)
     @commands.group(invoke_without_command=True, description="Lists the reaction roles in the current guild.")
     async def reactions(self, ctx):
         guild_id = ctx.guild.id
-        data = self.client.reaction_roles_data.get(str(guild_id), None)
+        data = self.client.data["reaction_roles"].get(str(guild_id), None)
         embed = discord.Embed(title="Reaction Roles")
         if data == None or data == []:
             embed.description = "There are no reaction roles set up right now."
@@ -108,14 +89,13 @@ class ReactionRoles(commands.Cog):
         msg = await channel.fetch_message(int(message_id))
         await msg.add_reaction(emote)
         self.add_reaction(ctx.guild.id, emote, role.id, channel.id, message_id)
-        await self.save_reaction_roles()
 
     @commands.has_permissions(manage_channels=True)
     @reactions.command(description="Removes an existing reaction role.")
     async def remove(self, ctx, index: int):
         """Removes an existing reaction role in the current guild. It takes the `index` of the reaction role, which you can see by invoking `reactions`."""
         guild_id = ctx.guild.id
-        data = self.client.reaction_roles_data.get(str(guild_id), None)
+        data = self.client.data["reaction_roles"].get(str(guild_id), None)
         embed = discord.Embed(title=f"Remove Reaction Role {index}")
         rr = None
         if data is None:
@@ -156,13 +136,12 @@ class ReactionRoles(commands.Cog):
             finally:
                 await msg.clear_reactions()
                 await msg.edit(embed=embed)
-            self.client.reaction_roles_data[str(guild_id)] = data
-            await self.save_reaction_roles()
+            self.client.data["reaction_roles"][str(guild_id)] = data
 
     def add_reaction(self, guild_id, emote: discord.Emoji, role_id, channel_id, message_id):
-        if not str(guild_id) in self.client.reaction_roles_data:
-            self.client.reaction_roles_data[str(guild_id)] = []
-        self.client.reaction_roles_data[str(guild_id)].append(
+        if not str(guild_id) in self.client.data["reaction_roles"]:
+            self.client.data["reaction_roles"][str(guild_id)] = []
+        self.client.data["reaction_roles"][str(guild_id)].append(
             {
                 "id": str(uuid.uuid4()),
                 "emote": emote,

@@ -21,45 +21,26 @@ class Levelling(commands.Cog):
             lvl += 1
 
     @commands.Cog.listener()
-    async def on_ready(self):
-        self.client.levelling_channel = self.client.get_channel(
-            self.client.data["levelling"]["channel"])
-        self.client.levelling_message = await self.client.levelling_channel.fetch_message(
-            self.client.data["levelling"]["message"])
-        self.client.levelling_levels = json.loads(
-            self.client.levelling_message.content)
-        print(__name__+": "+str(self.client.levelling_levels))
-
-        # i delete users with no XP from dictionary (cleanup)
-        self.client.levelling_levels = {
-            member: xp for member, xp in self.client.levelling_levels.items() if xp != 0}
-        await self.save_levels()
-
-    async def save_levels(self):
-        await self.client.levelling_message.edit(content=json.dumps(self.client.levelling_levels, indent=2))
-
-    @commands.Cog.listener()
     async def on_message(self, message):
         if message.author.bot:
             return
 
         authorID = str(message.author.id)
         try:
-            old_xp = self.client.levelling_levels[authorID]
+            old_xp = self.client.data["levelling"][authorID]
         except KeyError:
-            self.client.levelling_levels.update({authorID: 0})
+            self.client.data["levelling"].update({authorID: 0})
             old_xp = 0
 
-        self.client.levelling_levels[authorID] += random.randint(5, 12)
-        xp = self.client.levelling_levels[authorID]
+        self.client.data["levelling"][authorID] += random.randint(5, 12)
+        xp = self.client.data["levelling"][authorID]
 
         if self.get_lvl(old_xp)[1] < self.get_lvl(xp)[1]:
             await message.author.send(
                 f"GG {message.author.mention}, you just advanced to level {self.get_lvl(xp)[1]}!"
             )
 
-        self.client.levelling_levels.update({authorID: xp})
-        await self.save_levels()
+        self.client.data["levelling"].update({authorID: xp})
 
     @commands.command(description="Shows the rank, level and xp of someone.")
     async def rank(self, ctx, user: Union[discord.Member, discord.User] = "you"):
@@ -69,14 +50,14 @@ class Levelling(commands.Cog):
                 user = ctx.author
 
             try:
-                xp = self.client.levelling_levels[str(user.id)]
+                xp = self.client.data["levelling"][str(user.id)]
             except:
-                self.client.levelling_levels.update({str(user.id): 0})
-                xp = self.client.levelling_levels[str(user.id)]
+                self.client.data["levelling"].update({str(user.id): 0})
+                xp = self.client.data["levelling"][str(user.id)]
             lvlxp, lvl = self.get_lvl(xp)
 
             rank = 1
-            datalisted = sorted(self.client.levelling_levels.items(),
+            datalisted = sorted(self.client.data["levelling"].items(),
                                 key=lambda x: x[1], reverse=True)
             for x in datalisted:
                 if x[0] == str(user.id):
@@ -116,7 +97,7 @@ class Levelling(commands.Cog):
     async def leaderboard(self, ctx, top_x=5):
         """Shows the leaderboard. By default it will show the top 5 people, but you can specify a `top_x` argument."""
         async with ctx.typing():
-            datalisted = sorted(self.client.levelling_levels.items(),
+            datalisted = sorted(self.client.data["levelling"].items(),
                                 key=lambda x: x[1], reverse=True)
 
             topIDs = tuple(map(lambda i: i[0], datalisted))

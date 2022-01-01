@@ -1,5 +1,8 @@
-from asyncio import TimeoutError
+import json
 import discord
+from io import StringIO
+from typing import List, Union
+from asyncio import TimeoutError
 
 
 class Paginator:
@@ -42,3 +45,27 @@ class Paginator:
                 await message.edit(embed=embeds[current_page])
             except TimeoutError:
                 return await message.clear_reactions()
+
+
+class Data:
+    @staticmethod
+    async def load(client, message: Union[discord.Message, List[int]]):
+        if type(message) == list:
+            _channel = client.get_channel(message[0])
+            message = await _channel.fetch_message(message[1])
+        file_message = await message.channel.fetch_message(int(message.content))
+        bytes = await file_message.attachments[0].read()
+        return json.loads(bytes)
+
+    @staticmethod
+    async def dump(client, data, message: Union[discord.Message, List[int]]):
+        if type(message) == list:
+            _channel = client.get_channel(message[0])
+            message = await _channel.fetch_message(message[1])
+        if type(data) == dict:
+            data = json.dumps(data, indent=4)
+        old_file_message = await message.channel.fetch_message(int(message.content))
+        file = discord.File(StringIO(data), filename="data.json")
+        file_message = await message.channel.send(file=file)
+        await message.edit(content=str(file_message.id))
+        await old_file_message.delete()

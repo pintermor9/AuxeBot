@@ -18,7 +18,8 @@ class Logging(commands.Cog):
         self.client.last_up = float(self.client.logging_message.content)
         hours, minutes, seconds = str(timedelta(
             seconds=round(time() - self.client.last_up))).split(":")
-        await self.client.logging_channel.send(f"<@&922915340852289626> **The bot is back online, after being offline for ~`{hours} hour(s), {minutes} minute(s), {seconds} second(s)`.**")
+        if self.client.testing == False:
+            await self.client.logging_channel.send(f"<@&922915340852289626> **The bot is back online, after being offline for ~`{hours} hour(s), {minutes} minute(s), {seconds} second(s)`.**")
         while True:
             await asyncio.sleep(10)
             await self.client.logging_message.edit(content=str(time()))
