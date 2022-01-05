@@ -15,17 +15,11 @@ updates: "`rank` command now sends an image"
 noCycleActivity: ""
 
 data:
+  json-data:
+    - 926881468255436850
+    - 926881548198883358
   logging:
     channel: 920666671121842178
     message: 922873383941709854
-  levelling:
-    channel: 920764690244730950
-    message: 920929513456676875
-  reaction_roles:
-    channel: 920764997594935407
-    message: 921016292943740969
   report:
     channel: 923558173904867349
-  poll:
-    channel: 925029810672136212
-    message: 925029832851611679

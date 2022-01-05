@@ -60,6 +60,8 @@ client.WorkInProgressEmbed = discord.Embed(
 client.WorkInProgressEmbed.set_footer(
     text="If you experience any bugs or mistakes, please use the \n`report` command, to report it to the owner")
 
+client.settings = settings
+
 try:
     client.testing = bool(os.environ["TESTING"])
 except:
@@ -100,8 +102,7 @@ async def on_ready():
     else:
         await client.change_presence(activity=discord.Game(noCycleActivity))
 
-    # ! PUT THIS IN settings.yml
-    message = [926881468255436850, 926881548198883358]
+    message = client.settings["data"]["json-data"]
     client.data = await Data.load(client, message)
 
     dump_data.start()
@@ -112,12 +113,11 @@ async def activityLoop():
     await client.change_presence(activity=discord.Game(next(loopActivities)))
 
 
-@tasks.loop(minutes=1)
+@tasks.loop(seconds=10)
 async def dump_data():
-    # ! PUT THIS IN settings.yml
-    message = [926881468255436850, 926881548198883358]
-    await Data.dump(client, client.data, message)
-
+    message = client.settings["data"]["json-data"]
+    if await Data.load(client, message) != client.data:
+        await Data.dump(client, client.data, message)
 
 for file in os.listdir('./cogs'):
     if file.endswith('.py'):

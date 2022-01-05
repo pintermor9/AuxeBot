@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-import json
 import uuid
 from asyncio import TimeoutError
 
@@ -137,6 +136,8 @@ class ReactionRoles(commands.Cog):
                 await msg.clear_reactions()
                 await msg.edit(embed=embed)
             self.client.data["reaction_roles"][str(guild_id)] = data
+            if self.client.data["reaction_roles"][str(guild_id)] == []:
+                del self.client.data["reaction_roles"][str(guild_id)]
 
     def add_reaction(self, guild_id, emote: discord.Emoji, role_id, channel_id, message_id):
         if not str(guild_id) in self.client.data["reaction_roles"]:

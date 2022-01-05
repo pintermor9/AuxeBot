@@ -10,7 +10,7 @@ class Moderation(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         self.client.report_channel = self.client.get_channel(
-            self.client.data["report"]["channel"])
+            self.client.settings["data"]["report"]["channel"])
 
     @commands.command(description="Shows client ping.")
     async def ping(self, ctx):

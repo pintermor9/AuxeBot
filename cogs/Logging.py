@@ -12,9 +12,9 @@ class Logging(commands.Cog):
     @commands.Cog.listener()
     async def on_ready(self):
         self.client.logging_channel = self.client.get_channel(
-            self.client.data["logging"]["channel"])
+            self.client.settings["data"]["logging"]["channel"])
         self.client.logging_message = await self.client.logging_channel.fetch_message(
-            self.client.data["logging"]["message"])
+            self.client.settings["data"]["logging"]["message"])
         self.client.last_up = float(self.client.logging_message.content)
         hours, minutes, seconds = str(timedelta(
             seconds=round(time() - self.client.last_up))).split(":")
