@@ -1,4 +1,3 @@
-import asyncio
 import os
 import yaml
 import discord
@@ -92,7 +91,7 @@ async def on_connect():
 
 @client.event
 async def on_ready():
-    print('Logged in as {0.user}!'.format(client))
+    print('Logged in as {.user}!'.format(client))
     await client.change_presence(
         status=discord.Status.idle,
         activity=discord.Game("Initializing... Please wait."))
@@ -113,7 +112,7 @@ async def activityLoop():
     await client.change_presence(activity=discord.Game(next(loopActivities)))
 
 
-@tasks.loop(seconds=10)
+@tasks.loop(seconds=30)
 async def dump_data():
     message = client.settings["data"]["json-data"]
     if await Data.load(client, message) != client.data:
