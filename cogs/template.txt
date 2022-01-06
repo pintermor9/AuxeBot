@@ -1,0 +1,13 @@
+# ! This is a template. Replace all occourences of "template" with the name of the cog, and delete this line
+import discord
+from discord.ext import commands
+
+
+class template(commands.Cog):
+    def __init__(self, client):
+        self.client = client
+        print('Loaded', __name__)
+
+
+def setup(client):
+    client.add_cog(template(client))
