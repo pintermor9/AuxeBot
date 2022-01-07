@@ -2,6 +2,7 @@
 prefix: "-"
 owner_IDs:
   - 761555679873597450
+VERSION: v1.0-pre3
 
 #Downtime settings:
 downAnnouncement: False

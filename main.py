@@ -21,6 +21,7 @@ def get_prefix(*_args):
 client = commands.Bot(command_prefix=get_prefix,
                       help_command=HelpCommand(), intents=intents)
 
+
 print("Done.", end=f"{LINE_CLEAR}\r")
 print("Reading settings... ")
 
@@ -32,6 +33,7 @@ with open(r'./settings.yml') as file:
 TOKEN = os.environ["TOKEN"]
 client.prefix = settings['prefix']
 client.owner_IDs = settings['owner_IDs']
+client.VERSION = settings['VERSION']
 
 # Downtime settings:
 downAnnouncement = settings['downAnnouncement']
@@ -86,7 +88,8 @@ def is_owner(ctx):
 @client.event
 async def on_connect():
     print('Connected to discord.')
-    print('Current discord.py version: {.__version__}'.format(discord))
+    print(f'Current discord.py version: {discord.__version__}')
+    print(f'Current bot version: {client.VERSION}')
 
 
 @client.event
