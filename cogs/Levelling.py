@@ -1,4 +1,3 @@
-import json
 import random
 import discord
 import aiohttp
@@ -76,7 +75,6 @@ class Levelling(commands.Cog):
                 status = "online"
 
             async with aiohttp.ClientSession() as session:
-                print(user.avatar_url_as(format="png", size=1024))
                 async with session.post("https://discord-bot-api.pintermor9.repl.co/rankcard/", data={
                     "img": str(user.avatar_url_as(format="png", size=1024)),
                     "currentXP": lvlxp,
@@ -87,8 +85,8 @@ class Levelling(commands.Cog):
                     "rank": rank,
                     "level": lvl
                 }) as response:
-                    # if not str(response.code).startswith(2):
-                    #     return await ctx.send(embed=discord.Embed(title="Sorry,", description="this is temporarily unavailable."))
+                    if not str(response.status).startswith("2"):
+                        return await ctx.send(embed=discord.Embed(title="Sorry,", description="this is temporarily unavailable."))
                     rankcard = await response.read()
 
             await ctx.send(file=discord.File(BytesIO(rankcard), "rankcard.png"))
