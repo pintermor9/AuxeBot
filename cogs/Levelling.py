@@ -76,7 +76,7 @@ class Levelling(commands.Cog):
 
             async with aiohttp.ClientSession() as session:
                 async with session.post("https://discord-bot-api.pintermor9.repl.co/rankcard/", data={
-                    "img": str(user.diplay_avatar if user.diplay_avatar != None else user.deafult_avatar),
+                    "img": str(user.display_avatar if user.display_avatar != None else user.deafult_avatar),
                     "currentXP": lvlxp,
                     "requiredXP": int(200 * ((1 / 2) * lvl)),
                     "status": status,
