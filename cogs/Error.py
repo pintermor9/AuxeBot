@@ -15,7 +15,7 @@ class Error(commands.Cog):
             return
 
         DEAFULT = (BadArgument, BadUnionArgument, ArgumentParsingError, CheckFailure, DisabledCommand,
-                   CommandInvokeError, CommandOnCooldown, MaxConcurrencyReached, ExtensionError)
+                   CommandInvokeError, CommandOnCooldown, MaxConcurrencyReached)
 
         embed = discord.Embed(title="Error:exclamation:",
                               description="", color=0xff0000)
