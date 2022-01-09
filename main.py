@@ -1,12 +1,3 @@
-print('''                         ____        _   
-     /\                 |  _ \      | |  
-    /  \  _   ___  _____| |_) | ___ | |_ 
-   / /\ \| | | \ \/ / _ \  _ < / _ \| __|
-  / ____ \ |_| |>  <  __/ |_) | (_) | |_ 
- /_/    \_\__,_/_/\_\___|____/ \___/ \__|
-               
-         Ascii art by patorjk.com''')
-
 import os
 import yaml
 import discord
@@ -14,6 +5,8 @@ from Utils import Data
 from itertools import cycle
 from Help import HelpCommand
 from discord.ext import commands, tasks
+
+print('''         .d888888                              888888ba             dP   \n        d8'    88                              88    `8b            88   \n        88aaaaa88a dP    dP dP.  .dP .d8888b. a88aaaa8P' .d8888b. d8888P \n        88     88  88    88  `8bd8'  88ooood8  88   `8b. 88'  `88   88   \n        88     88  88.  .88  .d88b.  88.  ...  88    .88 88.  .88   88   \n        88     88  `88888P' dP'  `dP `88888P'  88888888P `88888P'   dP   \n                          Ascii art by patorjk.com                       ''')
 
 LINE_CLEAR = "\x1b[2k"
 
