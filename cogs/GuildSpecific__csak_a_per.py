@@ -11,6 +11,8 @@ class GuildSpecific__csak_a_per(commands.Cog):
     async def on_message(self, message):
         if message.channel.id != 920590116710412298:
             return
+        if message.attachments == []:
+            return await message.delete()
         await message.channel.create_thread(name=f"{message.author.name}`s shop", message=message)
 
 

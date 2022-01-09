@@ -1,10 +1,15 @@
-﻿git+https://github.com/Pycord-Development/pycord
-fastapi
+﻿# pycord 2.0.0a
+git+https://github.com/Pycord-Development/pycord
+# fastapi
 PyYAML
-requests
 aiohttp
-uvicorn
-gunicorn
+# uvicorn
+# gunicorn
 youtube_dl
 ffmpeg
 PyNaCl
+# speedups
+aiodns
+Brotli
+cchardet
+orjson
