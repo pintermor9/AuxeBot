@@ -8,6 +8,8 @@ aiohttp
 youtube_dl
 ffmpeg
 PyNaCl
+
+requests
 # speedups
 aiodns
 Brotli
