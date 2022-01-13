@@ -24,12 +24,12 @@ class Moderation(commands.Cog):
 
     @commands.command(hidden=True)
     @commands.is_owner()
-    async def logout(self, ctx):
+    async def shutdown(self, ctx):
         await ctx.send('Bye! :wave:')
         await self.client.change_presence(
             status=discord.Status.do_not_disturb,
             activity=discord.Game("Shutting down..."))
-        await self.client.logout()
+        await self.client.close()
         exit(0)
 
     @commands.command(hidden=True)
