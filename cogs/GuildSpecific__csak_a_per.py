@@ -9,7 +9,7 @@ class GuildSpecific__csak_a_per(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.channel.id != 920590116710412298:
+        if message.channel.id != 920590116710412298 or message.author == self.client.user:
             return
         if message.attachments == []:
             await message.channel.send("Ide csak a shopodat küldjed. Kell lennie egy fényképnek csatolva.", delete_after=10)
