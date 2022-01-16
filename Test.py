@@ -21,7 +21,7 @@ class Test(commands.Cog):
     
     @commands.command()
     async def fixshopthreads(self, ctx):
-        for thread in ctx.channel.archived_threads().flatten():
+        for thread in await ctx.channel.archived_threads().flatten():
             if not thread.name.endswith(" - before timestamp"): continue
             await thread.unarchive()
             await thread.edit(name=thread.name.replace(" - before timestamp", ""))
