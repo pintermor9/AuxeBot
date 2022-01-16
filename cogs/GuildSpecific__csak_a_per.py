@@ -17,7 +17,7 @@ class GuildSpecific__csak_a_per(commands.Cog):
             return await message.delete()
         name = f"{message.author.name}`s shop"
         to_delete = [
-            thread for thread in message.channel.threads if thread.name == name]
+            thread for thread in message.channel.threads if thread.name == name and not thread.archived]
         for t in to_delete:
             await t.edit(name=f"{t.name} - {str(datetime.datetime.now()).split('.')[0].replace(':', '.')}")
             await t.archive()
