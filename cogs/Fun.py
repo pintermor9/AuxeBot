@@ -32,8 +32,7 @@ class Fun(commands.Cog):
 
     @commands.command(description="Chooses something from the given parameters.")
     async def choose(self, ctx, option_1, option_2, *more):
-        chooselist = [option_1, option_2]
-        chooselist.extend(more)
+        chooselist = [option_1, option_2, *more]
         await ctx.send(random.choice(chooselist))
 
     @commands.command(aliases=['itsthisforthat', 'this/that', 'thisthat'], description="itsthisforthat.com")
