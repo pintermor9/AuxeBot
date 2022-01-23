@@ -37,8 +37,9 @@ class Fun(commands.Cog):
 
     @commands.command(aliases=['itsthisforthat', 'this/that', 'thisthat'], description="itsthisforthat.com")
     async def thisforthat(self, ctx):
-        r = await aiohttp.get('http://itsthisforthat.com/api.php?json')
-        r = r.json()
+        async with aiohttp.ClientSession() as session:
+            r = await session.get('http://itsthisforthat.com/api.php?json')
+            r = r.json()
         thisforthat = r['this'], ' for ', r['that'], '!'
         await ctx.send(''.join(thisforthat))
 
