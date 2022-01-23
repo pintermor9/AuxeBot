@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 import random
-import requests
+import aiohttp
 
 
 class Fun(commands.Cog):
@@ -37,7 +37,8 @@ class Fun(commands.Cog):
 
     @commands.command(aliases=['itsthisforthat', 'this/that', 'thisthat'], description="itsthisforthat.com")
     async def thisforthat(self, ctx):
-        r = requests.get('http://itsthisforthat.com/api.php?json').json()
+        r = await aiohttp.get('http://itsthisforthat.com/api.php?json')
+        r = r.json()
         thisforthat = r['this'], ' for ', r['that'], '!'
         await ctx.send(''.join(thisforthat))
 
