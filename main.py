@@ -123,6 +123,7 @@ async def dump_data():
     if await Data.load(client, message) != client.data:
         await Data.dump(client, client.data, message)
 
+client.load_extension("jishaku")
 for file in os.listdir('./cogs'):
     if file.endswith('.py'):
         client.load_extension(f'cogs.{file[:-3]}')
