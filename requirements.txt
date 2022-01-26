@@ -8,6 +8,7 @@ aiohttp
 youtube_dl
 ffmpeg
 PyNaCl
+jishaku
 
 requests
 # speedups
