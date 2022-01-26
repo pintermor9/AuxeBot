@@ -10,8 +10,7 @@ class HelpCommand(commands.HelpCommand):
     async def send_bot_help(self, _mapping):
         client = self.context.bot
         embeds = []
-        cogs = [cog for cog in client.cogs.values()]
-        cogs = list(filter(lambda c: len(c.get_commands()) > 0, cogs))
+        cogs = [cog for cog in client.cogs.values() if len([command for command in cog.get_commands() if not command.hidden]) > 0 and cog.qualified_name not in client.hidden_cogs]
         max_page = len(cogs)
         for cog in cogs:
             embed = discord.Embed(

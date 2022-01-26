@@ -36,6 +36,7 @@ TOKEN = os.environ["TOKEN"]
 client.prefix = settings['prefix']
 client.owner_IDs = settings['owner_IDs']
 client.VERSION = settings['VERSION']
+client.hidden_cogs = settings['hidden_cogs']
 
 # Downtime settings:
 downAnnouncement = settings['downAnnouncement']
@@ -59,9 +60,8 @@ loopActivities = cycle([
 client.data = settings["data"]
 
 client.WorkInProgressEmbed = discord.Embed(
-    title="**Hello:exclamation:**", description="**The command that you invoked is not done yet.**\nSorry for the inconvenience.")
-client.WorkInProgressEmbed.set_footer(
-    text="If you experience any bugs or mistakes, please use the \n`report` command, to report it to the owner")
+    title="**Hello:exclamation:**", description="**The command that you invoked is not done yet.**\nSorry for the inconvenience.").set_footer(
+        text="If you experience any bugs or mistakes, please use the \n`report` command, to report it to the owner")
 
 client.settings = settings
 
