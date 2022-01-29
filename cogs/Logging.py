@@ -2,7 +2,7 @@ from discord.ext import commands
 from datetime import timedelta
 from time import time
 import asyncio
-
+import discord
 
 class Logging(commands.Cog):
     def __init__(self, client):
