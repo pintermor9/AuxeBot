@@ -1,6 +1,7 @@
 import os
 import yaml
 import discord
+import logging
 from Utils import Data
 from itertools import cycle
 from Help import HelpCommand
@@ -69,6 +70,8 @@ try:
     client.testing = bool(os.environ["TESTING"])
 except:
     client.testing = False
+
+logging.basicConfig(level=logging.INFO if not testing else logging.DEBUG)
 
 print("Done.", end=f"{LINE_CLEAR}\r")
 
