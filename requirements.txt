@@ -1,5 +1,4 @@
-﻿# pycord 2.0.0a
-git+https://github.com/Pycord-Development/pycord
+py-cord==2.0.0b1
 # fastapi
 PyYAML
 aiohttp
