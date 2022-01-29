@@ -71,7 +71,7 @@ try:
 except:
     client.testing = False
 
-logging.basicConfig(level=logging.INFO if not testing else logging.DEBUG)
+logging.basicConfig(level=logging.INFO if not client.testing else logging.DEBUG)
 
 print("Done.", end=f"{LINE_CLEAR}\r")
 
