@@ -9,7 +9,7 @@ hidden_cogs:
 #Status and activity settings:
 cycleActivities: True
 status: "online"
-updates: "Now using pycord v2.0.0b1"
+updates: "v1.0-rc1"
 noCycleActivity: ""
 
 data:
