@@ -5,8 +5,8 @@ import aiohttp
 
 
 class Fun(commands.Cog):
-    def __init__(self, client):
-        self.client = client
+    def __init__(self, bot):
+        self.bot = bot
         print('Loaded', __name__)
 
     @commands.command(name='8ball', aliases=['eightball'], description="Gives you a random answer to your question.")
@@ -57,5 +57,5 @@ class Fun(commands.Cog):
         await ctx.send(text[-1::-1])
 
 
-def setup(client):
-    client.add_cog(Fun(client))
+def setup(bot):
+    bot.add_cog(Fun(bot))

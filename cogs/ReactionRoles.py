@@ -5,36 +5,36 @@ from asyncio import TimeoutError
 
 
 class ReactionRoles(commands.Cog):
-    def __init__(self, client):
-        self.client = client
+    def __init__(self, bot):
+        self.bot = bot
         print('Loaded', __name__)
 
     def parse_reaction_payload(self, payload: discord.RawReactionActionEvent):
         guild_id = payload.guild_id
-        data = self.client.data["reaction_roles"].get(str(guild_id), None)
+        data = self.bot.data["reaction_roles"].get(str(guild_id), None)
         if data is not None:
             for rr in data:
                 emote = rr.get("emote")
                 if int(payload.message_id) == int(rr.get("messageID")):
                     if int(payload.channel_id) == int(rr.get("channelID")):
                         if str(payload.emoji) == str(emote):
-                            guild = self.client.get_guild(guild_id)
+                            guild = self.bot.get_guild(guild_id)
                             role = guild.get_role(int(rr.get("roleID")))
                             user = guild.get_member(int(payload.user_id))
-                            if user != self.client.user:
+                            if user != self.bot.user:
                                 return role, user
         return None, None
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
         role, user = self.parse_reaction_payload(payload)
-        if role is not None and user is not None and user is not self.client.user:
+        if role is not None and user is not None and user is not self.bot.user:
             await user.add_roles(role, reason="ReactionRole")
 
     @commands.Cog.listener()
     async def on_raw_reaction_remove(self, payload: discord.RawReactionActionEvent):
         role, user = self.parse_reaction_payload(payload)
-        if role is not None and user is not None and user is not self.client.user:
+        if role is not None and user is not None and user is not self.bot.user:
             await user.remove_roles(role, reason="ReactionRole")
 
     @commands.has_permissions(manage_channels=True, manage_roles=True)
@@ -57,7 +57,7 @@ class ReactionRoles(commands.Cog):
     @commands.group(invoke_without_command=True, description="Lists the reaction roles in the current guild.")
     async def reactions(self, ctx):
         guild_id = ctx.guild.id
-        data = self.client.data["reaction_roles"].get(str(guild_id), None)
+        data = self.bot.data["reaction_roles"].get(str(guild_id), None)
         embed = discord.Embed(title="Reaction Roles")
         if data == None or data == []:
             embed.description = "There are no reaction roles set up right now."
@@ -94,7 +94,7 @@ class ReactionRoles(commands.Cog):
     async def remove(self, ctx, index: int):
         """Removes an existing reaction role in the current guild. It takes the `index` of the reaction role, which you can see by invoking `reactions`."""
         guild_id = ctx.guild.id
-        data = self.client.data["reaction_roles"].get(str(guild_id), None)
+        data = self.bot.data["reaction_roles"].get(str(guild_id), None)
         embed = discord.Embed(title=f"Remove Reaction Role {index}")
         rr = None
         if data is None:
@@ -127,7 +127,7 @@ class ReactionRoles(commands.Cog):
                     and str(reaction.emoji) == "🗑️"
                 )
             try:
-                reaction, user = await self.client.wait_for("reaction_add", check=check, timeout=15)
+                reaction, user = await self.bot.wait_for("reaction_add", check=check, timeout=15)
                 data.remove(rr)
                 embed = discord.Embed(title="Ok. Deleted.🗑️")
             except TimeoutError:
@@ -135,14 +135,14 @@ class ReactionRoles(commands.Cog):
             finally:
                 await msg.clear_reactions()
                 await msg.edit(embed=embed)
-            self.client.data["reaction_roles"][str(guild_id)] = data
-            if self.client.data["reaction_roles"][str(guild_id)] == []:
-                del self.client.data["reaction_roles"][str(guild_id)]
+            self.bot.data["reaction_roles"][str(guild_id)] = data
+            if self.bot.data["reaction_roles"][str(guild_id)] == []:
+                del self.bot.data["reaction_roles"][str(guild_id)]
 
     def add_reaction(self, guild_id, emote: discord.Emoji, role_id, channel_id, message_id):
-        if not str(guild_id) in self.client.data["reaction_roles"]:
-            self.client.data["reaction_roles"][str(guild_id)] = []
-        self.client.data["reaction_roles"][str(guild_id)].append(
+        if not str(guild_id) in self.bot.data["reaction_roles"]:
+            self.bot.data["reaction_roles"][str(guild_id)] = []
+        self.bot.data["reaction_roles"][str(guild_id)].append(
             {
                 "id": str(uuid.uuid4()),
                 "emote": emote,
@@ -153,5 +153,5 @@ class ReactionRoles(commands.Cog):
         )
 
 
-def setup(client):
-    client.add_cog(ReactionRoles(client))
+def setup(bot):
+    bot.add_cog(ReactionRoles(bot))

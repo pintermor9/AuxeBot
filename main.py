@@ -4,7 +4,6 @@ import discord
 import logging
 from Utils import Data
 from itertools import cycle
-from Help import HelpCommand
 from discord.ext import commands, tasks
 
 print('''         .d888888                              888888ba             dP   \n        d8'    88                              88    `8b            88   \n        88aaaaa88a dP    dP dP.  .dP .d8888b. a88aaaa8P' .d8888b. d8888P \n        88     88  88    88  `8bd8'  88ooood8  88   `8b. 88'  `88   88   \n        88     88  88.  .88  .d88b.  88.  ...  88    .88 88.  .88   88   \n        88     88  `88888P' dP'  `dP `88888P'  88888888P `88888P'   dP   \n                          Ascii art by patorjk.com                       ''')
@@ -14,15 +13,54 @@ LINE_CLEAR = "\x1b[2k"
 print("Imported modules.", end=f"{LINE_CLEAR}\r")
 print("Getting client...", end=f"{LINE_CLEAR}\r")
 
+
+class Bot(commands.Bot):
+    async def on_connect(self):
+        print('Connected to discord.')
+        print(f'Current discord.py version: {discord.__version__}')
+        print(f'Current bot version: {self.VERSION}')
+        await super().on_connect()
+
+    async def on_ready(self):
+        print('Logged in as {.user}!'.format(self))
+        message = self.settings["data"]["json-data"]
+        self.data = await Data.load(self, message)
+
+        if not self.testing:
+            await self.change_presence(
+                status=discord.Status.idle,
+                activity=discord.Game("Initializing... Please wait."))
+
+            if status == "online":
+                self.status = discord.Status.online
+            if status == "idle":
+                self.status = discord.Status.idle
+            if status == "dnd":
+                self.status = discord.Status.dnd
+            if cycleActivities:
+                activityLoop.start()
+            else:
+                await self.change_presence(activity=discord.Game(noCycleActivity), status=status)
+
+            dump_data.start()
+
+    async def on_message(self, message):
+        if not self.testing and not message.channel.id == 937293407796207627:
+            return await super().on_message(message)
+        elif self.testing and message.channel.id == 937293407796207627:
+            return await super().on_message(message)
+        else:
+            return
+
+
 intents = discord.Intents.all()
 
 
 def get_prefix(*_args):
-    return client.prefix
+    return bot.prefix
 
 
-client = commands.Bot(command_prefix=get_prefix,
-                      help_command=HelpCommand(), intents=intents)
+bot = Bot(command_prefix=get_prefix, intents=intents)
 
 
 print("Done.", end=f"{LINE_CLEAR}\r")
@@ -34,15 +72,11 @@ with open(r'./settings.yml') as file:
 
 # General settings
 TOKEN = os.environ["TOKEN"]
-client.prefix = settings['prefix']
-client.owner_IDs = settings['owner_IDs']
-client.VERSION = settings['VERSION']
-client.hidden_cogs = settings['hidden_cogs']
+bot.prefix = settings['prefix']
+bot.owner_IDs = settings['owner_IDs']
+bot.VERSION = settings['VERSION']
+bot.hidden_cogs = settings['hidden_cogs']
 
-# Downtime settings:
-downAnnouncement = settings['downAnnouncement']
-downDate = settings['downDate']
-downAnnouncementStatus = settings['downAnnouncementStatus']
 
 # Status and activity settings:
 cycleActivities = settings['cycleActivities']
@@ -50,7 +84,7 @@ status = settings['status']
 updates = settings['updates']
 noCycleActivity = settings['noCycleActivity']
 loopActivities = cycle([
-    f'Prefix: {client.prefix}', f'Use \'{client.prefix}help\' for help!',
+    f'Prefix: {bot.prefix}', f'Use \'{bot.prefix}help\' for help!',
     'Owner: mor3000#8499',
     'Check out \'stats.uptimerobot.com/pLEoghzLzx\' for uptime stats!',
     'Yeah I know that I should get a profile picture.',
@@ -58,79 +92,50 @@ loopActivities = cycle([
 ])
 
 # get necessary info for logging and levelling
-client.data = settings["data"]
+bot.data = settings["data"]
 
-client.WorkInProgressEmbed = discord.Embed(
+bot.WorkInProgressEmbed = discord.Embed(
     title="**Hello:exclamation:**", description="**The command that you invoked is not done yet.**\nSorry for the inconvenience.").set_footer(
         text="If you experience any bugs or mistakes, please use the \n`report` command, to report it to the owner")
 
-client.settings = settings
+bot.settings = settings
 
 try:
-    client.testing = bool(os.environ["TESTING"])
+    bot.testing = bool(os.environ["TESTING"])
 except:
-    client.testing = False
+    bot.testing = False
 
-logging.basicConfig(level=logging.INFO if not client.testing else logging.DEBUG)
+logging.basicConfig(
+    level=logging.INFO if not bot.testing else logging.DEBUG)
 
 print("Done.", end=f"{LINE_CLEAR}\r")
 
-if client.testing == True:
+if bot.testing == True:
     cycleActivities = False
     noCycleActivity = "Currently testing..."
-    client.load_extension("Test")
-
-
-if downAnnouncement:
-    cycleActivities = False
-    noCycleActivity = downAnnouncementStatus
+    bot.load_extension("Test")
 
 
 def is_owner(ctx):
-    return ctx.message.author.id in client.owner_IDs
-
-
-@client.event
-async def on_connect():
-    print('Connected to discord.')
-    print(f'Current discord.py version: {discord.__version__}')
-    print(f'Current bot version: {client.VERSION}')
-
-
-@client.event
-async def on_ready():
-    print('Logged in as {.user}!'.format(client))
-    await client.change_presence(
-        status=discord.Status.idle,
-        activity=discord.Game("Initializing... Please wait."))
-
-    if cycleActivities:
-        activityLoop.start()
-    else:
-        await client.change_presence(activity=discord.Game(noCycleActivity))
-
-    message = client.settings["data"]["json-data"]
-    client.data = await Data.load(client, message)
-
-    dump_data.start()
+    return ctx.message.author.id in bot.owner_IDs
 
 
 @tasks.loop(seconds=15)
 async def activityLoop():
-    await client.change_presence(activity=discord.Game(next(loopActivities)))
+    await bot.change_presence(activity=discord.Game(next(loopActivities)))
 
 
 @tasks.loop(seconds=30)
 async def dump_data():
-    message = client.settings["data"]["json-data"]
-    if await Data.load(client, message) != client.data:
-        await Data.dump(client, client.data, message)
+    message = bot.settings["data"]["json-data"]
+    if await Data.load(bot, message) != bot.data:
+        await Data.dump(bot, bot.data, message)
 
-client.load_extension("jishaku")
+bot.load_extension("jishaku")
 for file in os.listdir('./cogs'):
     if file.endswith('.py'):
-        client.load_extension(f'cogs.{file[:-3]}')
+        bot.load_extension(f'cogs.{file[:-3]}')
 
 print(" \n \nStarting client...\n ")
 
-client.run(TOKEN)
+bot.run(TOKEN)

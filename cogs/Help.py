@@ -8,9 +8,10 @@ class HelpCommand(commands.HelpCommand):
         super().__init__(**options)
 
     async def send_bot_help(self, _mapping):
-        client = self.context.bot
+        bot = self.context.bot
         embeds = []
-        cogs = [cog for cog in client.cogs.values() if len([command for command in cog.get_commands() if not command.hidden]) > 0 and cog.qualified_name not in client.hidden_cogs]
+        cogs = [cog for cog in bot.cogs.values() if len([command for command in cog.get_commands(
+        ) if not command.hidden]) > 0 and cog.qualified_name not in bot.hidden_cogs]
         max_page = len(cogs)
         for cog in cogs:
             embed = discord.Embed(
@@ -104,3 +105,7 @@ class HelpCommand(commands.HelpCommand):
             embed.add_field(name=command.name,
                             value=f"{description}{children}")
         await self.get_destination().send(embed=embed)
+
+
+def setup(bot):
+    bot.help_command = HelpCommand()

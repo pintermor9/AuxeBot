@@ -7,8 +7,8 @@ from discord.ext import commands
 
 
 class Levelling(commands.Cog):
-    def __init__(self, client):
-        self.client = client
+    def __init__(self, bot):
+        self.bot = bot
         print(f'Loaded', __name__)
 
     def get_lvl(self, xp):
@@ -26,20 +26,20 @@ class Levelling(commands.Cog):
 
         authorID = str(message.author.id)
         try:
-            old_xp = self.client.data["levelling"][authorID]
+            old_xp = self.bot.data["levelling"][authorID]
         except KeyError:
-            self.client.data["levelling"].update({authorID: 0})
+            self.bot.data["levelling"].update({authorID: 0})
             old_xp = 0
 
-        self.client.data["levelling"][authorID] += random.randint(5, 12)
-        xp = self.client.data["levelling"][authorID]
+        self.bot.data["levelling"][authorID] += random.randint(5, 12)
+        xp = self.bot.data["levelling"][authorID]
 
         if self.get_lvl(old_xp)[1] < self.get_lvl(xp)[1]:
             await message.author.send(
                 f"GG {message.author.mention}, you just advanced to level {self.get_lvl(xp)[1]}!"
             )
 
-        self.client.data["levelling"].update({authorID: xp})
+        self.bot.data["levelling"].update({authorID: xp})
 
     @commands.command(description="Shows the rank, level and xp of someone.")
     async def rank(self, ctx, user: Union[discord.Member, discord.User] = "you"):
@@ -49,14 +49,14 @@ class Levelling(commands.Cog):
                 user = ctx.author
 
             try:
-                xp = self.client.data["levelling"][str(user.id)]
+                xp = self.bot.data["levelling"][str(user.id)]
             except:
-                self.client.data["levelling"].update({str(user.id): 0})
-                xp = self.client.data["levelling"][str(user.id)]
+                self.bot.data["levelling"].update({str(user.id): 0})
+                xp = self.bot.data["levelling"][str(user.id)]
             lvlxp, lvl = self.get_lvl(xp)
 
             rank = 1
-            datalisted = sorted(self.client.data["levelling"].items(),
+            datalisted = sorted(self.bot.data["levelling"].items(),
                                 key=lambda x: x[1], reverse=True)
             for x in datalisted:
                 if x[0] == str(user.id):
@@ -95,7 +95,7 @@ class Levelling(commands.Cog):
     async def leaderboard(self, ctx, top_x=5):
         """Shows the leaderboard. By default it will show the top 5 people, but you can specify a `top_x` argument."""
         async with ctx.typing():
-            datalisted = sorted(self.client.data["levelling"].items(),
+            datalisted = sorted(self.bot.data["levelling"].items(),
                                 key=lambda x: x[1], reverse=True)
 
             topIDs = tuple(map(lambda i: i[0], datalisted))
@@ -120,7 +120,7 @@ class Levelling(commands.Cog):
 
             for rank in range(top_x):
                 try:
-                    user = self.client.get_user(int(datalisted[rank][0]))
+                    user = self.bot.get_user(int(datalisted[rank][0]))
                     xp = datalisted[rank][1]
                 except:
                     break
@@ -136,5 +136,5 @@ class Levelling(commands.Cog):
             await ctx.send(embed=embed)
 
 
-def setup(client):
-    client.add_cog(Levelling(client))
+def setup(bot):
+    bot.add_cog(Levelling(bot))

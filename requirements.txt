@@ -1,15 +1,11 @@
 py-cord==2.0.0b1
-# fastapi
 PyYAML
 aiohttp
-# uvicorn
-# gunicorn
 youtube_dl
 ffmpeg
 PyNaCl
 jishaku
 
-requests
 # speedups
 aiodns
 Brotli

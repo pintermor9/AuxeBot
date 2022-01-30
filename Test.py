@@ -5,8 +5,8 @@ from discord.ext import commands
 
 
 class Test(commands.Cog):
-    def __init__(self, client):
-        self.client = client
+    def __init__(self, bot):
+        self.bot = bot
         print(f'Loaded', __name__)
 
     @commands.command()
@@ -44,6 +44,14 @@ class Test(commands.Cog):
             return
         await ctx.send(_exec_response)
 
+    @commands.command()
+    async def test(self, ctx):
+        self.bot.dispatch("test")
 
-def setup(client):
-    client.add_cog(Test(client))
+    @commands.Cog.listener("on_test")
+    async def on_test(self):
+        print("IDK")
+
+
+def setup(bot):
+    bot.add_cog(Test(bot))

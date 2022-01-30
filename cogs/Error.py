@@ -4,8 +4,8 @@ from discord.ext.commands.errors import *
 
 
 class Error(commands.Cog):
-    def __init__(self, client):
-        self.client = client
+    def __init__(self, bot):
+        self.bot = bot
         print('Loaded', __name__)
 
     @commands.Cog.listener()
@@ -35,5 +35,5 @@ class Error(commands.Cog):
         raise error
 
 
-def setup(client):
-    client.add_cog(Error(client))
+def setup(bot):
+    bot.add_cog(Error(bot))

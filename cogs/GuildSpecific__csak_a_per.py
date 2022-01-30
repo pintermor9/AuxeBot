@@ -3,13 +3,13 @@ from discord.ext import commands
 
 
 class GuildSpecific__csak_a_per(commands.Cog):
-    def __init__(self, client):
-        self.client = client
+    def __init__(self, bot):
+        self.bot = bot
         print('Loaded', __name__)
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.channel.id != 920590116710412298 or message.author == self.client.user:
+        if message.channel.id != 920590116710412298 or message.author == self.bot.user:
             return
         if message.attachments == []:
             await message.channel.send("Ide csak a shopodat küldjed. Kell lennie egy fényképnek csatolva.", delete_after=10)
@@ -22,5 +22,5 @@ class GuildSpecific__csak_a_per(commands.Cog):
         await message.channel.create_thread(name=name, message=message)
 
 
-def setup(client):
-    client.add_cog(GuildSpecific__csak_a_per(client))
+def setup(bot):
+    bot.add_cog(GuildSpecific__csak_a_per(bot))
