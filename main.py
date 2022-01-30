@@ -106,7 +106,7 @@ except:
     bot.testing = False
 
 logging.basicConfig(
-    level=logging.INFO if not bot.testing else logging.DEBUG)
+    level="INFO" if not bot.testing else settings["log_level"])
 
 print("Done.", end=f"{LINE_CLEAR}\r")
 

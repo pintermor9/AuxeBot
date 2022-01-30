@@ -44,7 +44,10 @@ class Paginator:
 
                 await message.edit(embed=embeds[current_page])
             except TimeoutError:
-                return await message.clear_reactions()
+                try:
+                    return await message.clear_reactions()
+                except:
+                    pass
 
 
 class Data:

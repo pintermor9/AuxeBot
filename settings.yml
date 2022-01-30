@@ -5,6 +5,7 @@ owner_IDs:
 VERSION: v1.0-rc1
 hidden_cogs:
   - Jishaku
+log_level: INFO
 
 #Status and activity settings:
 cycleActivities: True
