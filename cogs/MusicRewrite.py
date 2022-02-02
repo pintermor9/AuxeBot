@@ -1,4 +1,6 @@
+import random
 import discord
+import asyncio
 import youtube_dl
 from discord.ext import commands
 
@@ -20,6 +22,32 @@ ytdl_format_options = {
 ffmpeg_options = {"options": "-vn"}
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
+
+
+class Song:
+    def __init__(self):
+        pass
+    
+    @property
+    def embed(self):
+        return self.embed
+    
+    # @embed.setter
+    # def 
+    
+
+class Queue(asyncio.Queue):
+    def __init__(self):
+        super().__init__(self, maxsize=100)
+    
+    def __len__(self):
+        return self.qsize()
+    
+    def clear(self):
+        self._queue.clear()
+
+    def shuffle(self):
+        random.shuffle(self._queue)
 
 
 class MusicRewrite(commands.Cog):
