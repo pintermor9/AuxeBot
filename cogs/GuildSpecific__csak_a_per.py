@@ -7,6 +7,7 @@ class GuildSpecific__csak_a_per(commands.Cog):
         self.bot = bot
         print('Loaded', __name__)
 
+    # auto-shopthreading
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.channel.id != 920590116710412298 or message.author == self.bot.user:
@@ -21,6 +22,13 @@ class GuildSpecific__csak_a_per(commands.Cog):
             await t.archive()
         await message.channel.create_thread(name=name, message=message)
 
+    # valorant twitter news
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.channel.id != 947548279531524186:
+            return
+        channel = self.bot.get_channel(928696145440550942) 
+        await channel.send(message.content, embeds=message.embeds)
 
 def setup(bot):
     bot.add_cog(GuildSpecific__csak_a_per(bot))
