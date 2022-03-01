@@ -24,7 +24,7 @@ class GuildSpecific__csak_a_per(commands.Cog):
         # valorant twitter news
         if message.channel.id == 947548279531524186:
             channel = self.bot.get_channel(928696145440550942) 
-            await channel.send(message.content, embeds=message.embeds)
+            await channel.send(message.content, embeds=message.embeds, files=[await attachment.to_file() for attachment in message.attachments])
 
             
 def setup(bot):
