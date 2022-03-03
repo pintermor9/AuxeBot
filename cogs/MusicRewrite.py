@@ -2,7 +2,6 @@ from discord.ext import commands
 import youtube_dl
 import asyncio
 import discord
-import functools
 import random
 
 ytdl_format_options = {
@@ -27,14 +26,7 @@ ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
 class Song:
     def __init__(self):
-        pass
-
-    @property
-    def embed(self):
-        return self.embed
-
-    # @embed.setter
-    # def
+        self.embed = discord.Embed.from_dict({""})
 
 
 class Queue(asyncio.Queue):
@@ -72,7 +64,7 @@ class MusicRewrite(commands.Cog):
             await ctx.invoke(self._join)
 
         async with ctx.typing():
-            data = await self.bot.loop.run_in_executor(None, functools.partial(ytdl.extract_info, query, download=True, process=False))
+            data = await self.bot.loop.run_in_executor(None, lambda: ytdl.extract_info(query, download=True, process=False))
             source = data  # TODO
             ctx.voice_client.play(
                 source, after=lambda e: print(
