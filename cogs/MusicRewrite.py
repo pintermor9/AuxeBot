@@ -1,8 +1,12 @@
-import random
-import discord
-import asyncio
-import youtube_dl
 from discord.ext import commands
+import youtube_dl
+import asyncio
+import discord
+import functools
+import random
+<< << << < Updated upstream
+== == == =
+>>>>>> > Stashed changes
 
 ytdl_format_options = {
     "format": "bestaudio/best",
@@ -27,22 +31,22 @@ ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 class Song:
     def __init__(self):
         pass
-    
+
     @property
     def embed(self):
         return self.embed
-    
+
     # @embed.setter
-    # def 
-    
+    # def
+
 
 class Queue(asyncio.Queue):
     def __init__(self):
         super().__init__(self, maxsize=100)
-    
+
     def __len__(self):
         return self.qsize()
-    
+
     def clear(self):
         self._queue.clear()
 
@@ -67,10 +71,28 @@ class MusicRewrite(commands.Cog):
 
     @commands.command(name="play")
     async def _play(self, ctx, query):
-        source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(query))
-        ctx.voice_client.play(
-            source, after=lambda e: print(f"Player error: {e}") if e else None
-        )
+        if not ctx.voice_client:
+            await ctx.invoke(self._join)
+
+        async with ctx.typing():
+            data = await self.bot.loop.run_in_executor(None, functools.partial(ytdl.extract_info, query, download=True, process=False))
+            source = data  # TODO
+            ctx.voice_client.play(
+                source, after=lambda e: print(
+                    f"Player error: {e}") if e else None
+            )
+
+    @_play.before_invoke
+    @_join.before_invoke
+    async def ensure_voice(self, ctx):
+        if not ctx.author.voice or not ctx.author.voice.channel:
+            raise commands.CommandError(
+                'You are not connected to any voice channel.')
+
+        if ctx.voice_client:
+            if ctx.voice_client.channel != ctx.author.voice.channel:
+                raise commands.CommandError(
+                    'Bot is already in a voice channel.')
 
 
 def setup(bot):
