@@ -4,9 +4,6 @@ import asyncio
 import discord
 import functools
 import random
-<< << << < Updated upstream
-== == == =
->>>>>> > Stashed changes
 
 ytdl_format_options = {
     "format": "bestaudio/best",
