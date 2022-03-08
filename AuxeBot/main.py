@@ -6,6 +6,7 @@ from Utils import Data
 from itertools import cycle
 from discord.ext import commands, tasks
 
+
 print('''         .d888888                              888888ba             dP   \n        d8'    88                              88    `8b            88   \n        88aaaaa88a dP    dP dP.  .dP .d8888b. a88aaaa8P' .d8888b. d8888P \n        88     88  88    88  `8bd8'  88ooood8  88   `8b. 88'  `88   88   \n        88     88  88.  .88  .d88b.  88.  ...  88    .88 88.  .88   88   \n        88     88  `88888P' dP'  `dP `88888P'  88888888P `88888P'   dP   \n                          Ascii art by patorjk.com                       ''')
 
 LINE_CLEAR = "\x1b[2k"
@@ -132,7 +133,7 @@ async def dump_data():
         await Data.dump(bot, bot.data, message)
 
 bot.load_extension("jishaku")
-for file in os.listdir('./cogs'):
+for file in os.listdir('./AuxeBot/cogs'):
     if file.endswith('.py'):
         bot.load_extension(f'cogs.{file[:-3]}')
 

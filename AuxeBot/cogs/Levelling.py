@@ -6,6 +6,7 @@ from typing import Union
 from discord.ext import commands
 from ..Utils import Api
 
+
 class Levelling(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
