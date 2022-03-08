@@ -2,14 +2,14 @@
 prefix: "-"
 owner_IDs:
   - 761555679873597450
-VERSION: v1.0-rc1
+VERSION: v1.0.0
 hidden_cogs:
   - Jishaku
 
 #Status and activity settings:
 cycleActivities: True
 status: "online"
-updates: "v1.0-rc1"
+updates: "v1.0.0 | If you notice any issues please use the -report command!"
 noCycleActivity: ""
 
 data:
@@ -21,3 +21,5 @@ data:
     message: 922873383941709854
   report:
     channel: 923558173904867349
+
+api_base_url: "https://AuxeBot-Api.pintermor9.repl.co"

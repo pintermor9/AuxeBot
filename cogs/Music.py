@@ -162,8 +162,7 @@ class Song:
 
     def create_embed(self):
         embed = (discord.Embed(title='Now playing',
-                               description='```\n{0.source.title}\n```'.format(
-                                   self),
+                               description=f'```\n{self.source.title}\n```',
                                color=discord.Color.blurple())
                  .add_field(name='Duration', value=self.source.duration)
                  .add_field(name='Requested by', value=self.requester.mention)

@@ -4,7 +4,7 @@ import aiohttp
 from io import BytesIO
 from typing import Union
 from discord.ext import commands
-
+from ..Utils import Api
 
 class Levelling(commands.Cog):
     def __init__(self, bot):
@@ -74,24 +74,37 @@ class Levelling(commands.Cog):
             except:
                 status = "online"
 
-            async with aiohttp.ClientSession() as session:
-                async with session.post("https://discord-bot-api.pintermor9.repl.co/rankcard/", data={
-                    "img": str(user.display_avatar if user.display_avatar != None else user.deafult_avatar),
-                    "currentXP": lvlxp,
-                    "requiredXP": int(200 * ((1 / 2) * lvl)),
-                    "status": status,
-                    "username": user.name,
-                    "discriminator": user.discriminator,
-                    "rank": rank,
-                    "level": lvl
-                }) as response:
-                    if not str(response.status).startswith("2"):
-                        return await ctx.send(embed=discord.Embed(title="Sorry,", description="this is temporarily unavailable."))
-                    rankcard = await response.read()
+            # async with aiohttp.ClientSession() as session:
+            #     async with session.post("https://discord-bot-api.pintermor9.repl.co/rankcard/", data={
+            #         "img": str(user.display_avatar if user.display_avatar != None else user.deafult_avatar),
+            #         "currentXP": lvlxp,
+            #         "requiredXP": int(200 * ((1 / 2) * lvl)),
+            #         "status": status,
+            #         "username": user.name,
+            #         "discriminator": user.discriminator,
+            #         "rank": rank,
+            #         "level": lvl
+            #     }) as response:
+            #         if not str(response.status).startswith("2"):
+            #             return await ctx.send(embed=discord.Embed(title="Sorry,", description="this is temporarily unavailable."))
+            #         rankcard = await response.read()
+
+            response = await Api.post(bot, "/rankcard", data={
+                "img": str(user.display_avatar if user.display_avatar != None else user.deafult_avatar),
+                "currentXP": lvlxp,
+                "requiredXP": int(200 * ((1 / 2) * lvl)),
+                "status": status,
+                "username": user.name,
+                "discriminator": user.discriminator,
+                "rank": rank,
+                "level": lvl})
+            if not str(response.status).startswith("2"):
+                return await ctx.send(embed=discord.Embed(title="Sorry,", description="this is temporarily unavailable."))
+            rankcard = await response.read()
 
             await ctx.send(file=discord.File(BytesIO(rankcard), "rankcard.png"))
 
-    @ commands.command(aliases=["lead"], description="Shows the leaderboard.")
+    @commands.command(aliases=["lead"], description="Shows the leaderboard.")
     async def leaderboard(self, ctx, top_x=5):
         """Shows the leaderboard. By default it will show the top 5 people, but you can specify a `top_x` argument."""
         async with ctx.typing():
