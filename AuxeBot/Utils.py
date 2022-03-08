@@ -76,7 +76,7 @@ class Data:
 
 
 class Api:
-    def __init__():
+    def __init__(self, bot):
         self.base_url = bot.settings["api_base_url"]
 
     async def get(self, url):
