@@ -2,6 +2,7 @@ import os
 import yaml
 import discord
 import logging
+import Utils
 from Utils import Data
 from itertools import cycle
 from discord.ext import commands, tasks
@@ -92,7 +93,6 @@ loopActivities = cycle([
     f'Latest updates: {updates}'
 ])
 
-# get necessary info for logging and levelling
 bot.data = settings["data"]
 
 bot.WorkInProgressEmbed = discord.Embed(
@@ -100,6 +100,8 @@ bot.WorkInProgressEmbed = discord.Embed(
         text="If you experience any bugs or mistakes, please use the \n`report` command, to report it to the owner")
 
 bot.settings = settings
+
+bot.utils = Utils
 
 try:
     bot.testing = bool(os.environ["TESTING"])
