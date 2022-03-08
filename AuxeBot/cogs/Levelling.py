@@ -4,7 +4,6 @@ import aiohttp
 from io import BytesIO
 from typing import Union
 from discord.ext import commands
-from ..Utils import Api
 
 
 class Levelling(commands.Cog):
@@ -90,7 +89,7 @@ class Levelling(commands.Cog):
             #             return await ctx.send(embed=discord.Embed(title="Sorry,", description="this is temporarily unavailable."))
             #         rankcard = await response.read()
 
-            response = await Api.post(bot, "/rankcard", data={
+            response = await self.bot.utils.Api.post(bot, "/rankcard", data={
                 "img": str(user.display_avatar if user.display_avatar != None else user.deafult_avatar),
                 "currentXP": lvlxp,
                 "requiredXP": int(200 * ((1 / 2) * lvl)),
