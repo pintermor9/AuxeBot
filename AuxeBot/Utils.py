@@ -82,7 +82,8 @@ class Api:
             return await session.get(bot.settings["api_base_url"] + url)
 
     @staticmethod
-    async def post(bot, url, data={}):
+    async def post(bot, url, *args, data={}):
+        print(bot, args)
         print(bot.settings["api_base_url"]+url, data)
         async with aiohttp.ClientSession() as session:
             return await session.post(bot.settings["api_base_url"] + url, data)
