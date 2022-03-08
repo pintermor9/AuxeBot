@@ -1,4 +1,5 @@
 import json
+import aiohttp
 import discord
 from io import StringIO
 from typing import List, Union
@@ -69,3 +70,15 @@ class Data:
         file_message = await message.channel.send(file=file)
         await message.edit(content=str(file_message.id))
         await old_file_message.delete()
+
+
+class Api:
+    @staticmethod
+    async def get(bot, url):
+        async with aiohttp.ClientSession() as session:
+            return await session.get(bot.settings["api_base_url"] + url)
+
+    @staticmethod
+    async def post(bot, url, data={}):
+        async with aiohttp.ClientSession() as session:
+            return await session.post(bot.settings["api_base_url"] + url, data)
