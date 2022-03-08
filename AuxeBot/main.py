@@ -103,6 +103,8 @@ bot.settings = settings
 
 bot.utils = Utils
 
+bot.api = Utils.Api(bot)
+
 try:
     bot.testing = bool(os.environ["TESTING"])
 except:
