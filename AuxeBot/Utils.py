@@ -76,12 +76,12 @@ class Data:
 
 
 class Api:
-    @staticmethod
-    async def get(bot, url):
+    @classmethod
+    async def get(cls, bot, url):
         async with aiohttp.ClientSession() as session:
             return await session.get(bot.settings["api_base_url"] + url)
 
-    @staticmethod
-    async def post(bot, url, data={}):
+    @classmethod
+    async def post(cls, bot, url, data={}):
         async with aiohttp.ClientSession() as session:
             return await session.post(bot.settings["api_base_url"] + url, data)
