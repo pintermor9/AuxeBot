@@ -46,6 +46,8 @@ class Bot(commands.Bot):
 
             dump_data.start()
 
+        status_.start()
+
     async def on_message(self, message):
         if not self.testing and not message.channel.id == 937293407796207627:
             return await super().on_message(message)
@@ -110,8 +112,13 @@ try:
 except:
     bot.testing = False
 
-logging.basicConfig(
-    level=logging.INFO if not bot.testing else logging.DEBUG)
+if bot.testing:
+    level = input("Do you want to set logging level to DEBUG (y/n): ")
+    level = logging.DEBUG if level.lower() == "y" else logging.INFO
+    logging.basicConfig(level=level)
+else:
+    logging.basicConfig(level=logging.INFO)
+
 
 print("Done.", end=f"{LINE_CLEAR}\r")
 
@@ -135,6 +142,23 @@ async def dump_data():
     message = bot.settings["data"]["json-data"]
     if await Data.load(bot, message) != bot.data:
         await Data.dump(bot, bot.data, message)
+
+
+@tasks.loop()
+async def status_():
+    pass
+
+
+@status_.before_loop
+async def status_online():
+    bot.last_up = await bot.api.get("/status/online")
+    bot.dispatch("online")
+
+
+@status_.after_loop
+async def status_offline():
+    await bot.api.get("/status/offline")
+
 
 bot.load_extension("jishaku")
 for file in os.listdir('./AuxeBot/cogs'):

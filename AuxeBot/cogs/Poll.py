@@ -112,7 +112,7 @@ class Poll(commands.Cog):
             for poll in expired:
                 await self.end_poll(self.bot.data["poll"].index(poll))
         except:
-            pass  # ? It'll prolly work 10 seconds later XD
+            pass  # It'll prolly work 10 seconds later XD
 
 
 def setup(client):
