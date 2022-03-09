@@ -13,8 +13,6 @@ class Logging(commands.Cog):
     async def on_ready(self):
         self.bot.logging_channel = self.bot.get_channel(
             self.bot.settings["data"]["logging"]["channel"])
-        self.bot.logging_message = await self.bot.logging_channel.fetch_message(
-            self.bot.settings["data"]["logging"]["message"])
 
     @commands.Cog.listener()
     async def on_online(self):
