@@ -1,6 +1,5 @@
 import random
 import discord
-import aiohttp
 from io import BytesIO
 from typing import Union
 from discord.ext import commands

@@ -1,6 +1,4 @@
-import json
 import discord
-import asyncio
 import datetime
 from time import time
 from discord.ext import commands, tasks

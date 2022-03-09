@@ -1,4 +1,3 @@
-import re
 import discord
 from io import StringIO
 from discord.ext import commands
