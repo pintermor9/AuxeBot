@@ -83,6 +83,7 @@ class Api:
         async with aiohttp.ClientSession() as session:
             return await session.get(self.base_url + url)
 
-    async def post(self, url, data={}):
+    async def post(*args,  **kwargs):
+        print(args, kwargs)
         async with aiohttp.ClientSession() as session:
             return await session.post(self.base_url + url, data)
