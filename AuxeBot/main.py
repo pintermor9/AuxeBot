@@ -45,8 +45,7 @@ class Bot(commands.Bot):
                 await self.change_presence(activity=discord.Game(noCycleActivity), status=status)
 
             dump_data.start()
-
-        status_.start()
+            bot_status.start()
 
     async def on_message(self, message):
         if not self.testing and not message.channel.id == 937293407796207627:
@@ -112,12 +111,16 @@ try:
 except:
     bot.testing = False
 
-if bot.testing:
-    level = input("Do you want to set logging level to DEBUG (y/n): ")
-    level = logging.DEBUG if level.lower() == "y" else logging.INFO
+try:
+    assert bot.testing
+    level = __import__("inputimeout").inputimeout(
+        "Do you want to set logging level to DEBUG (y/n): ", timeout=5)
+    assert level.lower() == "y"
+    level = logging.DEBUG
+except:
+    level = logging.INFO
+finally:
     logging.basicConfig(level=level)
-else:
-    logging.basicConfig(level=logging.INFO)
 
 
 print("Done.", end=f"{LINE_CLEAR}\r")
@@ -144,18 +147,18 @@ async def dump_data():
         await Data.dump(bot, bot.data, message)
 
 
-@tasks.loop()
-async def status_():
-    pass
+@tasks.loop(minutes=1)
+async def bot_status():
+    await bot.api.get("/status/ping")
 
 
-@status_.before_loop
+@bot_status.before_loop
 async def status_online():
     bot.last_up = await bot.api.get("/status/online")
     bot.dispatch("online")
 
 
-@status_.after_loop
+@bot_status.after_loop
 async def status_offline():
     await bot.api.get("/status/offline")
 
