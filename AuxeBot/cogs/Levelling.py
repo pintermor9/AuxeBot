@@ -88,7 +88,7 @@ class Levelling(commands.Cog):
             #             return await ctx.send(embed=discord.Embed(title="Sorry,", description="this is temporarily unavailable."))
             #         rankcard = await response.read()
 
-            response = await self.bot.api.post("/rankcard", data={
+            rankcard = await self.bot.api.post("/rankcard", data={
                 "img": str(user.display_avatar if user.display_avatar != None else user.deafult_avatar),
                 "currentXP": lvlxp,
                 "requiredXP": int(200 * ((1 / 2) * lvl)),
@@ -96,10 +96,7 @@ class Levelling(commands.Cog):
                 "username": user.name,
                 "discriminator": user.discriminator,
                 "rank": rank,
-                "level": lvl})
-            if not str(response.status).startswith("2"):
-                return await ctx.send(embed=discord.Embed(title="Sorry,", description="this is temporarily unavailable."))
-            rankcard = await response.read()
+                "level": lvl}, return_as="bytes")
 
             await ctx.send(file=discord.File(BytesIO(rankcard), "rankcard.png"))
 
