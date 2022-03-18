@@ -1,9 +1,12 @@
 import os
-import aiohttp
+import ssl
 import yaml
-import discord
-import logging
 import Utils
+import orjson
+import discord
+import aiohttp
+import logging
+import certifi
 from Utils import Data
 from itertools import cycle
 from discord.ext import commands, tasks
@@ -24,7 +27,8 @@ class Bot(commands.Bot):
         print(f'Current bot version: {self.VERSION}')
 
         self.utils = Utils
-        session = aiohttp.ClientSession()
+        session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(
+            ssl=ssl.create_default_context(cafile=certifi.where())), json_serialize=orjson.dumps)
         self.api = Utils.Api(self, session)
 
         await super().on_connect()

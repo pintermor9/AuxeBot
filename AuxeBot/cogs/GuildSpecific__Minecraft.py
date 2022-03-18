@@ -1,5 +1,7 @@
+import json
 import discord
 from discord.ext import commands, tasks
+import orjson
 
 SERVERS = {
     "pintermor9_SERVER_0.aternos.me:12599": {
@@ -17,28 +19,16 @@ class GuildSpecific__Minecraft(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        online = []
-        for server in SERVERS.items():
-            bedrock = "bedrock/" if server[1]["bedrock"] else ""
-            response = await self.bot.api.get(API_URL.format(bedrock, server[0]), use_base=False)
-            server = await response.json()
-            print(server)
-            if server["online"]:
-                online.append(server)
-        print(online)
-        # self.check_servers.start()
+        self.check_servers.start()
 
     @tasks.loop(minutes=5)
     async def check_servers(self):
         online = []
         for server in SERVERS.items():
             bedrock = "bedrock/" if server[1]["bedrock"] else ""
-            response = await self.bot.api.get(API_URL.format(bedrock, server[0]), use_base=False)
-            server = await response.json()
-            print(server)
+            server = await self.bot.api.get(API_URL.format(bedrock, server[0]), use_base=False, return_as="json")
             if server["online"]:
                 online.append(server)
-        print(online)
 
 
 def setup(bot):

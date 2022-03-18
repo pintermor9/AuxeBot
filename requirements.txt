@@ -4,6 +4,7 @@ aiohttp
 youtube_dl
 ffmpeg
 PyNaCl
+certifi
 jishaku
 
 # speedups
