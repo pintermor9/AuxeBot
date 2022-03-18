@@ -76,13 +76,26 @@ class Data:
 
 
 class Api:
-    def __init__(self, bot):
+    def __init__(self, bot, session):
+        self.session = session
+        self.bot = bot
         self.base_url = bot.settings["api_base_url"]
 
-    async def get(self, url):
-        async with aiohttp.ClientSession() as session:
-            return await session.get(self.base_url + url)
+    async def get(self, url, use_base=True):
+        if use_base:
+            _url = self.base_url + url
+        else:
+            _url = url
+        print(self.session)
+        response = await self.session.get(_url)
+        print(response)
+        return response
 
-    async def post(self, url, data):
-        async with aiohttp.ClientSession() as session:
-            return await session.post(self.base_url + url, data=data)
+    async def post(self, url, *, data, use_base=True):
+        if use_base:
+            _url = self.base_url + url
+        else:
+            _url = url
+        response = await self.session.post(_url, data=data)
+        print(response)
+        return response

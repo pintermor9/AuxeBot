@@ -1,4 +1,5 @@
 import os
+import aiohttp
 import yaml
 import discord
 import logging
@@ -21,6 +22,11 @@ class Bot(commands.Bot):
         print('Connected to discord.')
         print(f'Current discord.py version: {discord.__version__}')
         print(f'Current bot version: {self.VERSION}')
+
+        self.utils = Utils
+        session = aiohttp.ClientSession()
+        self.api = Utils.Api(self, session)
+
         await super().on_connect()
 
     async def on_ready(self):
@@ -102,9 +108,6 @@ bot.WorkInProgressEmbed = discord.Embed(
 
 bot.settings = settings
 
-bot.utils = Utils
-
-bot.api = Utils.Api(bot)
 
 try:
     bot.testing = bool(os.environ["TESTING"])
@@ -160,6 +163,7 @@ async def status_online():
 
 @bot_status.after_loop
 async def status_offline():
+    await bot.session.close()
     await bot.api.get("/status/offline")
 
 
