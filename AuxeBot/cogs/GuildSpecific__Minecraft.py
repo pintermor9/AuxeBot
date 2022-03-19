@@ -55,6 +55,10 @@ Bedrock Edition IP címek
         {
             "name": "SERVER_0 - CROSSPLAY SURVIVAL",
             "value": "CÍM: pintermor9_SERVER_0.aternos.me\nPORT: 12599"
+        },
+        {
+            "name": "Nem tudsz csatlakozni?",
+            "value": "[Itt van segítség](https://wiki.geysermc.org/geyser/using-geyser-with-consoles/)! "
         }
     ]
 }
