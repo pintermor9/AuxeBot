@@ -17,7 +17,7 @@ class Logging(commands.Cog):
     @commands.Cog.listener()
     async def on_online(self):
         hours, minutes, seconds = \
-            str(timedelta(seconds=round(time() - float(await self.bot.last_up)))).split(":")
+            str(timedelta(seconds=round(time() - float(self.bot.last_up)))).split(":")
 
         if self.bot.testing == False:
             await self.bot.logging_channel.send(f"<@&922915340852289626> **The bot is back online, after being offline for ~`{hours} hour(s), {minutes} minute(s), {seconds} second(s)`.**\nCurrent bot version: {self.bot.VERSION}\nCurrent pycord version: {discord.__version__}")
