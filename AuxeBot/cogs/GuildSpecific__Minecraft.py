@@ -7,9 +7,18 @@ SERVERS = {
     "pintermor9_SERVER_0.aternos.me:12599": {
         "bedrock": False},
     "pintermor9_SERVER_2.aternos.me:64603": {
-        "bedrock": True}}
+        "bedrock": True},
+    "mc.hypixel.net": {
+        "bedrock": False}}
 
 API_URL = "https://api.mcsrvstat.us/{0}2/{1}"
+
+
+def is_online(server):
+    try:
+        return int(server["players"]["online"]) > 0
+    except:
+        return False
 
 
 class GuildSpecific__Minecraft(commands.Cog):
@@ -25,10 +34,15 @@ class GuildSpecific__Minecraft(commands.Cog):
     async def check_servers(self):
         online = []
         for server in SERVERS.items():
-            bedrock = "bedrock/" if server[1]["bedrock"] else ""
-            server = await self.bot.api.get(API_URL.format(bedrock, server[0]), use_base=False, return_as="json")
-            if server["online"]:
-                online.append(server)
+            try:
+                bedrock = "bedrock/" if server[1]["bedrock"] else ""
+                server = await self.bot.api.get(API_URL.format(bedrock, server[0]), use_base=False, return_as="json")
+                if is_online(server):
+                    online.append(server)
+            except:
+                continue
+        print(online)
+        print(len(online))
 
 
 def setup(bot):
