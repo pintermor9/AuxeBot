@@ -4,34 +4,65 @@ from discord.ext import commands, tasks
 import orjson
 
 """
-Java Edition IP címek
+Info
+{
+  "title": "Információ a szerverről",
+  "description": "Ezt a szervert azért csináltam, hogy egyszerű legyen együtt Minecraftozni. (+ unatkoztam) ",
+  "author": {
+    "name": "Minecraft"
+  },
+  "color": 53380,
+  "footer": {
+    "text": "Köszönöm hogy végig olvastad! "
+  },
+  "fields": [
     {
-        "title": "Java Edition IP címek",
-        "fields": [
-            {
-                "name": "SERVER_0 - CROSSPLAY SURVIVAL",
-                "value": "pintermor9_SERVER_0.aternos.me:12599"
-            }
-        ],
-        "footer": {
-            "text": 'A kettőspont utáni számokat nem kötelező beírni. \nHa, TLaunchert vagy más tört verziót használsz, \nvagy "SRV" hibát dob fel a játék, írd oda!'
-        }
+      "name": "Reakció rangok",
+      "value": "Itt tudjátok kiválasztani, hogy a Java, a Bedrock vagy mindkettő kiadással játszotok. Csak azokhoz a csatornákhoz kaptok hozzáférést, ami olyan szerverhez tartozik, amin tudtok játszani, az értesítések minimalizálása érdekében. \n#reakció-rangok",
+      "inline": False 
+    },
+    {
+      "name": "IP címek",
+      "value": "A választott rangotok szerint hozzáférést kaptok az szerverek IP címeihez. Ebben a csatornában találjátok meg a felhasználónevet és jelszót ahhoz az [aternos](https://aternos.org) fiókhoz, amivel elindíthatjátok a szervereket. ",
+      "inline": False 
+    },
+    {
+      "name": "Szerver státusz",
+      "value": "Itt látható, hogy jelenleg mely szerverek vannak online. \n#szerver-statusz",
+      "inline": False
     }
+  ]
+}
+
+Java Edition IP címek
+{
+    "title": "Java Edition IP címek",
+    "fields": [
+        {
+            "name": "SERVER_0 - CROSSPLAY SURVIVAL",
+            "value": "pintermor9_SERVER_0.aternos.me:12599"
+        }
+    ],
+    "footer": {
+        "text": 'A kettőspont utáni számokat nem kötelező beírni. \nHa, TLaunchert vagy más tört verziót használsz, \nvagy "SRV" hibát dob fel a játék, írd oda!'
+    }
+}
 
 Bedrock Edition IP címek
-    {
-        "title": "Bedrock Edition IP címek",
-        "fields": [
-            {
-                "name": "SERVER_0 - CROSSPLAY SURVIVAL",
-                "value": "CÍM: pintermor9_SERVER_0.aternos.me\nPORT: 12599"
-            }
-        ]
-    }
-
-
 {
-    "title": "--                                          Reakció rangok                                          --",
+    "title": "Bedrock Edition IP címek",
+    "fields": [
+        {
+            "name": "SERVER_0 - CROSSPLAY SURVIVAL",
+            "value": "CÍM: pintermor9_SERVER_0.aternos.me\nPORT: 12599"
+        }
+    ]
+}
+
+
+Reakció rangok
+{
+    "title": "--              Reakció rangok              --",
     "description": "Kérlek reagálj erre az üzentre, a játékod kiadásának megfelelő emojival:",
     "fields": [
         {
