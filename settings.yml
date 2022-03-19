@@ -21,5 +21,8 @@ data:
     message: 922873383941709854
   report:
     channel: 923558173904867349
+  minecraft:
+    channel: 954512172661227590
+    message: 954513380570460181
 
 api_base_url: "https://AuxeBot-Api.pintermor9.repl.co"

@@ -73,21 +73,6 @@ class Levelling(commands.Cog):
             except:
                 status = "online"
 
-            # async with aiohttp.ClientSession() as session:
-            #     async with session.post("https://discord-bot-api.pintermor9.repl.co/rankcard/", data={
-            #         "img": str(user.display_avatar if user.display_avatar != None else user.deafult_avatar),
-            #         "currentXP": lvlxp,
-            #         "requiredXP": int(200 * ((1 / 2) * lvl)),
-            #         "status": status,
-            #         "username": user.name,
-            #         "discriminator": user.discriminator,
-            #         "rank": rank,
-            #         "level": lvl
-            #     }) as response:
-            #         if not str(response.status).startswith("2"):
-            #             return await ctx.send(embed=discord.Embed(title="Sorry,", description="this is temporarily unavailable."))
-            #         rankcard = await response.read()
-
             rankcard = await self.bot.api.post("/rankcard", data={
                 "img": str(user.display_avatar if user.display_avatar != None else user.deafult_avatar),
                 "currentXP": lvlxp,
