@@ -2,6 +2,7 @@ import json
 import discord
 from discord.ext import commands, tasks
 import orjson
+from datetime import datetime
 
 """
 Info
@@ -128,9 +129,9 @@ class GuildSpecific__Minecraft(commands.Cog):
 
     async def edit_server_list(self):
         embed = discord.Embed(
-            title="--              Online szerverek              --")
+            title="--              Online szerverek              --", 
+            timestamp=datetime.utcnow(), color=discord.Color.green())
         for server in self.online:
-            embed.color = discord.Color.green()
             embed.add_field(
                 name=server["hostname"],
                 value=f"{server['players']['online']}/{server['players']['max']}",
