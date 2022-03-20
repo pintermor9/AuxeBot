@@ -93,7 +93,7 @@ API_URL = "https://api.mcsrvstat.us/{0}2/{1}"
 
 def is_online(server):
     try:
-        return int(server["players"]["online"]) > 0
+        return int(server["players"]["max"]) > 1
     except:
         return False
 
@@ -143,5 +143,4 @@ class GuildSpecific__Minecraft(commands.Cog):
 
 
 def setup(bot):
-    # return  # for now
     bot.add_cog(GuildSpecific__Minecraft(bot))
