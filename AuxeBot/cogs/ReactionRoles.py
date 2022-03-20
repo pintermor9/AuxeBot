@@ -1,6 +1,6 @@
+import uuid
 import discord
 from discord.ext import commands
-import uuid
 from asyncio import TimeoutError
 
 

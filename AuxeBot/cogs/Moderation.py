@@ -41,32 +41,13 @@ class Moderation(commands.Cog):
         await message.edit(content=content)
         await ctx.message.delete()
 
-    # TODO give XP boost to people who reported
+    # idea -- give XP boost to people who reported
     @commands.command(description="Sends a bug report to the owner.")
     async def report(self, ctx, *report):
         """Sends a bug report to the owner. The owner will review it and correct the mistake."""
         await ctx.message.add_reaction("✅")
         await self.bot.report_channel.send(f"**author: {ctx.message.author.name}#{ctx.message.author.discriminator}**, guild: {ctx.guild.name}\n> {' '.join(report)}\nhttps://www.discord.com/channels/{ctx.guild.id}/{ctx.channel.id}/{ctx.message.id}")
         await ctx.send("**Thank you for reporting!** Please do not delete the command.")
-
-    @commands.command(name='reload', hidden=True)
-    @commands.is_owner()
-    async def _reload(self, ctx, cog: str):
-        self.bot.unload_extension(cog)
-        self.bot.load_extension(cog)
-        await ctx.message.add_reaction("✅")
-
-    @commands.command(name='unload', hidden=True)
-    @commands.is_owner()
-    async def _unload(self, ctx, cog: str):
-        self.bot.unload_extension(cog)
-        await ctx.message.add_reaction("✅")
-
-    @commands.command(name='load', hidden=True)
-    @commands.is_owner()
-    async def _load(self, ctx, cog: str):
-        self.bot.load_extension(cog)
-        await ctx.message.add_reaction("✅")
 
 
 def setup(bot):

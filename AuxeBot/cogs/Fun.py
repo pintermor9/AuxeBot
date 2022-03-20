@@ -1,7 +1,7 @@
+import random
+import orjson
 import discord
 from discord.ext import commands
-import random
-import aiohttp
 
 
 class Fun(commands.Cog):
@@ -37,9 +37,7 @@ class Fun(commands.Cog):
 
     @commands.command(aliases=['itsthisforthat', 'this/that', 'thisthat'], description="itsthisforthat.com")
     async def thisforthat(self, ctx):
-        async with aiohttp.ClientSession() as session:
-            r = await session.get('http://itsthisforthat.com/api.php?json')
-            r = r.json()
+        r = orjson.loads(await self.bot.api.get('http://itsthisforthat.com/api.php?json', use_base=False))
         thisforthat = r['this'], ' for ', r['that'], '!'
         await ctx.send(''.join(thisforthat))
 

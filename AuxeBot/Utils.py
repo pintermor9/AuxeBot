@@ -1,12 +1,11 @@
 import json
-import aiohttp
 import discord
 from io import StringIO
 from asyncio import TimeoutError
 from typing import List, Literal, Union
 
 
-class Paginator:
+class Paginator:  # TODO NEEDS REWRITE WITH COMPONENTS
     def __init__(self, ctx, embeds):
         self.ctx = ctx
         self.client = ctx.bot
@@ -82,10 +81,7 @@ class Api:
         self.base_url = bot.settings["api_base_url"]
 
     async def get(self, url, use_base=True, return_as: Literal["text", "json"] = None):
-        if use_base:
-            _url = self.base_url + url
-        else:
-            _url = url
+        _url = self.base_url + url if use_base else url
         async with self.session.get(_url) as resp:
             if return_as == "json" or resp.content_type == "application/json":
                 return await resp.json()
@@ -95,10 +91,7 @@ class Api:
                 return await resp.read()
 
     async def post(self, url, *, data, use_base=True, return_as: Literal["text", "json"] = None):
-        if use_base:
-            _url = self.base_url + url
-        else:
-            _url = url
+        _url = self.base_url + url if use_base else url
         async with self.session.post(_url, data=data) as resp:
             if return_as == "json" or resp.content_type == "application/json":
                 return await resp.json()

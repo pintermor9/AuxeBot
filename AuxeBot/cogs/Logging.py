@@ -1,7 +1,7 @@
-from discord.ext import commands
-from datetime import timedelta
-from time import time
 import discord
+from time import time
+from datetime import timedelta
+from discord.ext import commands
 
 
 class Logging(commands.Cog):

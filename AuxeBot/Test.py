@@ -27,22 +27,6 @@ class Test(commands.Cog):
             await thread.edit(name=thread.name.replace(" - before timestamp", ""))
             await thread.archive()
 
-    @commands.command(name="exec", hidden=True)
-    @commands.is_owner()
-    async def _exec(self, ctx, *, command):
-        global _exec_response
-        _exec_response = ""
-
-        def print(text: str, *args, **kwargs):
-            global _exec_response
-            text = str(text) + "\n"
-            text += " ".join(args)
-            _exec_response += text
-        exec(command)
-        if _exec_response == "":
-            return
-        await ctx.send(_exec_response)
-
     @commands.command()
     async def test(self, ctx):
         self.bot.dispatch("test")
