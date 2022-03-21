@@ -86,14 +86,14 @@ Reakció rangok
 
 SERVERS = {
     "pintermor9_SERVER_0.aternos.me:12599": {
-        "bedrock": False},
-    "pintermor9_SERVER_2.aternos.me:64603": {
-        "bedrock": True}}
+        "edition": "crossplay"},
+    "pintermor9_SERVER_1.aternos.me:30946": {
+        "edition": "java"}}
 
 API_URL = "https://api.mcsrvstat.us/{0}2/{1}"
 
 
-def is_online(server):
+def is_online(server) -> bool:
     try:
         return int(server["players"]["max"]) > 1
     except:
@@ -103,6 +103,7 @@ def is_online(server):
 class GuildSpecific__Minecraft(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.online = []
         print('Loaded', __name__)
 
     @commands.Cog.listener()
@@ -116,17 +117,30 @@ class GuildSpecific__Minecraft(commands.Cog):
 
     @tasks.loop(minutes=5)
     async def check_servers(self):
-        self.online = []
+        online = []
         for server in SERVERS.items():
             try:
-                bedrock = "bedrock/" if server[1]["bedrock"] else ""
+                bedrock = "bedrock/" if server[1]["edition"] == "bedrock" else ""
                 server = await self.bot.api.get(API_URL.format(bedrock, server[0]), use_base=False, return_as="json")
                 if is_online(server):
-                    self.online.append(server)
+                    online.append(server)
             except:
                 continue
 
         await self.edit_server_list()
+
+        for server in online:
+            if server not in self.online:
+                # * saját magam értesítése
+                u = self.bot.get_user(761555679873597450)
+                await u.send(f"{server.hostname} is online!")
+
+                # * áron megspamelése
+                u = self.bot.get_user(735435854885158912)
+                for _ in range(10):
+                    await u.send(f"{server.hostname} online van\nTe akartad")
+
+        self.online = online
 
     async def edit_server_list(self):
         embed = discord.Embed(
