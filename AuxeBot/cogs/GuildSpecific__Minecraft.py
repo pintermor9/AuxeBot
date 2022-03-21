@@ -41,7 +41,7 @@ Java Edition IP címek
             "name": "SERVER_0 - CROSSPLAY SURVIVAL",
             "value": "pintermor9_SERVER_0.aternos.me:12599"
         }, {
-            "name": SERVER_0 - SNAPSHOT TESTING", 
+            "name": "SERVER_0 - SNAPSHOT TESTING", 
             "value": "pintermor9_SERVER_1.aternos.me:30946"
         }
     ],
