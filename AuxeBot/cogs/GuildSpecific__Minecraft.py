@@ -129,18 +129,17 @@ class GuildSpecific__Minecraft(commands.Cog):
 
         await self.edit_server_list()
 
-        """
-        for server in online:
-            if not server in self.online:
+
+        for hostname in [server["hostname"] for server in online]:
+            if not hostname in [server["hostname"] for server in self.online]: 
                 # * saját magam értesítése
                 en = self.bot.get_user(761555679873597450)
-                await en.send(f"{server['hostname']} is online!")
+                await en.send(f"{hostname} is online!")
 
                 # * áron megspamelése
                 aron = self.bot.get_user(735435854885158912)
                 for _ in range(10):
-                    await aron.send(f"{server['hostname']} online van\nTe akartad")
-        """
+                    await aron.send(f"{hostname} online van\nTe akartad")
 
         self.online = online
 
