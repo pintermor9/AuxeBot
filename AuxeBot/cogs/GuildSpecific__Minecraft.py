@@ -129,6 +129,7 @@ class GuildSpecific__Minecraft(commands.Cog):
 
         await self.edit_server_list()
 
+        """
         for server in online:
             if not server in self.online:
                 # * saját magam értesítése
@@ -139,6 +140,7 @@ class GuildSpecific__Minecraft(commands.Cog):
                 aron = self.bot.get_user(735435854885158912)
                 for _ in range(10):
                     await aron.send(f"{server['hostname']} online van\nTe akartad")
+        """
 
         self.online = online
 
