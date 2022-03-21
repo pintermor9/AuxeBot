@@ -132,13 +132,13 @@ class GuildSpecific__Minecraft(commands.Cog):
         for server in online:
             if server not in self.online:
                 # * saját magam értesítése
-                u = self.bot.get_user(761555679873597450)
-                await u.send(f"{server.hostname} is online!")
+                en = self.bot.get_user(761555679873597450)
+                await en.send(f"{server['hostname']} is online!")
 
                 # * áron megspamelése
-                u = self.bot.get_user(735435854885158912)
+                aron = self.bot.get_user(735435854885158912)
                 for _ in range(10):
-                    await u.send(f"{server.hostname} online van\nTe akartad")
+                    await aron.send(f"{server['hostname']} online van\nTe akartad")
 
         self.online = online
 
