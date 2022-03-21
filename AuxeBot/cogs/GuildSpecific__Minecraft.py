@@ -130,7 +130,7 @@ class GuildSpecific__Minecraft(commands.Cog):
         await self.edit_server_list()
 
         for server in online:
-            if server not in self.online:
+            if not server in self.online:
                 # * saját magam értesítése
                 en = self.bot.get_user(761555679873597450)
                 await en.send(f"{server['hostname']} is online!")
