@@ -2,9 +2,10 @@ import discord
 from datetime import datetime
 from discord.ext import commands, tasks
 
-"""
-Info
-{
+class Embeds:
+    pass
+
+Embeds.Info = {
   "title": "Információ a szerverről",
   "description": "Ezt a szervert azért csináltam, hogy egyszerű legyen együtt Minecraftozni. (+ unatkoztam) ",
   "author": {
@@ -33,8 +34,8 @@ Info
   ]
 }
 
-Java Edition IP címek
-{
+
+Embeds.JavaIPs = {
     "title": "Java Edition IP címek",
     "fields": [
         {
@@ -50,8 +51,7 @@ Java Edition IP címek
     }
 }
 
-Bedrock Edition IP címek
-{
+Embeds.BedrockIPs = {
     "title": "Bedrock Edition IP címek",
     "fields": [
         {
@@ -66,8 +66,7 @@ Bedrock Edition IP címek
 }
 
 
-Reakció rangok
-{
+Embeds.ReactionRoles = {
     "title": "--              Reakció rangok              --",
     "description": "Kérlek reagálj erre az üzentre, a játékod kiadásának megfelelő emojival:",
     "fields": [
@@ -82,7 +81,6 @@ Reakció rangok
         }
     ]
 }
-"""
 
 SERVERS = {
     "pintermor9_SERVER_0.aternos.me:12599": {
