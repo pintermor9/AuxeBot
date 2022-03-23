@@ -2,85 +2,104 @@ import discord
 from datetime import datetime
 from discord.ext import commands, tasks
 
+
 class Embeds:
-    pass
-
-Embeds.Info = {
-  "title": "Információ a szerverről",
-  "description": "Ezt a szervert azért csináltam, hogy egyszerű legyen együtt Minecraftozni. (+ unatkoztam) ",
-  "author": {
-    "name": "Minecraft"
-  },
-  "color": 53380,
-  "footer": {
-    "text": "Köszönöm hogy végig olvastad! "
-  },
-  "fields": [
-    {
-      "name": "Reakció rangok",
-      "value": "Itt tudjátok kiválasztani, hogy a Java, a Bedrock vagy mindkettő kiadással játszotok. Csak azokhoz a csatornákhoz kaptok hozzáférést, ami olyan szerverhez tartozik, amin tudtok játszani, az értesítések minimalizálása érdekében. \n#reakció-rangok",
-      "inline": False 
-    },
-    {
-      "name": "IP címek",
-      "value": "A választott rangotok szerint hozzáférést kaptok az szerverek IP címeihez. Ebben a csatornában találjátok meg a felhasználónevet és jelszót ahhoz az [aternos](https://aternos.org) fiókhoz, amivel elindíthatjátok a szervereket. ",
-      "inline": False 
-    },
-    {
-      "name": "Szerver státusz",
-      "value": "Itt látható, hogy jelenleg mely szerverek vannak online. \n#szerver-statusz",
-      "inline": False
+    locations = {
+        "Info": [954267475388817438, 954771976944250971],
+        "JavaIPs": [954267709326098432, 954766315992809515],
+        "BedrockIPs": [954267747238424616, 954765517971918878],
+        "ReactionRoles": [954267562470961193, 954712865191903232],
+        "Access": [954267709326098432, 954766315992809515],
+        "BAccess": [954267747238424616, 954765517971918878]
     }
-  ]
-}
 
-
-Embeds.JavaIPs = {
-    "title": "Java Edition IP címek",
-    "fields": [
+    Info = discord.Embed.from_dict({
+      "title": "Információ a szerverről",
+      "description": "Ezt a szervert azért csináltam, hogy egyszerű legyen együtt Minecraftozni. (+ unatkoztam) ",
+      "author": {
+        "name": "Minecraft"
+      },
+      "color": 53380,
+      "footer": {
+        "text": "Köszönöm hogy végig olvastad! "
+      },
+      "fields": [
         {
-            "name": "SERVER_0 - CROSSPLAY SURVIVAL",
-            "value": "pintermor9_SERVER_0.aternos.me:12599"
-        }, {
-            "name": "SERVER_0 - SNAPSHOT TESTING", 
-            "value": "pintermor9_SERVER_1.aternos.me:30946"
-        }
-    ],
-    "footer": {
-        "text": 'A kettőspont utáni számokat nem kötelező beírni. \nHa, TLaunchert vagy más tört verziót használsz, \nvagy "SRV" hibát dob fel a játék, írd oda!'
-    }
-}
-
-Embeds.BedrockIPs = {
-    "title": "Bedrock Edition IP címek",
-    "fields": [
-        {
-            "name": "SERVER_0 - CROSSPLAY SURVIVAL",
-            "value": "CÍM: pintermor9_SERVER_0.aternos.me\nPORT: 12599"
+          "name": "Reakció rangok",
+          "value": "Itt tudjátok kiválasztani, hogy a Java, a Bedrock vagy mindkettő kiadással játszotok. Csak azokhoz a csatornákhoz kaptok hozzáférést, ami olyan szerverhez tartozik, amin tudtok játszani, az értesítések minimalizálása érdekében. \n#reakció-rangok",
+          "inline": False 
         },
         {
-            "name": "Nem tudsz csatlakozni?",
-            "value": "[Itt van segítség](https://wiki.geysermc.org/geyser/using-geyser-with-consoles/)! "
-        }
-    ]
-}
-
-
-Embeds.ReactionRoles = {
-    "title": "--              Reakció rangok              --",
-    "description": "Kérlek reagálj erre az üzentre, a játékod kiadásának megfelelő emojival:",
-    "fields": [
+          "name": "IP címek",
+          "value": "A választott rangotok szerint hozzáférést kaptok az szerverek IP címeihez. Ebben a csatornában találjátok meg a felhasználónevet és jelszót ahhoz az [aternos](https://aternos.org) fiókhoz, amivel elindíthatjátok a szervereket. ",
+          "inline": False 
+        },
         {
-            "name": "Java Edition",
-            "value": ":javaEdition:",
-            "inline": True
-        }, {
-            "name": "Bedrock Edition",
-            "value": ":bedrockEdition:",
-            "inline": True
+          "name": "Szerver státusz",
+          "value": "Itt látható, hogy jelenleg mely szerverek vannak online. \n#szerver-statusz",
+          "inline": False
         }
-    ]
-}
+      ]
+    })
+
+
+    JavaIPs = discord.Embed.from_dict({
+        "title": "Java Edition IP címek",
+        "fields": [
+            {
+                "name": "SERVER_0 - CROSSPLAY SURVIVAL",
+                "value": "pintermor9_SERVER_0.aternos.me:12599"
+            }, {
+                "name": "SERVER_0 - SNAPSHOT TESTING", 
+                "value": "pintermor9_SERVER_1.aternos.me:30946"
+            }
+        ],
+        "footer": {
+            "text": 'A kettőspont utáni számokat nem kötelező beírni. \nHa, TLaunchert vagy más tört verziót használsz, \nvagy "SRV" hibát dob fel a játék, írd oda!'
+        }
+    })
+
+    BedrockIPs = discord.Embed.from_dict({
+        "title": "Bedrock Edition IP címek",
+        "fields": [
+            {
+                "name": "SERVER_0 - CROSSPLAY SURVIVAL",
+                "value": "CÍM: pintermor9_SERVER_0.aternos.me\nPORT: 12599"
+            },
+            {
+                "name": "Nem tudsz csatlakozni?",
+                "value": "[Itt van segítség](https://wiki.geysermc.org/geyser/using-geyser-with-consoles/)! "
+            }
+        ]
+    })
+
+
+    ReactionRoles = discord.Embed.from_dict({
+        "title": "--              Reakció rangok              --",
+        "description": "Kérlek reagálj erre az üzentre, a játékod kiadásának megfelelő emojival:",
+        "fields": [
+            {
+                "name": "Java Edition",
+                "value": ":javaEdition:",
+                "inline": True
+            }, {
+                "name": "Bedrock Edition",
+                "value": ":bedrockEdition:",
+                "inline": True
+            }
+        ]
+    })
+
+    Access = discord.Embed.from_dict({
+        "title": "Aternos indítási hozzáférés",
+        "description": "Itt vannak a bejelentkezési adatok ahhoz az [aternos] fiókhoz, amivel el tudjátok indítani a szervereket.\n**Felhasználónév:** pintermor9_Access\n**Jelszó:** access.aternos\n**Kérlek ne változtassad meg a jelszót!**",
+    })
+
+
+    BAccess = discord.Embed.from_dict({
+        "title": "Aternos indítási hozzáférés",
+        "description": "Itt vannak a bejelentkezési adatok ahhoz az [aternos] fiókhoz, amivel el tudjátok indítani a szervereket.\n**Felhasználónév:** pintermor9_BAccess\n**Jelszó:** access.aternos\n**Kérlek ne változtassad meg a jelszót!**",
+    })
 
 SERVERS = {
     "pintermor9_SERVER_0.aternos.me:12599": {
@@ -155,6 +174,11 @@ class GuildSpecific__Minecraft(commands.Cog):
             embed.description = "Jelenleg egy szerver sincs online. :("
 
         await self.message.edit(embeds=[embed])
+    
+    @commands.command(name="refreshembeds", hidden=True)
+    @commands.is_owner()
+    async def _refreshembeds(self, ctx):
+        pass
 
 
 def setup(bot):
