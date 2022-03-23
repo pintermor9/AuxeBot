@@ -79,11 +79,11 @@ class Embeds:
         "fields": [
             {
                 "name": "Java Edition",
-                "value": ":javaEdition:",
+                "value": "<:javaEdition:954709973408030740>",
                 "inline": True
             }, {
                 "name": "Bedrock Edition",
-                "value": ":bedrockEdition:",
+                "value": "<:bedrockEdition:954710184045998100>",
                 "inline": True
             }
         ]
