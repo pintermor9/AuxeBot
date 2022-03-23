@@ -2,19 +2,15 @@ import discord
 from datetime import datetime
 from discord.ext import commands, tasks
 
-class EmbedLocations:
-    def __init__(self, locations):
-        self.__dict__ = locations
-
 class Embeds:
-    locations = EmbedLocations({
+    locations = {
         "Info": [954267475388817438, 954771976944250971],
         "JavaIPs": [954267709326098432, 954766315992809515],
         "BedrockIPs": [954267747238424616, 954765517971918878],
         "ReactionRoles": [954267562470961193, 954712865191903232],
         "Access": [954267709326098432, 954766315992809515],
         "BAccess": [954267747238424616, 954765517971918878]
-    })
+    }
 
     Info = discord.Embed.from_dict({
       "title": "Információ a szerverről",
