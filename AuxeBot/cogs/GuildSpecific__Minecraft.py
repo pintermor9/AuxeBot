@@ -2,6 +2,7 @@ import discord
 from datetime import datetime
 from discord.ext import commands, tasks
 
+
 class Embeds:
     locations = {
         "Info": [954267475388817438, 954771976944250971],
@@ -13,34 +14,33 @@ class Embeds:
     }
 
     Info = discord.Embed.from_dict({
-      "title": "Információ a szerverről",
-      "description": "Ezt a szervert azért csináltam, hogy egyszerű legyen együtt Minecraftozni. (+ unatkoztam) ",
-      "author": {
-        "name": "Minecraft"
-      },
-      "color": 53380,
-      "footer": {
-        "text": "Köszönöm hogy végig olvastad! "
-      },
-      "fields": [
-        {
-          "name": "Reakció rangok",
-          "value": "Itt tudjátok kiválasztani, hogy a Java, a Bedrock vagy mindkettő kiadással játszotok. Csak azokhoz a csatornákhoz kaptok hozzáférést, ami olyan szerverhez tartozik, amin tudtok játszani, az értesítések minimalizálása érdekében. \n#reakció-rangok",
-          "inline": False 
+        "title": "Információ a szerverről",
+        "description": "Ezt a szervert azért csináltam, hogy egyszerű legyen együtt Minecraftozni. (+ unatkoztam) ",
+        "author": {
+            "name": "Minecraft"
         },
-        {
-          "name": "IP címek",
-          "value": "A választott rangotok szerint hozzáférést kaptok az szerverek IP címeihez. Ebben a csatornában találjátok meg a felhasználónevet és jelszót ahhoz az [aternos](https://aternos.org) fiókhoz, amivel elindíthatjátok a szervereket. ",
-          "inline": False 
+        "color": 53380,
+        "footer": {
+            "text": "Köszönöm hogy végig olvastad! "
         },
-        {
-          "name": "Szerver státusz",
-          "value": "Itt látható, hogy jelenleg mely szerverek vannak online. \n#szerver-statusz",
-          "inline": False
-        }
-      ]
+        "fields": [
+            {
+                "name": "Reakció rangok",
+                "value": "Itt tudjátok kiválasztani, hogy a Java, a Bedrock vagy mindkettő kiadással játszotok. Csak azokhoz a csatornákhoz kaptok hozzáférést, ami olyan szerverhez tartozik, amin tudtok játszani, az értesítések minimalizálása érdekében. \n#reakció-rangok",
+                "inline": False
+            },
+            {
+                "name": "IP címek",
+                "value": "A választott rangotok szerint hozzáférést kaptok az szerverek IP címeihez. Ebben a csatornában találjátok meg a felhasználónevet és jelszót ahhoz az [aternos](https://aternos.org) fiókhoz, amivel elindíthatjátok a szervereket. ",
+                "inline": False
+            },
+            {
+                "name": "Szerver státusz",
+                "value": "Itt látható, hogy jelenleg mely szerverek vannak online. \n#szerver-statusz",
+                "inline": False
+            }
+        ]
     })
-
 
     JavaIPs = discord.Embed.from_dict({
         "title": "Java Edition IP címek",
@@ -49,7 +49,7 @@ class Embeds:
                 "name": "SERVER_0 - CROSSPLAY SURVIVAL",
                 "value": "pintermor9_SERVER_0.aternos.me:12599"
             }, {
-                "name": "SERVER_0 - SNAPSHOT TESTING", 
+                "name": "SERVER_0 - SNAPSHOT TESTING",
                 "value": "pintermor9_SERVER_1.aternos.me:30946"
             }
         ],
@@ -72,7 +72,6 @@ class Embeds:
         ]
     })
 
-
     ReactionRoles = discord.Embed.from_dict({
         "title": "--              Reakció rangok              --",
         "description": "Kérlek reagálj erre az üzentre, a játékod kiadásának megfelelő emojival:",
@@ -91,14 +90,14 @@ class Embeds:
 
     Access = discord.Embed.from_dict({
         "title": "Aternos indítási hozzáférés",
-        "description": "Itt vannak a bejelentkezési adatok ahhoz az [aternos] fiókhoz, amivel el tudjátok indítani a szervereket.\n**Felhasználónév:** pintermor9_Access\n**Jelszó:** access.aternos\n**Kérlek ne változtassad meg a jelszót!**",
+        "description": "Itt vannak a bejelentkezési adatok ahhoz az [aternos](https://aternos.org/servers) fiókhoz, amivel el tudjátok indítani a szervereket.\n**Felhasználónév:** pintermor9_Access\n**Jelszó:** access.aternos\n**Kérlek ne változtassad meg a jelszót!**",
     })
-
 
     BAccess = discord.Embed.from_dict({
         "title": "Aternos indítási hozzáférés",
-        "description": "Itt vannak a bejelentkezési adatok ahhoz az [aternos] fiókhoz, amivel el tudjátok indítani a szervereket.\n**Felhasználónév:** pintermor9_BAccess\n**Jelszó:** access.aternos\n**Kérlek ne változtassad meg a jelszót!**",
+        "description": "Itt vannak a bejelentkezési adatok ahhoz az [aternos](https://aternos.org/servers) fiókhoz, amivel el tudjátok indítani a szervereket.\n**Felhasználónév:** pintermor9_BAccess\n**Jelszó:** access.aternos\n**Kérlek ne változtassad meg a jelszót!**",
     })
+
 
 SERVERS = {
     "pintermor9_SERVER_0.aternos.me:12599": {
@@ -145,9 +144,8 @@ class GuildSpecific__Minecraft(commands.Cog):
 
         await self.edit_server_list()
 
-
         for hostname in [server["hostname"] for server in online]:
-            if not hostname in [server["hostname"] for server in self.online]: 
+            if not hostname in [server["hostname"] for server in self.online]:
                 # * saját magam értesítése
                 en = self.bot.get_user(761555679873597450)
                 await en.send(f"{hostname} is online!")
@@ -173,11 +171,18 @@ class GuildSpecific__Minecraft(commands.Cog):
             embed.description = "Jelenleg egy szerver sincs online. :("
 
         await self.message.edit(embeds=[embed])
-    
+
     @commands.command(name="refreshembeds", hidden=True)
     @commands.is_owner()
     async def _refreshembeds(self, ctx):
-        pass
+        for embed_name in Embeds.locations:
+            embed = Embeds.__getattribute__(Embeds, embed_name)
+
+            location = Embeds.locations[embed_name]
+            channel = self.bot.get_channel(location[0])
+            message = await channel.fetch_message(location[1])
+
+            print(message.embeds)
 
 
 def setup(bot):
