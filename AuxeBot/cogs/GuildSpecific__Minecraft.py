@@ -142,8 +142,6 @@ class GuildSpecific__Minecraft(commands.Cog):
             except:
                 continue
 
-        await self.edit_server_list()
-
         for hostname in [server["hostname"] for server in online]:
             if not hostname in [server["hostname"] for server in self.online]:
                 # * saját magam értesítése
@@ -156,6 +154,8 @@ class GuildSpecific__Minecraft(commands.Cog):
                     await aron.send(f"{hostname} online van\nTe akartad")
 
         self.online = online
+
+        await self.edit_server_list()
 
     async def edit_server_list(self):
         embed = discord.Embed(
