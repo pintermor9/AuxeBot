@@ -98,9 +98,9 @@ updates = settings['updates']
 noCycleActivity = settings['noCycleActivity']
 loopActivities = cycle([
     f'Prefix: {bot.prefix}', f'Use \'{bot.prefix}help\' for help!',
-    'Owner: mor3000#8499',
+    'Owner: GFIZ Auxea#8304',
     'Check out \'stats.uptimerobot.com/pLEoghzLzx\' for uptime stats!',
-    'Yeah I know that I should get a profile picture.',
+    'Yeah, I know that I should get a profile picture.',
     f'Latest updates: {updates}'
 ])
 
