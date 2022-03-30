@@ -4,6 +4,7 @@ from io import BytesIO
 from typing import Union
 from discord.ext import commands
 
+IGNORED_GUILDS = [932362633527590963] 
 
 class Levelling(commands.Cog):
     def __init__(self, bot):
@@ -21,6 +22,8 @@ class Levelling(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.author.bot:
+            return
+        if message.guild.id in IGNORED_GUILDS:
             return
 
         authorID = str(message.author.id)
