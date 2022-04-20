@@ -186,4 +186,6 @@ class GuildSpecific__Minecraft(commands.Cog):
 
 
 def setup(bot):
+    if not 954259643801157652 in bot.guilds:
+        return
     bot.add_cog(GuildSpecific__Minecraft(bot))
