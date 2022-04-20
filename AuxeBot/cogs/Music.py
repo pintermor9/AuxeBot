@@ -106,13 +106,13 @@ class Music(commands.Cog):
             await ctx.send(f"Skipped {data[0].name}")
 
     @commands.command()
-    async def volume(self, ctx, vol):
+    async def volume(self, ctx, vol: int):
         """Sets the volume of the player."""
         if vol > 100 or vol < 0:
-            raise BadArgument("`vol` needs to be between 0 and 100")
+            raise BadArgument("`vol` must be between 0 and 100")
         player = self.music.get_player(guild_id=ctx.guild.id)
         song, volume = await player.change_volume(float(vol) / 100)
-        await ctx.send(f"Changed volume for {song.name} to {volume*100}%")
+        await ctx.send(f"Changed volume for {song.name} to {vol}%")
 
     @commands.command()
     async def remove(self, ctx, index):
