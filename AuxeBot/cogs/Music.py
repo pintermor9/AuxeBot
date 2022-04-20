@@ -32,18 +32,20 @@ class Music(commands.Cog):
         This command automatically searches from various sites if no URL is provided.
         A list of these sites can be found here: https://rg3.github.io/youtube-dl/supportedsites.html
         """
-        if not ctx.voice_client:
-            await ctx.invoke(self.join)
-        player = self.music.get_player(guild_id=ctx.guild.id)
-        if not player:
-            player = self.music.create_player(ctx, ffmpeg_error_betterfix=True)
-        if not ctx.voice_client.is_playing():
-            await player.queue(url, search=True)
-            song = await player.play()
-            await ctx.send(f"Playing {song.name}")
-        else:
-            song = await player.queue(url, search=True)
-            await ctx.send(f"Queued {song.name}")
+        async with ctx.typing():
+            if not ctx.voice_client:
+                await ctx.invoke(self.join)
+            player = self.music.get_player(guild_id=ctx.guild.id)
+            if not player:
+                player = self.music.create_player(
+                    ctx, ffmpeg_error_betterfix=True)
+            if not ctx.voice_client.is_playing():
+                await player.queue(url, search=True)
+                song = await player.play()
+                await ctx.send(f"Playing {song.name}")
+            else:
+                song = await player.queue(url, search=True)
+                await ctx.send(f"Queued {song.name}")
 
     @commands.command()
     async def pause(self, ctx):
@@ -81,7 +83,10 @@ class Music(commands.Cog):
     async def queue(self, ctx):
         """Shows the player's queue."""
         player = self.music.get_player(guild_id=ctx.guild.id)
-        await ctx.send(f"{'\n'.join([song.name for song in player.current_queue()])}")
+        text = ""
+        for i, song in enumerate([song.name for song in player.current_queue()]):
+            text += f"`{i}.` {song}\n"
+        await ctx.send(text)
 
     @commands.command()
     async def now(self, ctx):
