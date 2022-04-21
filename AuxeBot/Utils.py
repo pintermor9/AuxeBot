@@ -75,13 +75,14 @@ class Data:
 
 
 class Api:
-    def __init__(self, bot, session):
-        self.session = session
+    def __init__(self, bot, secret, session):
         self.bot = bot
+        self.secret = secret
+        self.session = session
         self.base_url = bot.settings["api_base_url"]
 
     async def get(self, url, use_base=True, return_as: Literal["text", "json"] = None):
-        _url = self.base_url + url if use_base else url
+        _url = f"{self.base_url}{url}?secret={self.secret}" if use_base else url
         async with self.session.get(_url) as resp:
             if return_as == "json" or resp.content_type == "application/json":
                 return await resp.json()
@@ -91,7 +92,7 @@ class Api:
                 return await resp.read()
 
     async def post(self, url, *, data, use_base=True, return_as: Literal["text", "json"] = None):
-        _url = self.base_url + url if use_base else url
+        _url = f"{self.base_url}{url}?secret={self.secret}" if use_base else url
         async with self.session.post(_url, data=data) as resp:
             if return_as == "json" or resp.content_type == "application/json":
                 return await resp.json()

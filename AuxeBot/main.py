@@ -31,7 +31,7 @@ class Bot(commands.Bot):
         self.utils = Utils
         session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(
             ssl=ssl.create_default_context(cafile=certifi.where())), json_serialize=orjson.dumps)
-        self.api = Utils.Api(self, session)
+        self.api = Utils.Api(self, os.environ["API_SECRET"], session)
 
         await super().on_connect()
 
