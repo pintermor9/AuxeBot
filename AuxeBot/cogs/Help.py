@@ -1,10 +1,14 @@
 import discord
+import logging
 from Utils import Paginator
 from discord.ext import commands
+
+logger = logging.getLogger(__name__)
 
 
 class HelpCommand(commands.HelpCommand):
     def __init__(self, **options):
+        logger.info('Loaded ' + __name__)
         super().__init__(**options)
 
     async def send_bot_help(self, _mapping):

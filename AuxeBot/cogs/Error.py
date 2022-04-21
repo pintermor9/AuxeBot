@@ -1,12 +1,15 @@
+import logging
 import discord
 from discord.ext import commands
 from discord.ext.commands.errors import *
+
+logger = logging.getLogger(__name__)
 
 
 class Error(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        print('Loaded', __name__)
+        logger.info('Loaded ' + __name__)
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):

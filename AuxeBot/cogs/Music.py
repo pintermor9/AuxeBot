@@ -1,15 +1,18 @@
 import discord
+import logging
 import random
-from discord.ext import commands
 import DiscordUtils
+from discord.ext import commands
 from discord.ext.commands.errors import BadArgument
+
+logger = logging.getLogger(__name__)
 
 
 class Music(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.music = DiscordUtils.Music()
-        print(f'Loaded', __name__)
+        logger.info('Loaded ' + __name__)
 
     @commands.command()
     async def join(self, ctx):

@@ -1,6 +1,9 @@
+import logging
 import discord
 from datetime import datetime
 from discord.ext import commands, tasks
+
+logger = logging.getLogger(__name__)
 
 
 class Embeds:
@@ -119,7 +122,7 @@ class GuildSpecific__Minecraft(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.online = []
-        print('Loaded', __name__)
+        logger.info('Loaded ' + __name__)
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -182,7 +185,7 @@ class GuildSpecific__Minecraft(commands.Cog):
             channel = self.bot.get_channel(location[0])
             message = await channel.fetch_message(location[1])
 
-            print(message.embeds)
+            logger.info(message.embeds)
 
 
 def setup(bot):

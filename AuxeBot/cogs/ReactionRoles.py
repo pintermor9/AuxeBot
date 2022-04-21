@@ -1,13 +1,16 @@
 import uuid
 import discord
+import logging
 from discord.ext import commands
 from asyncio import TimeoutError
+
+logger = logging.getLogger(__name__)
 
 
 class ReactionRoles(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        print('Loaded', __name__)
+        logger.info('Loaded ' + __name__)
 
     def parse_reaction_payload(self, payload: discord.RawReactionActionEvent):
         guild_id = payload.guild_id

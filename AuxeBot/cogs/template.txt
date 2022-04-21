@@ -1,6 +1,9 @@
 # ! This is a template. Replace all occourences of "template" with the name of the cog, and delete this line
 import discord
+import logging
 from discord.ext import commands
+
+logger = logging.getLogger(__name__)
 
 
 class template(commands.Cog):

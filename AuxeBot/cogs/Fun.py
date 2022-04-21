@@ -1,13 +1,16 @@
 import random
 import orjson
+import logging
 import discord
 from discord.ext import commands
+
+logger = logging.getLogger(__name__)
 
 
 class Fun(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        print('Loaded', __name__)
+        logger.info('Loaded ' + __name__)
 
     @commands.command(name='8ball', aliases=['eightball'], description="Gives you a random answer to your question.")
     async def _8ball(self, ctx, *, question):

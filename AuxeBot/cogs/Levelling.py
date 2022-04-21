@@ -1,15 +1,19 @@
 import random
 import discord
+import logging
 from io import BytesIO
 from typing import Union
 from discord.ext import commands
 
-IGNORED_GUILDS = [932362633527590963] 
+logger = logging.getLogger(__name__)
+
+IGNORED_GUILDS = [932362633527590963]
+
 
 class Levelling(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        print(f'Loaded', __name__)
+        logger.info('Loaded ' + __name__)
 
     def get_lvl(self, xp):
         lvl = 0

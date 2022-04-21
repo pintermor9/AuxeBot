@@ -7,24 +7,26 @@ import discord
 import aiohttp
 import logging
 import certifi
+import logging
 from Utils import Data
 from itertools import cycle
 from discord.ext import commands, tasks
 
+logger = logging.getLogger(__name__)
+
 
 print('''         .d888888                              888888ba             dP   \n        d8'    88                              88    `8b            88   \n        88aaaaa88a dP    dP dP.  .dP .d8888b. a88aaaa8P' .d8888b. d8888P \n        88     88  88    88  `8bd8'  88ooood8  88   `8b. 88'  `88   88   \n        88     88  88.  .88  .d88b.  88.  ...  88    .88 88.  .88   88   \n        88     88  `88888P' dP'  `dP `88888P'  88888888P `88888P'   dP   \n                          Ascii art by patorjk.com                       ''')
 
-LINE_CLEAR = "\x1b[2k"
 
-print("Imported modules.", end=f"{LINE_CLEAR}\r")
-print("Getting client...", end=f"{LINE_CLEAR}\r")
+logger.info("Imported modules.")
+logger.info("Getting client...")
 
 
 class Bot(commands.Bot):
     async def on_connect(self):
-        print('Connected to discord.')
-        print(f'Current discord.py version: {discord.__version__}')
-        print(f'Current bot version: {self.VERSION}')
+        logger.info('Connected to discord.')
+        logger.info(f'Current discord.py version: {discord.__version__}')
+        logger.info(f'Current bot version: {self.VERSION}')
 
         self.utils = Utils
         session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(
@@ -34,7 +36,7 @@ class Bot(commands.Bot):
         await super().on_connect()
 
     async def on_ready(self):
-        print('Logged in as {.user}!'.format(self))
+        logger.info('Logged in as {.user}!'.format(self))
         message = self.settings["data"]["json-data"]
         self.data = await Data.load(self, message)
 
@@ -43,14 +45,11 @@ class Bot(commands.Bot):
                 status=discord.Status.idle,
                 activity=discord.Game("Initializing... Please wait."))
 
-            if status == "online":
-                self.status = discord.Status.online
-            if status == "idle":
-                self.status = discord.Status.idle
-            if status == "dnd":
-                self.status = discord.Status.dnd
+            self.status = discord.Status.__dict__[status]
+
             if cycleActivities:
                 activityLoop.start()
+
             else:
                 await self.change_presence(activity=discord.Game(noCycleActivity), status=status)
 
@@ -76,12 +75,12 @@ def get_prefix(*_args):
 bot = Bot(command_prefix=get_prefix, intents=intents)
 
 
-print("Done.", end=f"{LINE_CLEAR}\r")
-print("Reading settings... ")
+logger.info("Done.")
+logger.info("Reading settings... ")
 
 with open(r'./settings.yml') as file:
     settings = yaml.full_load(file)
-    print(settings)
+    logger.debug(settings)
 
 # General settings
 TOKEN = os.environ["TOKEN"]
@@ -130,7 +129,7 @@ finally:
     logging.basicConfig(level=level)
 
 
-print("Done.", end=f"{LINE_CLEAR}\r")
+logger.info("Done.")
 
 if bot.testing == True:
     cycleActivities = False
@@ -167,8 +166,13 @@ async def status_online():
 
 @bot_status.after_loop
 async def status_offline():
-    await bot.session.close()
     await bot.api.get("/status/offline")
+
+    webhook = discord.Webhook.from_url(
+        bot.settings["offline_wh"], session=bot.api.session)
+    await webhook.send('<@&922915340852289626> **The bot went offline!**')
+
+    await bot.api.session.close()
 
 
 bot.load_extension("jishaku")
@@ -176,6 +180,6 @@ for file in os.listdir('./AuxeBot/cogs'):
     if file.endswith('.py'):
         bot.load_extension(f'cogs.{file[:-3]}')
 
-print(" \n \nStarting client...\n ")
+logger.info(" \n \nStarting client...\n ")
 
 bot.run(TOKEN)

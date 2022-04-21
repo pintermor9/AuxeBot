@@ -1,14 +1,17 @@
+import logging
 import discord
 import datetime
 from time import time
 from discord.ext import commands, tasks
 from discord.ext.commands.errors import ArgumentParsingError
 
+logger = logging.getLogger(__name__)
+
 
 class Poll(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        print(f'Loaded', __name__)
+        logger.info('Loaded ' + __name__)
 
     @commands.Cog.listener()
     async def on_ready(self):
