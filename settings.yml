@@ -2,14 +2,14 @@
 prefix: "-"
 owner_IDs:
   - 761555679873597450
-VERSION: v1.0.0
+VERSION: v1.0.1
 hidden_cogs:
   - Jishaku
 
 #Status and activity settings:
 cycleActivities: True
 status: "online"
-updates: "v1.0.0 | If you notice any issues please use the -report command!"
+updates: "Music now uses github.com/pintermor9/DiscordUtils!"
 noCycleActivity: ""
 
 data:

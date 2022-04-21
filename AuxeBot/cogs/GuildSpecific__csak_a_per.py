@@ -27,4 +27,6 @@ class GuildSpecific__csak_a_per(commands.Cog):
 
 
 def setup(bot):
+    if not 900769642585395272 in bot.guilds:
+        return
     bot.add_cog(GuildSpecific__csak_a_per(bot))
