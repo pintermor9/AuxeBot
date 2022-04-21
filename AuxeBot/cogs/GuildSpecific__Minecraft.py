@@ -189,6 +189,10 @@ class GuildSpecific__Minecraft(commands.Cog):
 
 
 def setup(bot):
-    if not 954259643801157652 in bot.guilds:
-        return
-    bot.add_cog(GuildSpecific__Minecraft(bot))
+    async def _setup(bot):
+        await bot.wait_for("connect")
+        if not 954259643801157652 in [g.id for g in bot.guilds]:
+            return
+        bot.add_cog(GuildSpecific__Minecraft(bot))
+
+    bot.loop.create_task(_setup(bot))

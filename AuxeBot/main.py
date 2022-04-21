@@ -169,7 +169,7 @@ async def status_offline():
     await bot.api.get("/status/offline")
 
     webhook = discord.Webhook.from_url(
-        bot.settings["offline_wh"], session=bot.api.session)
+        os.environ["offline_wh"], session=bot.api.session)
     await webhook.send('<@&922915340852289626> **The bot went offline!**')
 
     await bot.api.session.close()
