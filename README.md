@@ -6,6 +6,6 @@ This is a private Discord bot. You are free to fork this or copy parts of this r
 * Fun
 * Levelling
 * Moderation
-* Music (this is currently under rewrite, as copying [Valentin B](https://gist.github.com/vbe0201/ade9b80f2d3b64643d854938d40a0a2d)'s work was just a temporary solution)
+* Music (using my version of [DiscordUtils](https://github.com/pintermor9/DiscordUtils/))
 * Poll
 * Reaction Roles
