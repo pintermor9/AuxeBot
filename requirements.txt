@@ -7,7 +7,7 @@ PyNaCl
 certifi
 jishaku
 
-git+https://github.com/pintermor9/DiscordUtils
+disutils # my 1st package :D
 
 # speedups
 aiodns

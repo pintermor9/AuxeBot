@@ -9,19 +9,28 @@ logger = logging.getLogger(__name__)
 class Error(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        logger.info('Loaded ' + __name__)
+        logger.info("Loaded " + __name__)
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
-        IGNORE = (CommandNotFound)
+        IGNORE = (CommandNotFound,)
         if isinstance(error, IGNORE):
             return
 
-        DEAFULT = (BadArgument, BadUnionArgument, ArgumentParsingError, CheckFailure, DisabledCommand,
-                   CommandInvokeError, CommandOnCooldown, MaxConcurrencyReached)
+        DEAFULT = (
+            BadArgument,
+            BadUnionArgument,
+            ArgumentParsingError,
+            CheckFailure,
+            DisabledCommand,
+            CommandInvokeError,
+            CommandOnCooldown,
+            MaxConcurrencyReached,
+        )
 
-        embed = discord.Embed(title="Error:exclamation:",
-                              description="", color=0xff0000)
+        embed = discord.Embed(
+            title="Error:exclamation:", description="", color=0xFF0000
+        )
 
         if isinstance(error, DEAFULT):
             embed.description = str(error)
@@ -32,10 +41,14 @@ class Error(commands.Cog):
         if isinstance(error, UserInputError):
             parent = ctx.command.parent.name + " " if ctx.command.parent else ""
             embed.add_field(
-                name="Usage", value=f"`{parent + ctx.command.name} {ctx.command.signature.replace('=', ' = ')}".strip()+"`", inline=False)
+                name="Usage",
+                value=f"`{parent + ctx.command.name} {ctx.command.signature.replace('=', ' = ')}".strip()
+                + "`",
+                inline=False,
+            )
 
         await ctx.send(embed=embed)
-        raise error
+        print(error)
 
 
 def setup(bot):
