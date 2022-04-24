@@ -1,5 +1,3 @@
-disutils # my 1st package :D
-
 py-cord==2.0.0b7
 PyYAML
 aiohttp
@@ -8,6 +6,8 @@ ffmpeg
 PyNaCl
 certifi
 jishaku
+
+disutils==1.4.1 # my 1st package :D
 
 # speedups
 aiodns
