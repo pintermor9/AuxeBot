@@ -34,4 +34,6 @@ jobs:
         run: heroku login
 
       - name: g
-        run: git push heroku master
+        run: |
+          git remote add heroku "https://git.heroku.com/auxebot.git"
+          git push heroku master
