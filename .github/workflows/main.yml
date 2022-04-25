@@ -32,3 +32,6 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Log in to Heroku
         run: heroku login
+
+      - name: g
+        run: git heroku push master
