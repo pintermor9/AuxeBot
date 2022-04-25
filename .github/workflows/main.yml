@@ -33,7 +33,8 @@ jobs:
       - name: Log in to Heroku
         run: heroku login
 
-      - name: g
+      - name: Git remote 
         run: |
           heroku git:remote -a auxebot
+          git remote -v
           git push heroku master
