@@ -43,24 +43,24 @@ class Music(commands.Cog):
             if not ctx.voice_client.is_playing():
                 await player.queue(url)
                 song = await player.play()
-                await ctx.send(f"Playing {song.name}")
+                await ctx.send(f"Playing {song.title}")
             else:
                 song = await player.queue(url)
-                await ctx.send(f"Queued {song.name}")
+                await ctx.send(f"Queued {song.title}")
 
     @commands.command()
     async def pause(self, ctx):
         """Pauses the currently playing song."""
         player = self.music.get_player(ctx)
         song = await player.pause()
-        await ctx.send(f"Paused {song.name}")
+        await ctx.send(f"Paused {song.title}")
 
     @commands.command()
     async def resume(self, ctx):
         """Resumes a currently paused song."""
         player = self.music.get_player(ctx)
         song = await player.resume()
-        await ctx.send(f"Resumed {song.name}")
+        await ctx.send(f"Resumed {song.title}")
 
     @commands.command()
     async def stop(self, ctx):
@@ -76,16 +76,16 @@ class Music(commands.Cog):
         player = self.music.get_player(ctx)
         song = await player.toggle_song_loop()
         if song.is_looping:
-            await ctx.send(f"Enabled loop for {song.name}")
+            await ctx.send(f"Enabled loop for {song.title}")
         else:
-            await ctx.send(f"Disabled loop for {song.name}")
+            await ctx.send(f"Disabled loop for {song.title}")
 
     @commands.command()
     async def queue(self, ctx):
         """Shows the player's queue."""
         player = self.music.get_player(ctx)
         text = ""
-        for i, song in enumerate([song.name for song in player.current_queue()]):
+        for i, song in enumerate([song.title for song in player.song_queue]):
             text += f"`{i}.` {song}\n"
         await ctx.send(text)
 
@@ -93,8 +93,8 @@ class Music(commands.Cog):
     async def now(self, ctx):
         """Displays the currently playing song."""
         player = self.music.get_player(ctx)
-        song = player.now_playing()
-        await ctx.send(song.name)
+        song = player.song_queue[0]
+        await ctx.send(song.title)
 
     @commands.command()
     async def skip(self, ctx):
@@ -102,9 +102,9 @@ class Music(commands.Cog):
         player = self.music.get_player(ctx)
         data = await player.skip(force=True)
         if len(data) == 2:
-            await ctx.send(f"Skipped from {data[0].name} to {data[1].name}")
+            await ctx.send(f"Skipped from {data[0].title} to {data[1].title}")
         else:
-            await ctx.send(f"Skipped {data[0].name}")
+            await ctx.send(f"Skipped {data[0].title}")
 
     @commands.command(aliases=["vol"])
     async def volume(self, ctx, vol: int):
@@ -113,14 +113,14 @@ class Music(commands.Cog):
             raise BadArgument("`vol` must be between 0 and 100")
         player = self.music.get_player(ctx)
         song, volume = await player.change_volume(float(vol) / 100)
-        await ctx.send(f"Changed volume for {song.name} to {vol}%")
+        await ctx.send(f"Changed volume for {song.title} to {vol}%")
 
     @commands.command()
     async def remove(self, ctx, index):
         """Removes a song from the queue at a given index."""
         player = self.music.get_player(ctx)
         song = await player.remove_from_queue(int(index))
-        await ctx.send(f"Removed {song.name} from queue")
+        await ctx.send(f"Removed {song.title} from queue")
 
     @commands.command()
     async def shuffle(self, ctx):
