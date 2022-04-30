@@ -48,6 +48,8 @@ class Error(commands.Cog):
             )
 
         await ctx.send(embed=embed)
+        if self.bot.testing:
+            raise error
         print(error)
 
 
