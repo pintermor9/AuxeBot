@@ -17,7 +17,10 @@ class Music(commands.Cog):
     @commands.command()
     async def join(self, ctx):
         """Joins a voice channel."""
-        await ctx.author.voice.channel.connect()  # Joins author's voice channel
+        try:
+            await ctx.author.voice.channel.connect()  # Joins author's voice channel
+        except AttributeError:
+            raise Music.NotConnectedToVoice("You're not connected to a voice channel.")
 
     @commands.command()
     async def leave(self, ctx):
@@ -40,7 +43,7 @@ class Music(commands.Cog):
             if not ctx.voice_client:
                 await ctx.invoke(self.join)
             player = self.music.get_player(ctx)
-            if not ctx.voice_client.is_playing():
+            if not player.is_playing:
                 await player.queue(url)
                 song = await player.play()
                 await ctx.send(f"Playing {song.title}")
@@ -101,19 +104,22 @@ class Music(commands.Cog):
         """Skips the currently playing song."""
         player = self.music.get_player(ctx)
         data = await player.skip(force=True)
-        if len(data) == 2:
+        if data[1] is not None: 
             await ctx.send(f"Skipped from {data[0].title} to {data[1].title}")
         else:
             await ctx.send(f"Skipped {data[0].title}")
 
     @commands.command(aliases=["vol"])
-    async def volume(self, ctx, vol: int):
-        """Sets the volume of the player."""
+    async def volume(self, ctx, vol: int = None):
+        """Sets the volume of the player. If no volume is provided, it will return the current volume."""
         if vol > 100 or vol < 0:
             raise BadArgument("`vol` must be between 0 and 100")
         player = self.music.get_player(ctx)
-        song, volume = await player.change_volume(float(vol) / 100)
-        await ctx.send(f"Changed volume for {song.title} to {vol}%")
+        if vol is None:
+            await ctx.send(f"Volume is {player.volume * 100}%")	
+        else:
+            song, volume = await player.change_volume(float(vol) / 100)
+            await ctx.send(f"Changed volume for {song.title} to {vol}%")
 
     @commands.command()
     async def remove(self, ctx, index):
@@ -125,7 +131,8 @@ class Music(commands.Cog):
     @commands.command()
     async def shuffle(self, ctx):
         """Shuffles the queue"""
-        random.shuffle(self.music.queue[ctx.guild.id])
+        player = self.music.get_player(ctx)
+        player.shuffle_queue()
         await ctx.send("Shuffled!")
 
 
