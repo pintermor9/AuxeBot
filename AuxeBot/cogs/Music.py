@@ -89,14 +89,14 @@ class Music(commands.Cog):
         player = self.music.get_player(ctx)
         text = ""
         for i, song in enumerate([song.title for song in player.song_queue]):
-            text += f"`{i}.` {song}\n"
+            text += f"`{i+1}.` {song}\n"
         await ctx.send(text)
 
     @commands.command()
     async def now(self, ctx):
         """Displays the currently playing song."""
         player = self.music.get_player(ctx)
-        song = player.song_queue[0]
+        song = player.now_playing()
         await ctx.send(song.title)
 
     @commands.command()
@@ -112,11 +112,11 @@ class Music(commands.Cog):
     @commands.command(aliases=["vol"])
     async def volume(self, ctx, vol: int = None):
         """Sets the volume of the player. If no volume is provided, it will return the current volume."""
-        if vol > 100 or vol < 0:
-            raise BadArgument("`vol` must be between 0 and 100")
         player = self.music.get_player(ctx)
         if vol is None:
-            await ctx.send(f"Volume is {player.volume * 100}%")	
+            return await ctx.send(f"Volume is {player.volume * 100}%")	
+        if vol > 100 or vol < 0:
+            raise BadArgument("`vol` must be between 0 and 100")
         else:
             song, volume = await player.change_volume(float(vol) / 100)
             await ctx.send(f"Changed volume for {song.title} to {vol}%")
@@ -125,7 +125,7 @@ class Music(commands.Cog):
     async def remove(self, ctx, index):
         """Removes a song from the queue at a given index."""
         player = self.music.get_player(ctx)
-        song = await player.remove_from_queue(int(index))
+        song = await player.remove_from_queue(int(index-1))
         await ctx.send(f"Removed {song.title} from queue")
 
     @commands.command()
