@@ -48,7 +48,10 @@ class Error(commands.Cog):
             )
 
         await ctx.send(embed=embed)
-        print(error)
+        if self.bot.testing:
+            raise error
+        else:
+            print(error)
 
 
 def setup(bot):
