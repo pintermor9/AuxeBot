@@ -11,13 +11,17 @@ class Test(commands.Cog):
 
     @commands.command(name="view")
     async def _view(self, ctx):
-        b = discord.ui.Button(label="Test")
+        buttons = []
+        for emoji in {
+            "⏮️": "first",
+            "⏪": "previous",
+            "⏹": "stop",
+            "⏩": "next",
+            "⏭️": "last",
+        }.keys():
+            buttons.append(discord.ui.Button(emoji=emoji))
 
-        async def cb(interaction):
-            dir(interaction)
-
-        b.callback = cb
-        view = discord.ui.View(b)
+        view = discord.ui.View(*buttons)
         await ctx.send(view=view)
 
     @commands.command(
