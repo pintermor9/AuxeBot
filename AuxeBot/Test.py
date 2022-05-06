@@ -13,10 +13,15 @@ class Test(commands.Cog):
         await ctx.send(file=discord.File(StringIO(str(text)), filename="message.json"))
 
     @commands.command()
-    async def readtxt(self, ctx, message_id):
-        message = await ctx.channel.fetch_message(message_id)
+    async def readtxt(self, ctx, message_id, channel:discord.TextChannel=None):
+        if channel is None:
+            channel = ctx.channel
+        message = await channel.fetch_message(message_id)
         bytes = await message.attachments[0].read()
-        await ctx.send(bytes.decode())
+        string = bytes.decode()
+        while string != '':
+            await ctx.send(string[:2000])
+            string = string[2000:]
 
     @commands.command()
     async def fixshopthreads(self, ctx):
