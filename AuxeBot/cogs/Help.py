@@ -8,18 +8,25 @@ logger = logging.getLogger(__name__)
 
 class HelpCommand(commands.HelpCommand):
     def __init__(self, **options):
-        logger.info('Loaded ' + __name__)
+        logger.info("Loaded " + __name__)
         super().__init__(**options)
 
     async def send_bot_help(self, _mapping):
         bot = self.context.bot
         embeds = []
-        cogs = [cog for cog in bot.cogs.values() if len([command for command in cog.get_commands(
-        ) if not command.hidden]) > 0 and cog.qualified_name not in bot.hidden_cogs]
+        cogs = [
+            cog
+            for cog in bot.cogs.values()
+            if len([command for command in cog.get_commands() if not command.hidden])
+            > 0
+            and cog.qualified_name not in bot.hidden_cogs
+        ]
         max_page = len(cogs)
         for cog in cogs:
             embed = discord.Embed(
-                title=f"Documentation for `{cog.qualified_name}`", description=f"All cogs: {', '.join([cog.qualified_name for cog in cogs])}")
+                title=f"Documentation for `{cog.qualified_name}`",
+                description=f"All cogs: {', '.join([cog.qualified_name for cog in cogs])}",
+            )
             for command in cog.get_commands():
                 if command.hidden:
                     continue
@@ -33,9 +40,12 @@ class HelpCommand(commands.HelpCommand):
                     description = command.description
                 else:
                     description = "This command does not have any description yet."
-                children = f"\n**Children:** {', '.join([child.name for child in children])}" if children != None else ""
-                embed.add_field(name=command.name,
-                                value=f"{description}{children}")
+                children = (
+                    f"\n**Children:** {', '.join([child.name for child in children])}"
+                    if children != None
+                    else ""
+                )
+                embed.add_field(name=command.name, value=f"{description}{children}")
                 embed.set_footer(text=f"Page {(cogs.index(cog))+1}/{max_page}")
             embeds.append(embed)
         paginator = Paginator(self.context, embeds)
@@ -55,13 +65,19 @@ class HelpCommand(commands.HelpCommand):
         else:
             description = "This command does not have any description yet."
         embed = discord.Embed(
-            title=f"Documentation for `{parent}{command.name}`", description=description)
+            title=f"Documentation for `{parent}{command.name}`", description=description
+        )
         if command.aliases != []:
             embed.add_field(name="Aliases:", value=", ".join(command.aliases))
         embed.add_field(
-            name="Usage", value=f"`{parent}{command.name} {command.signature.replace('=', ' = ')}".strip()+"`", inline=False)
+            name="Usage",
+            value=f"`{parent}{command.name} {command.signature.replace('=', ' = ')}".strip()
+            + "`",
+            inline=False,
+        )
         embed.set_footer(
-            text="`< argument > required, [ argument = default ] optional`")
+            text="`< argument > required, [ argument = default ] optional`"
+        )
         return await self.get_destination().send(embed=embed)
 
     async def send_group_help(self, group):
@@ -74,7 +90,8 @@ class HelpCommand(commands.HelpCommand):
         else:
             description = "This command does not have any description yet."
         embed = discord.Embed(
-            title=f"Documentation for `{group.name}`", description=description)
+            title=f"Documentation for `{group.name}`", description=description
+        )
         children = ""
         for child in group.commands:
             if child.brief:
@@ -83,15 +100,16 @@ class HelpCommand(commands.HelpCommand):
                 child_description = child.description
             else:
                 child_description = "This command does not have any description yet."
-            children += f"> **{child.name}:** *{child_description}*\n> \u2800Usage: `{group.name} {child.name} {child.signature.replace('=', ' = ')}".strip(
-            )+"`\n"
+            children += (
+                f"> **{child.name}:** *{child_description}*\n> \u2800Usage: `{group.name} {child.name} {child.signature.replace('=', ' = ')}".strip()
+                + "`\n"
+            )
         embed.add_field(name=f"Child commands:", value=children)
         embed.set_footer(text="< > required, [ ] optional argument")
         return await self.get_destination().send(embed=embed)
 
     async def send_cog_help(self, cog):
-        embed = discord.Embed(
-            title=f"Documentation for `{cog.qualified_name}`")
+        embed = discord.Embed(title=f"Documentation for `{cog.qualified_name}`")
         for command in cog.get_commands():
             if command.hidden:
                 continue
@@ -105,11 +123,14 @@ class HelpCommand(commands.HelpCommand):
                 description = command.description
             else:
                 description = "This command does not have any description yet."
-            children = f"\n**Children:** {', '.join([child.name for child in children])}" if children != None else ""
-            embed.add_field(name=command.name,
-                            value=f"{description}{children}")
+            children = (
+                f"\n**Children:** {', '.join([child.name for child in children])}"
+                if children != None
+                else ""
+            )
+            embed.add_field(name=command.name, value=f"{description}{children}")
         await self.get_destination().send(embed=embed)
 
 
-def setup(bot):
+async def setup(bot):
     bot.help_command = HelpCommand()

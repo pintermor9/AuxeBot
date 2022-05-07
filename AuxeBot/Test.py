@@ -6,20 +6,20 @@ from discord.ext import commands
 class Test(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        print(f'Loaded', __name__)
+        print(f"Loaded", __name__)
 
     @commands.command()
     async def sendtxt(self, ctx, text):
         await ctx.send(file=discord.File(StringIO(str(text)), filename="message.json"))
 
     @commands.command()
-    async def readtxt(self, ctx, message_id, channel:discord.TextChannel=None):
+    async def readtxt(self, ctx, message_id, channel: discord.TextChannel = None):
         if channel is None:
             channel = ctx.channel
         message = await channel.fetch_message(message_id)
         bytes = await message.attachments[0].read()
         string = bytes.decode()
-        while string != '':
+        while string != "":
             await ctx.send(string[:2000])
             string = string[2000:]
 
@@ -41,5 +41,5 @@ class Test(commands.Cog):
         print("IDK")
 
 
-def setup(bot):
-    bot.add_cog(Test(bot))
+async def setup(bot):
+    await bot.add_cog(Test(bot))

@@ -7,10 +7,10 @@ hidden_cogs:
   - Jishaku
 
 #Status and activity settings:
-cycleActivities: True
+cycleActivities: False
 status: "online"
 updates: "Music now uses disutils! (my 1st package :D)"
-noCycleActivity: ""
+noCycleActivity: "FIXING IN PROGRESS! KNOWN: MUSIC BUGS"
 
 data:
   json-data:

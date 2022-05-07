@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 class ReactionRoles(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        logger.info('Loaded ' + __name__)
+        logger.info("Loaded " + __name__)
 
     def parse_reaction_payload(self, payload: discord.RawReactionActionEvent):
         guild_id = payload.guild_id
@@ -42,7 +42,15 @@ class ReactionRoles(commands.Cog):
 
     @commands.has_permissions(manage_channels=True, manage_roles=True)
     @commands.command(description="Creates a new reaction role.")
-    async def reaction(self, ctx, emote, role: discord.Role, channel: discord.TextChannel, title, message):
+    async def reaction(
+        self,
+        ctx,
+        emote,
+        role: discord.Role,
+        channel: discord.TextChannel,
+        title,
+        message,
+    ):
         """Creates a new reaction role. The bot will send an embed message, wich will be the base of the reaction role.
         **Parameters:**
         `emote`: The emoji that users need to react in order to get the role.
@@ -57,7 +65,10 @@ class ReactionRoles(commands.Cog):
         self.add_reaction(ctx.guild.id, emote, role.id, channel.id, msg.id)
 
     @commands.has_permissions(manage_channels=True, manage_roles=True)
-    @commands.group(invoke_without_command=True, description="Lists the reaction roles in the current guild.")
+    @commands.group(
+        invoke_without_command=True,
+        description="Lists the reaction roles in the current guild.",
+    )
     async def reactions(self, ctx):
         guild_id = ctx.guild.id
         data = self.bot.data["reaction_roles"].get(str(guild_id), None)
@@ -80,7 +91,9 @@ class ReactionRoles(commands.Cog):
 
     @commands.has_permissions(manage_channels=True, manage_roles=True)
     @reactions.command(description="Creates a new reaction role.")
-    async def add(self, ctx, emote, role: discord.Role, channel: discord.TextChannel, message_id):
+    async def add(
+        self, ctx, emote, role: discord.Role, channel: discord.TextChannel, message_id
+    ):
         """Creates a new reaction role for an existing message.
         **Parameters:**
         `emote`: The emoji that users need to react in order to get the role.
@@ -129,8 +142,11 @@ class ReactionRoles(commands.Cog):
                     and user == ctx.message.author
                     and str(reaction.emoji) == "🗑️"
                 )
+
             try:
-                reaction, user = await self.bot.wait_for("reaction_add", check=check, timeout=15)
+                reaction, user = await self.bot.wait_for(
+                    "reaction_add", check=check, timeout=15
+                )
                 data.remove(rr)
                 embed = discord.Embed(title="Ok. Deleted.🗑️")
             except TimeoutError:
@@ -142,7 +158,9 @@ class ReactionRoles(commands.Cog):
             if self.bot.data["reaction_roles"][str(guild_id)] == []:
                 del self.bot.data["reaction_roles"][str(guild_id)]
 
-    def add_reaction(self, guild_id, emote: discord.Emoji, role_id, channel_id, message_id):
+    def add_reaction(
+        self, guild_id, emote: discord.Emoji, role_id, channel_id, message_id
+    ):
         if not str(guild_id) in self.bot.data["reaction_roles"]:
             self.bot.data["reaction_roles"][str(guild_id)] = []
         self.bot.data["reaction_roles"][str(guild_id)].append(
@@ -156,5 +174,5 @@ class ReactionRoles(commands.Cog):
         )
 
 
-def setup(bot):
-    bot.add_cog(ReactionRoles(bot))
+async def setup(bot):
+    await bot.add_cog(ReactionRoles(bot))

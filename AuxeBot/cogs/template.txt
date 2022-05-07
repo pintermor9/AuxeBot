@@ -12,5 +12,5 @@ class template(commands.Cog):
         print('Loaded', __name__)
 
 
-def setup(bot):
-    bot.add_cog(template(bot))
+async def setup(bot):
+    await bot.add_cog(template(bot))

@@ -13,13 +13,13 @@ IGNORED_GUILDS = [932362633527590963]
 class Levelling(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        logger.info('Loaded ' + __name__)
+        logger.info("Loaded " + __name__)
 
     def get_lvl(self, xp):
         lvl = 0
         while True:
             if xp < ((50 * (lvl**2)) + (50 * lvl)):
-                xp -= ((50 * ((lvl - 1)**2)) + (50 * (lvl - 1)))
+                xp -= (50 * ((lvl - 1) ** 2)) + (50 * (lvl - 1))
                 return xp, lvl
             lvl += 1
 
@@ -62,8 +62,9 @@ class Levelling(commands.Cog):
             lvlxp, lvl = self.get_lvl(xp)
 
             rank = 1
-            datalisted = sorted(self.bot.data["levelling"].items(),
-                                key=lambda x: x[1], reverse=True)
+            datalisted = sorted(
+                self.bot.data["levelling"].items(), key=lambda x: x[1], reverse=True
+            )
             for x in datalisted:
                 if x[0] == str(user.id):
                     break
@@ -80,15 +81,24 @@ class Levelling(commands.Cog):
             except:
                 status = "online"
 
-            rankcard = await self.bot.api.post("/rankcard", data={
-                "img": str(user.display_avatar if user.display_avatar != None else user.deafult_avatar),
-                "currentXP": lvlxp,
-                "requiredXP": int(200 * ((1 / 2) * lvl)),
-                "status": status,
-                "username": user.name,
-                "discriminator": user.discriminator,
-                "rank": rank,
-                "level": lvl}, return_as="bytes")
+            rankcard = await self.bot.api.post(
+                "/rankcard",
+                data={
+                    "img": str(
+                        user.display_avatar
+                        if user.display_avatar != None
+                        else user.deafult_avatar
+                    ),
+                    "currentXP": lvlxp,
+                    "requiredXP": int(200 * ((1 / 2) * lvl)),
+                    "status": status,
+                    "username": user.name,
+                    "discriminator": user.discriminator,
+                    "rank": rank,
+                    "level": lvl,
+                },
+                return_as="bytes",
+            )
 
             await ctx.send(file=discord.File(BytesIO(rankcard), "rankcard.png"))
 
@@ -96,15 +106,16 @@ class Levelling(commands.Cog):
     async def leaderboard(self, ctx, top_x=5):
         """Shows the leaderboard. By default it will show the top 5 people, but you can specify a `top_x` argument."""
         async with ctx.typing():
-            datalisted = sorted(self.bot.data["levelling"].items(),
-                                key=lambda x: x[1], reverse=True)
+            datalisted = sorted(
+                self.bot.data["levelling"].items(), key=lambda x: x[1], reverse=True
+            )
 
             topIDs = tuple(map(lambda i: i[0], datalisted))
 
             if str(ctx.author.id) in topIDs:
                 try:
                     if topIDs.index(str(ctx.author.id)) == 0:
-                        color = 0xff8800
+                        color = 0xFF8800
                     elif topIDs.index(str(ctx.author.id)) == 1:
                         color = 0xC0C0C0
                     elif topIDs.index(str(ctx.author.id)) == 2:
@@ -117,7 +128,8 @@ class Levelling(commands.Cog):
             embed = discord.Embed(
                 title="Leaderboard",
                 description=f"Top {top_x} member(s) on the leaderboard\n",
-                color=color)
+                color=color,
+            )
 
             for rank in range(top_x):
                 try:
@@ -127,15 +139,16 @@ class Levelling(commands.Cog):
                     break
 
                 lvlxp, lvl = self.get_lvl(xp)
-                whitespace = '\u2800' * (len(str(rank)) + 1)
+                whitespace = "\u2800" * (len(str(rank)) + 1)
 
                 embed.add_field(
                     name=f"**`{rank + 1}`.** {user}",
                     value=f"** {whitespace} Level: {lvl},\u2800XP: {lvlxp}**",
-                    inline=False)
+                    inline=False,
+                )
 
             await ctx.send(embed=embed)
 
 
-def setup(bot):
-    bot.add_cog(Levelling(bot))
+async def setup(bot):
+    await bot.add_cog(Levelling(bot))

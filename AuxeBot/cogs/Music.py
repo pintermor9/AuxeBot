@@ -104,7 +104,7 @@ class Music(commands.Cog):
         """Skips the currently playing song."""
         player = self.music.get_player(ctx)
         data = await player.skip(force=True)
-        if data[1] is not None: 
+        if data[1] is not None:
             await ctx.send(f"Skipped from {data[0].title} to {data[1].title}")
         else:
             await ctx.send(f"Skipped {data[0].title}")
@@ -114,7 +114,7 @@ class Music(commands.Cog):
         """Sets the volume of the player. If no volume is provided, it will return the current volume."""
         player = self.music.get_player(ctx)
         if vol is None:
-            return await ctx.send(f"Volume is {player.volume * 100}%")	
+            return await ctx.send(f"Volume is {player.volume * 100}%")
         if vol > 100 or vol < 0:
             raise BadArgument("`vol` must be between 0 and 100")
         else:
@@ -125,7 +125,7 @@ class Music(commands.Cog):
     async def remove(self, ctx, index):
         """Removes a song from the queue at a given index."""
         player = self.music.get_player(ctx)
-        song = await player.remove_from_queue(int(index-1))
+        song = await player.remove_from_queue(int(index - 1))
         await ctx.send(f"Removed {song.title} from queue")
 
     @commands.command()
@@ -136,5 +136,5 @@ class Music(commands.Cog):
         await ctx.send("Shuffled!")
 
 
-def setup(bot):
-    bot.add_cog(Music(bot))
+async def setup(bot):
+    await bot.add_cog(Music(bot))

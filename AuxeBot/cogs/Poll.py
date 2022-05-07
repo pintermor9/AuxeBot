@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 class Poll(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        logger.info('Loaded ' + __name__)
+        logger.info("Loaded " + __name__)
 
     @commands.Cog.listener()
     async def on_ready(self):
@@ -36,24 +36,30 @@ class Poll(commands.Cog):
             choices = _choices
         except:
             raise ArgumentParsingError(
-                "An error ocurred while parsing argument: `choices`")
+                "An error ocurred while parsing argument: `choices`"
+            )
 
         description = message + "\n**Choices:**"
         for choice in choices:
             description += f"\n**{choice}:** {choices[choice]}"
         embed = discord.Embed(
-            title=f"Poll by {ctx.author.name + '#' + ctx.author.discriminator}:", description=description)
+            title=f"Poll by {ctx.author.name + '#' + ctx.author.discriminator}:",
+            description=description,
+        )
         embed.set_footer(text="Ends: ")
-        embed.timestamp = datetime.datetime.now() + \
-            datetime.timedelta(minutes=lenght)
+        embed.timestamp = datetime.datetime.now() + datetime.timedelta(minutes=lenght)
         msg = await ctx.send(embed=embed)
 
         for choice in choices:
             await msg.add_reaction(choice)
 
         expires = round(time()) + (lenght * 60)
-        poll = {"channel": msg.channel.id, "message": msg.id,
-                "expires": expires, "choices": choices}
+        poll = {
+            "channel": msg.channel.id,
+            "message": msg.id,
+            "expires": expires,
+            "choices": choices,
+        }
         self.bot.data["poll"].append(poll)
 
     @commands.Cog.listener()
@@ -66,8 +72,12 @@ class Poll(commands.Cog):
         messages = [poll["message"] for poll in self.bot.data["poll"]]
         if payload.message_id not in messages:
             return
-        poll = next(poll for poll in self.bot.data["poll"] if poll["channel"] ==
-                    payload.channel_id and poll["message"] == payload.message_id)
+        poll = next(
+            poll
+            for poll in self.bot.data["poll"]
+            if poll["channel"] == payload.channel_id
+            and poll["message"] == payload.message_id
+        )
         if str(payload.emoji) not in [choice for choice in poll["choices"]]:
             return
         channel = self.bot.get_channel(payload.channel_id)
@@ -81,7 +91,11 @@ class Poll(commands.Cog):
 
         if voted_users.count(payload.member) > 1:
             await message.remove_reaction(payload.emoji, payload.member)
-            await message.channel.send(f"{payload.member.mention} You can't vote for 2 choices!", reference=message, delete_after=5)
+            await message.channel.send(
+                f"{payload.member.mention} You can't vote for 2 choices!",
+                reference=message,
+                delete_after=5,
+            )
 
     async def end_poll(self, poll_index: int):
         poll = self.bot.data["poll"][poll_index]
@@ -98,7 +112,7 @@ class Poll(commands.Cog):
 
         embed = discord.Embed(
             title=message.embeds[0].title.replace("Poll ", "Poll results "),
-            description=message.embeds[0].description + "\n\n**Results:**"
+            description=message.embeds[0].description + "\n\n**Results:**",
         )
         for vote in votes.items():
             embed.add_field(name=poll["choices"][vote[0]], value=len(vote[1]))
@@ -110,13 +124,16 @@ class Poll(commands.Cog):
     @tasks.loop(seconds=10)
     async def expiry_check(self):
         try:
-            expired = list(filter(lambda p: p["expires"] <= int(
-                round(time())), self.bot.data["poll"]))
+            expired = list(
+                filter(
+                    lambda p: p["expires"] <= int(round(time())), self.bot.data["poll"]
+                )
+            )
             for poll in expired:
                 await self.end_poll(self.bot.data["poll"].index(poll))
         except:
             pass  # It'll prolly work 10 seconds later XD
 
 
-def setup(client):
-    client.add_cog(Poll(client))
+async def setup(bot):
+    bot.add_cog(Poll(bot))

@@ -25,6 +25,19 @@ logger.info("Getting client...")
 
 
 class Bot(commands.Bot):
+    async def setup_hook(self):
+        # Load extensions
+        if self.testing:
+            await bot.load_extension("Test")
+
+        await bot.load_extension("jishaku")
+
+        for file in os.listdir("./AuxeBot/cogs"):
+            if file.endswith(".py"):
+                await bot.load_extension(f"cogs.{file[:-3]}")
+
+        return await super().setup_hook()
+
     async def on_connect(self):
         logger.info("Connected to discord.")
         logger.info(f"Current discord.py version: {discord.__version__}")
@@ -38,8 +51,6 @@ class Bot(commands.Bot):
             json_serialize=orjson.dumps,
         )
         self.api = Utils.Api(self, os.environ["API_SECRET"], session)
-
-        await super().on_connect()
 
     async def on_ready(self):
         logger.info("Logged in as {.user}!".format(self))
@@ -150,7 +161,6 @@ logger.info("Done.")
 if bot.testing == True:
     cycleActivities = False
     noCycleActivity = "Currently testing..."
-    bot.load_extension("Test")
 
 
 def is_owner(ctx):
@@ -191,11 +201,6 @@ async def status_offline():
 
     await bot.api.session.close()
 
-
-bot.load_extension("jishaku")
-for file in os.listdir("./AuxeBot/cogs"):
-    if file.endswith(".py"):
-        bot.load_extension(f"cogs.{file[:-3]}")
 
 logger.info(" \n \nStarting client...\n ")
 
