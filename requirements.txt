@@ -1,3 +1,5 @@
+# TODO MAKE THIS FILE BE A setup.py OR IDK. SOMETHING TO FORCE REINSTALL ALL PACKAGES
+
 git+https://github.com/Rapptz/discord.py
 
 PyYAML
