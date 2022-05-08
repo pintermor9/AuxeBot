@@ -8,7 +8,7 @@ PyNaCl
 certifi
 jishaku
 
-disutils # my 1st package :D
+disutils==1.4.32
 
 # speedups
 aiodns
