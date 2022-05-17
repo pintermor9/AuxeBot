@@ -23,6 +23,12 @@ print(
 logger.info("Imported modules.")
 logger.info("Getting client...")
 
+try:
+    import sys
+    sys.path.insert(0, os.environ["disutils_path"])
+except:
+    pass
+
 
 class Bot(commands.Bot):
     async def setup_hook(self):
@@ -75,14 +81,6 @@ class Bot(commands.Bot):
 
             dump_data.start()
             bot_status.start()
-
-    async def on_message(self, message):
-        if not self.testing and not message.channel.id == 937293407796207627:
-            return await super().on_message(message)
-        elif self.testing and message.channel.id == 937293407796207627:
-            return await super().on_message(message)
-        else:
-            return
 
 
 intents = discord.Intents.all()
