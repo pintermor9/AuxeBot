@@ -8,6 +8,7 @@ import aiohttp
 import logging
 import certifi
 import logging
+import disutils
 from Utils import Data
 from itertools import cycle
 from discord.ext import commands, tasks
@@ -25,6 +26,7 @@ logger.info("Getting client...")
 
 try:
     import sys
+
     sys.path.insert(0, os.environ["disutils_path"])
 except:
     pass
@@ -32,6 +34,14 @@ except:
 
 class Bot(commands.Bot):
     async def setup_hook(self):
+        return await super().setup_hook()
+
+    async def on_connect(self):
+        logger.info("Connected to discord.")
+        logger.info(f"Current discord.py version: {discord.__version__}")
+        logger.info(f"Current disutils version: {disutils.__version__}")
+        logger.info(f"Current bot version: {self.VERSION}")
+
         # Load extensions
         if self.testing:
             await bot.load_extension("Test")
@@ -41,13 +51,6 @@ class Bot(commands.Bot):
         for file in os.listdir("./AuxeBot/cogs"):
             if file.endswith(".py"):
                 await bot.load_extension(f"cogs.{file[:-3]}")
-
-        return await super().setup_hook()
-
-    async def on_connect(self):
-        logger.info("Connected to discord.")
-        logger.info(f"Current discord.py version: {discord.__version__}")
-        logger.info(f"Current bot version: {self.VERSION}")
 
         self.utils = Utils
         session = aiohttp.ClientSession(

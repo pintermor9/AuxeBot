@@ -1,5 +1,6 @@
 import discord
 import logging
+import disutils
 from time import time
 from datetime import timedelta
 from discord.ext import commands
@@ -26,7 +27,7 @@ class Logging(commands.Cog):
 
         if self.bot.testing == False:
             await self.bot.logging_channel.send(
-                f"<@&922915340852289626> **The bot is back online, after being offline for ~`{hours} hour(s), {minutes} minute(s), {seconds} second(s)`.**\nCurrent bot version: {self.bot.VERSION}\nCurrent pycord version: {discord.__version__}"
+                f"<@&922915340852289626> **The bot is back online, after being offline for ~`{hours} hour(s), {minutes} minute(s), {seconds} second(s)`.**\nCurrent bot version: {self.bot.VERSION}\nCurrent pycord version: {discord.__version__}\nCurrent disutils version: {disutils.__version__}"
             )
 
     @commands.Cog.listener()
