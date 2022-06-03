@@ -1,7 +1,10 @@
 import asyncio
+from discord.ext.commands import Context
 import discord
 from io import StringIO
 from discord.ext import commands
+import orjson
+import inspect
 
 
 class Test(commands.Cog):
@@ -11,7 +14,7 @@ class Test(commands.Cog):
 
     @commands.command(name="view")
     async def _view(self, ctx):
-        buttons = []
+        view = discord.ui.View()
         for emoji in {
             "⏮️": "first",
             "⏪": "previous",
@@ -19,7 +22,10 @@ class Test(commands.Cog):
             "⏩": "next",
             "⏭️": "last",
         }.keys():
-            buttons.append(discord.ui.Button(emoji=emoji))
+            view.add_item(discord.ui.Button(emoji=emoji))
+        await ctx.send(
+            "This is a test message",
+            view=view)
 
     @commands.command()
     async def readtxt(self, ctx, message_id, channel: discord.TextChannel = None):
@@ -32,31 +38,23 @@ class Test(commands.Cog):
             await ctx.send(string[:2000])
             string = string[2000:]
 
-    @commands.command(
-        name="run",
-    )
-    async def _run(self, ctx, script):
-        _script = SCRIPTS[script]
-        for full_command in _script:
-            command_name = full_command.split(" ")[0]
-            command = self.bot.get_command(command_name)
-            await ctx.invoke(command, full_command.split(" ")[1:])
-
-    @commands.command(name="run2")
-    async def _run2(self, ctx, script_name):
+    @commands.command(name="run")
+    async def _run(self, ctx, script_name):
         script = SCRIPTS[script_name]
         for full_command in script:
-            command_name = full_command[0]
-            command = self.bot.get_command(command_name)
-            try:
-                args = full_command[1]
-            except IndexError:
-                args = []
-            await ctx.invoke(command, *args)
-            await asyncio.sleep(1)
+            command = self.bot.get_command(full_command[0])
+            kwargs = {} if len(full_command) == 1 else full_command[1]
+            await command(ctx, **kwargs)
 
 
-SCRIPTS = {"test": [["view"], ["help"], ["reverse", ["test"]]]}
+SCRIPTS = orjson.loads("""
+{
+    "test": [
+        ["view"],
+        ["reverse", {"text": "test"}]
+    ]
+}
+""".strip())
 
 
 async def setup(bot):

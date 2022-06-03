@@ -1,4 +1,6 @@
 import logging
+import os
+import discord
 from discord.ext import commands
 
 logger = logging.getLogger(__name__)
@@ -31,8 +33,10 @@ class GuildSpecific__csak_a_per(commands.Cog):
 
         # valorant twitter news
         if message.channel.id == 947548279531524186:
-            channel = self.bot.get_channel(928696145440550942)
-            await channel.send(
+            webhook = discord.Webhook.from_url(
+                os.environ["offline_wh"], session=self.bot.api.session
+            )
+            await webhook.send(
                 message.content,
                 embeds=message.embeds,
                 files=[

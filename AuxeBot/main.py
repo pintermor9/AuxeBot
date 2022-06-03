@@ -34,14 +34,6 @@ except:
 
 class Bot(commands.Bot):
     async def setup_hook(self):
-        return await super().setup_hook()
-
-    async def on_connect(self):
-        logger.info("Connected to discord.")
-        logger.info(f"Current discord.py version: {discord.__version__}")
-        logger.info(f"Current disutils version: {disutils.__version__}")
-        logger.info(f"Current bot version: {self.VERSION}")
-
         # Load extensions
         if self.testing:
             await bot.load_extension("Test")
@@ -52,6 +44,7 @@ class Bot(commands.Bot):
             if file.endswith(".py"):
                 await bot.load_extension(f"cogs.{file[:-3]}")
 
+        # Set up utils
         self.utils = Utils
         session = aiohttp.ClientSession(
             connector=aiohttp.TCPConnector(
@@ -60,6 +53,23 @@ class Bot(commands.Bot):
             json_serialize=orjson.dumps,
         )
         self.api = Utils.Api(self, os.environ["API_SECRET"], session)
+
+        # Set up instance vars
+
+        # TODO
+
+        # set up loops
+        if not self.testing:
+            dump_data.start()
+            bot_status.start()
+
+        await super().setup_hook()
+
+    async def on_connect(self):
+        logger.info("Connected to discord.")
+        logger.info(f"Current discord.py version: {discord.__version__}")
+        logger.info(f"Current disutils version: {disutils.__version__}")
+        logger.info(f"Current bot version: {self.VERSION}")
 
     async def on_ready(self):
         logger.info("Logged in as {.user}!".format(self))
@@ -81,9 +91,6 @@ class Bot(commands.Bot):
                 await self.change_presence(
                     activity=discord.Game(noCycleActivity), status=status
                 )
-
-            dump_data.start()
-            bot_status.start()
 
 
 intents = discord.Intents.all()
