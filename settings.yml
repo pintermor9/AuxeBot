@@ -2,7 +2,7 @@
 prefix: "-"
 owner_IDs:
   - 761555679873597450
-VERSION: v1.1
+VERSION: v1.2
 hidden_cogs:
   - Jishaku
 
