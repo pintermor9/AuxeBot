@@ -158,7 +158,7 @@ try:
     )
     assert level.lower() == "y"
     level = logging.DEBUG
-except:
+except Exception:
     level = logging.INFO
 finally:
     logging.basicConfig(level=level)
@@ -185,6 +185,11 @@ async def dump_data():
     message = bot.settings["data"]["json-data"]
     if await Data.load(bot, message) != bot.data:
         await Data.dump(bot, bot.data, message)
+
+
+@dump_data.before_loop
+async def before_dump_data():
+    await bot.wait_until_ready()
 
 
 @tasks.loop(minutes=1)

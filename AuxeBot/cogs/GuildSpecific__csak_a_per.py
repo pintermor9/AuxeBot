@@ -34,7 +34,7 @@ class GuildSpecific__csak_a_per(commands.Cog):
         # valorant twitter news
         if message.channel.id == 947548279531524186:
             webhook = discord.Webhook.from_url(
-                os.environ["offline_wh"], session=self.bot.api.session
+                os.environ["val_news_wh"], session=self.bot.api.session
             )
             await webhook.send(
                 message.content,
@@ -46,6 +46,11 @@ class GuildSpecific__csak_a_per(commands.Cog):
 
 
 async def setup(bot):
-    if not 954259643801157652 in [g.id for g in bot.guilds]:
-        return
-    await bot.add_cog(GuildSpecific__csak_a_per(bot))
+
+    async def _setup():
+        await bot.wait_until_ready()
+        if not 954259643801157652 in [g.id for g in bot.guilds]:
+            return
+        await bot.add_cog(GuildSpecific__csak_a_per(bot))
+
+    bot.loop.create_task(_setup())
