@@ -12,6 +12,7 @@ import disutils
 from Utils import Data
 from itertools import cycle
 from discord.ext import commands, tasks
+from Bot import AuxeBot
 
 logger = logging.getLogger(__name__)
 
@@ -28,128 +29,12 @@ try:
     import sys
 
     sys.path.insert(0, os.environ["disutils_path"])
+    import disutils
 except:
     pass
 
 
-class Bot(commands.Bot):
-    async def setup_hook(self):
-        # Load extensions
-        if self.testing:
-            await bot.load_extension("Test")
-
-        await bot.load_extension("jishaku")
-
-        for file in os.listdir("./AuxeBot/cogs"):
-            if file.endswith(".py"):
-                await bot.load_extension(f"cogs.{file[:-3]}")
-
-        # Set up utils
-        self.utils = Utils
-        session = aiohttp.ClientSession(
-            connector=aiohttp.TCPConnector(
-                ssl=ssl.create_default_context(cafile=certifi.where())
-            ),
-            json_serialize=orjson.dumps,
-        )
-        self.api = Utils.Api(self, os.environ["API_SECRET"], session)
-
-        # Set up instance vars
-
-        # TODO
-
-        # set up loops
-        if not self.testing:
-            dump_data.start()
-            bot_status.start()
-
-        await super().setup_hook()
-
-    async def on_connect(self):
-        logger.info("Connected to discord.")
-        logger.info(f"Current discord.py version: {discord.__version__}")
-        logger.info(f"Current disutils version: {disutils.__version__}")
-        logger.info(f"Current bot version: {self.VERSION}")
-
-    async def on_ready(self):
-        logger.info("Logged in as {.user}!".format(self))
-        message = self.settings["data"]["json-data"]
-        self.data = await Data.load(self, message)
-
-        if not self.testing:
-            await self.change_presence(
-                status=discord.Status.idle,
-                activity=discord.Game("Initializing... Please wait."),
-            )
-
-            self.status = discord.Status.__dict__[status]
-
-            if cycleActivities:
-                activityLoop.start()
-
-            else:
-                await self.change_presence(
-                    activity=discord.Game(noCycleActivity), status=status
-                )
-
-
-intents = discord.Intents.all()
-
-
-def get_prefix(*_args):
-    return bot.prefix
-
-
-bot = Bot(command_prefix=get_prefix, intents=intents)
-
-
-logger.info("Done.")
-logger.info("Reading settings... ")
-
-with open(r"./settings.yml") as file:
-    settings = yaml.full_load(file)
-    logger.debug(settings)
-
-# General settings
-TOKEN = os.environ["TOKEN"]
-bot.prefix = settings["prefix"]
-bot.owner_IDs = settings["owner_IDs"]
-bot.VERSION = settings["VERSION"]
-bot.hidden_cogs = settings["hidden_cogs"]
-
-
-# Status and activity settings:
-cycleActivities = settings["cycleActivities"]
-status = settings["status"]
-updates = settings["updates"]
-noCycleActivity = settings["noCycleActivity"]
-loopActivities = cycle(
-    [
-        f"Prefix: {bot.prefix}",
-        f"Use '{bot.prefix}help' for help!",
-        "Owner: GFIZ Auxea#8304",
-        "Check out 'stats.uptimerobot.com/pLEoghzLzx' for uptime stats!",
-        "Yeah, I know that I should get a profile picture.",
-        f"Latest updates: {updates}",
-    ]
-)
-
-bot.data = settings["data"]
-
-bot.WorkInProgressEmbed = discord.Embed(
-    title="**Hello:exclamation:**",
-    description="**The command that you invoked is not done yet.**\nSorry for the inconvenience.",
-).set_footer(
-    text="If you experience any bugs or mistakes, please use the \n`report` command, to report it to the owner"
-)
-
-bot.settings = settings
-
-
-try:
-    bot.testing = bool(os.environ["TESTING"])
-except:
-    bot.testing = False
+bot = AuxeBot()
 
 try:
     assert bot.testing
@@ -164,61 +49,8 @@ finally:
     logging.basicConfig(level=level)
 
 
-logger.info("Done.")
-
-if bot.testing == True:
-    cycleActivities = False
-    noCycleActivity = "Currently testing..."
-
-
-def is_owner(ctx):
-    return ctx.message.author.id in bot.owner_IDs
-
-
-@tasks.loop(seconds=15)
-async def activityLoop():
-    await bot.change_presence(activity=discord.Game(next(loopActivities)))
-
-
-@tasks.loop(seconds=30)
-async def dump_data():
-    message = bot.settings["data"]["json-data"]
-    if await Data.load(bot, message) != bot.data:
-        await Data.dump(bot, bot.data, message)
-
-
-@dump_data.before_loop
-async def before_dump_data():
-    await bot.wait_until_ready()
-
-
-@tasks.loop(minutes=1)
-async def bot_status():
-    await bot.api.get("/status/ping")
-
-
-@bot_status.before_loop
-async def status_online():
-    bot.last_up = await bot.api.get("/status/online")
-    bot.dispatch("online")
-
-
-@bot_status.after_loop
-async def status_offline():
-    await bot.api.get("/status/offline")
-
-    webhook = discord.Webhook.from_url(
-        os.environ["offline_wh"], session=bot.api.session
-    )
-    await webhook.send("<@&922915340852289626> **The bot went offline!**")
-
-    await bot.api.session.close()
-
-
-logger.info(" \n \nStarting client...\n ")
-
 if __name__ == "__main__":
-    bot.run(TOKEN)
+    bot.run()
 
 """
 # test run always restart
