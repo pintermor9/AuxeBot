@@ -14,7 +14,7 @@ class Logging(commands.Cog):
         logger.info("Loaded " + __name__)
 
     @commands.Cog.listener()
-    async def on_ready(self):
+    async def on_ready_cogs(self):
         self.bot.logging_channel = self.bot.get_channel(
             self.bot.settings["data"]["logging"]["channel"]
         )
@@ -37,7 +37,7 @@ class Logging(commands.Cog):
         guild = ctx.guild.name
         author = f"{ctx.author.name}#{ctx.author.discriminator}"
         channel = ctx.channel.name
-        command = ctx.message.content[len(self.bot.prefix) :]
+        command = ctx.message.content[len(self.bot.prefix):]
         log = f"**{guild}:** *{author}* invoked `{command}` in `#{channel}`"
         await self.bot.logging_channel.send(log)
 

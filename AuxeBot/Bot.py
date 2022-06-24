@@ -5,6 +5,7 @@ import orjson
 import logging
 import aiohttp
 import certifi
+import disutils
 from itertools import cycle
 
 import discord
@@ -63,10 +64,7 @@ class AuxeBot(commands.Bot):
 
         self.settings = settings
 
-        try:
-            self.testing = bool(os.environ["TESTING"])
-        except:
-            self.testing = False
+        self.testing = bool(os.getenv("TESTING", default=False))
 
         if self.testing == True:
             self.cycleActivities = False
@@ -87,31 +85,29 @@ class AuxeBot(commands.Bot):
             await super().on_ready()
 
         logger.info(f"Logged in as {self.user}!")
-        message = self.settings["data"]["json-data"]
-        self.data = await Data.load(self, message)
+
+        self.data = await Data.load(self, self.settings["data"]["json-data"])
+
+        await self.change_presence(
+            status=discord.Status.idle,
+            activity=discord.Game("Initializing... Please wait."),
+        )
+
+        if self.cycleActivities:
+            activityLoop.start(self)
+        else:
+            await self.change_presence(activity=discord.Game(self.noCycleActivity), status=self.status)
 
         if not self.testing:
-            await self.change_presence(
-                status=discord.Status.idle,
-                activity=discord.Game("Initializing... Please wait."),
-            )
-
-            self.status = getattr(discord.Status, self.status)
-
-            if self.cycleActivities:
-                activityLoop.start(self)
-
-            else:
-                await self.change_presence(activity=discord.Game(self.noCycleActivity), status=self.status)
-
             dump_data.start(self)
 
-            self.last_up = await self.api.get("/status/online")
-            self.dispatch("online")
+        self.last_up = await self.api.get("/status/online")
+        self.dispatch("ready_cogs")
 
     async def on_connect(self):
         logger.info("Connected to discord.")
         logger.info(f"Current discord.py version: {discord.__version__}")
+        logger.info(f"Current disutils version: {disutils.__version__}")
         logger.info(f"Current bot version: {self.VERSION}")
 
         session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(

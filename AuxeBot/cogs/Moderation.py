@@ -11,7 +11,7 @@ class Moderation(commands.Cog):
         logger.info("Loaded " + __name__)
 
     @commands.Cog.listener()
-    async def on_ready(self):
+    async def on_ready_cogs(self):
         self.bot.report_channel = self.bot.get_channel(
             self.bot.settings["data"]["report"]["channel"]
         )

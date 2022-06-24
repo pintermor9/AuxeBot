@@ -14,7 +14,7 @@ class Poll(commands.Cog):
         logger.info("Loaded " + __name__)
 
     @commands.Cog.listener()
-    async def on_ready(self):
+    async def on_ready_cogs(self):
         self.expiry_check.start()
 
     @commands.command(name="poll", description="Creates a poll.")
@@ -126,7 +126,8 @@ class Poll(commands.Cog):
         try:
             expired = list(
                 filter(
-                    lambda p: p["expires"] <= int(round(time())), self.bot.data["poll"]
+                    lambda p: p["expires"] <= int(
+                        round(time())), self.bot.data["poll"]
                 )
             )
             for poll in expired:

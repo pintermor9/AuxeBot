@@ -1,10 +1,6 @@
-import asyncio
-from discord.ext.commands import Context
 import discord
-from io import StringIO
 from discord.ext import commands
 import orjson
-import inspect
 
 
 class Test(commands.Cog):
