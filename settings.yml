@@ -1,12 +1,12 @@
-#General settings
+# General settings
 prefix: "-"
 owner_IDs:
   - 761555679873597450
-VERSION: v1.2
+VERSION: v1.2.1
 hidden_cogs:
   - Jishaku
 
-#Status and activity settings:
+# Status and activity settings:
 cycleActivities: True
 status: "online"
 updates: "Music now uses disutils! (my 1st package :D)"
