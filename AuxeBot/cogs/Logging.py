@@ -19,8 +19,6 @@ class Logging(commands.Cog):
             self.bot.settings["data"]["logging"]["channel"]
         )
 
-    @commands.Cog.listener()
-    async def on_online(self):
         hours, minutes, seconds = str(
             timedelta(seconds=round(time() - float(self.bot.last_up)))
         ).split(":")
