@@ -1,3 +1,4 @@
+import sys
 import os
 import logging
 from Bot import AuxeBot
@@ -11,12 +12,8 @@ print(
 logger.info("Imported modules.")
 logger.info("Getting client...")
 
-try:
-    import sys
-    sys.path.insert(0, os.environ["disutils_path"])
-    import disutils
-except ImportError or KeyError:
-    pass
+if p := os.getenv("disutils_path", default=None):
+    sys.path.insert(0, p)
 
 bot = AuxeBot()
 
