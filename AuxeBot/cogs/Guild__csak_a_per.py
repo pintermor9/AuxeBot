@@ -6,7 +6,7 @@ from discord.ext import commands
 logger = logging.getLogger(__name__)
 
 
-class GuildSpecific__csak_a_per(commands.Cog):
+class Guild__csak_a_per(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         logger.info("Loaded " + __name__)
@@ -51,6 +51,6 @@ async def setup(bot):
         await bot.wait_until_ready()
         if not 954259643801157652 in [g.id for g in bot.guilds]:
             return
-        await bot.add_cog(GuildSpecific__csak_a_per(bot))
+        await bot.add_cog(Guild__csak_a_per(bot))
 
     bot.loop.create_task(_setup())

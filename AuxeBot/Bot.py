@@ -9,6 +9,7 @@ import disutils
 from itertools import cycle
 
 import discord
+from discord import app_commands
 from discord.ext import commands, tasks
 
 from Utils import Data, Api
@@ -24,7 +25,7 @@ class AuxeBot(commands.Bot):
     def __init__(self):
         super().__init__(
             command_prefix=_get_prefix,
-            intents=discord.Intents.all()
+            intents=discord.Intents.all(),
         )
 
         with open(r"./settings.yml") as file:
@@ -100,6 +101,10 @@ class AuxeBot(commands.Bot):
 
         if not self.testing:
             dump_data.start(self)
+
+        self.tree.copy_global_to(guild=discord.Object(
+            id=991043250854973490))  # FIXME hardcoded guild id
+        await self.tree.sync(guild=discord.Object(id=991043250854973490))
 
         self.last_up = await self.api.get("/status/online")
         self.dispatch("ready_cogs")

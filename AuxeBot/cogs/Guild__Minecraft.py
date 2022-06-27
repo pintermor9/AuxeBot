@@ -127,7 +127,7 @@ def is_online(server) -> bool:
         return False
 
 
-class GuildSpecific__Minecraft(commands.Cog):
+class Guild__Minecraft(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.online = []
@@ -209,6 +209,6 @@ async def setup(bot):
         await bot.wait_until_ready()
         if not 954259643801157652 in [g.id for g in bot.guilds]:
             return
-        await bot.add_cog(GuildSpecific__Minecraft(bot))
+        await bot.add_cog(Guild__Minecraft(bot))
 
     bot.loop.create_task(_setup())
