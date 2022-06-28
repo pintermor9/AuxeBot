@@ -100,3 +100,10 @@ class Api:
                 return await resp.text()
             else:
                 return await resp.read()
+
+
+def get_category(guild, category_id):
+    for c in guild.categories:
+        if c.id == category_id:
+            return c
+    return None
