@@ -25,11 +25,8 @@ try:
     )
     assert level.lower() == "y"
     level = logging.DEBUG
-except AssertionError or ImportError or inputimeout.TimeoutOccurred:
+except Exception:
     level = logging.INFO
-except Exception as e:
-    print(e)
-
 finally:
     logging.basicConfig(level=level)
 
