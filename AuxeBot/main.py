@@ -3,7 +3,10 @@ import os
 import logging
 from Bot import AuxeBot
 
-__import__("dotenv").load_dotenv()
+try:
+    __import__("dotenv").load_dotenv()
+except ModuleNotFoundError:
+    pass
 
 logger = logging.getLogger(__name__)
 
