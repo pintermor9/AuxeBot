@@ -3,6 +3,8 @@ import os
 import logging
 from Bot import AuxeBot
 
+__import__("dotenv").load_dotenv()
+
 logger = logging.getLogger(__name__)
 
 print(

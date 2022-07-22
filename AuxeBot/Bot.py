@@ -1,5 +1,7 @@
+import atexit
 import os
 import ssl
+import requests
 import yaml
 import orjson
 import logging
@@ -71,6 +73,9 @@ class AuxeBot(commands.Bot):
             self.cycleActivities = False
             self.noCycleActivity = "Currently testing..."
 
+        self._close_ran = False
+        atexit.register(close, self)
+
     async def on_ready(self):
         # Load extensions
         if self.testing:
@@ -121,18 +126,25 @@ class AuxeBot(commands.Bot):
 
     async def close(self) -> None:
         print("AuxeBot is now closing...")
-
-        await self.api.get("/status/offline")
-        webhook = discord.Webhook.from_url(
-            os.environ["offline_wh"], session=self.api.session
-        )
-        await webhook.send("<@&922915340852289626> **The bot went offline!**")
+        close(self)
         await self.api.session.close()
-
         await super().close()
 
     def run(self):
         super().run(os.environ["TOKEN"], reconnect=True)
+
+
+def close(bot):
+    if bot._close_ran:
+        return
+    with requests.Session() as session:
+        webhook = discord.SyncWebhook.from_url(
+            os.environ["offline_wh"], session=session
+        )
+        webhook.send("<@&922915340852289626> **The bot went offline!**")
+        session.get(
+            f"{bot.settings['api_base_url']}/status/offline?secret={os.environ['API_SECRET']}")
+    bot._close_ran = True
 
 
 @tasks.loop(seconds=15)

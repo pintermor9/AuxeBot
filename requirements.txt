@@ -9,6 +9,8 @@ ffmpeg
 PyNaCl
 certifi
 jishaku
+requests
+dotenv
 
 disutils
 
