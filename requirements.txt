@@ -10,7 +10,6 @@ PyNaCl
 certifi
 jishaku
 requests
-dotenv
 
 disutils
 
